@@ -113,26 +113,146 @@
 		<section id="eligibility" class="bg-brand-light py-14 sm:py-16">
 			<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
 				<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-					<h2 class="text-center text-2xl font-bold text-brand-navy sm:text-3xl">Check Service Availability</h2>
-					<p class="mt-2 text-center text-slate-600">Enter your ZIP code to see if free government-supported phone service is available in your area.</p>
-					<form class="mt-6" action="#" method="post" aria-label="ZIP code eligibility checker">
-						<label for="zipcode" class="mb-2 block text-sm font-medium text-slate-700">ZIP Code</label>
-						<div class="flex flex-col gap-3 sm:flex-row">
-							<input
-								id="zipcode"
-								name="zipcode"
-								type="text"
-								inputmode="numeric"
-								pattern="[0-9]{5}"
-								maxlength="5"
-								placeholder="e.g. 90001"
-								class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30"
-								required
-							/>
-							<button type="submit" class="rounded-md bg-brand-navy px-6 py-3 font-semibold text-white transition hover:bg-[#02284d] focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2">
-								Check Now
-							</button>
+					<h2 class="text-center text-2xl font-bold text-brand-navy sm:text-3xl">Start Your Enrollment</h2>
+					<p class="mt-2 text-center text-slate-600">Complete this form to check eligibility and begin your free government phone service application.</p>
+					<form class="mt-6 space-y-6" action="#" method="post" aria-label="Enrollment form">
+						<div>
+							<h3 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">Applicant Information</h3>
+							<div class="mt-3 grid gap-4 sm:grid-cols-2">
+								<div>
+									<label for="first_name" class="mb-2 block text-sm font-medium text-slate-700">First Name</label>
+									<input id="first_name" name="first_name" type="text" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
+								</div>
+								<div>
+									<label for="last_name" class="mb-2 block text-sm font-medium text-slate-700">Last Name</label>
+									<input id="last_name" name="last_name" type="text" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
+								</div>
+								<div>
+									<label for="dob" class="mb-2 block text-sm font-medium text-slate-700">Date of Birth</label>
+									<input id="dob" name="dob" type="date" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
+								</div>
+								<div>
+									<label for="phone" class="mb-2 block text-sm font-medium text-slate-700">Phone Number</label>
+									<input id="phone" name="phone" type="tel" placeholder="e.g. (555) 123-4567" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
+								</div>
+								<div class="sm:col-span-2">
+									<label for="email" class="mb-2 block text-sm font-medium text-slate-700">Email Address</label>
+									<input id="email" name="email" type="email" placeholder="name@example.com" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
+								</div>
+							</div>
 						</div>
+
+						<div>
+							<h3 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">Service Address</h3>
+							<div class="mt-3 grid gap-4 sm:grid-cols-2">
+								<div class="sm:col-span-2">
+									<label for="address1" class="mb-2 block text-sm font-medium text-slate-700">Street Address</label>
+									<input id="address1" name="address1" type="text" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
+								</div>
+								<div class="sm:col-span-2">
+									<label for="address2" class="mb-2 block text-sm font-medium text-slate-700">Apt, Suite, Unit (Optional)</label>
+									<input id="address2" name="address2" type="text" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" />
+								</div>
+								<div>
+									<label for="city" class="mb-2 block text-sm font-medium text-slate-700">City</label>
+									<input id="city" name="city" type="text" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
+								</div>
+								<div>
+									<label for="state" class="mb-2 block text-sm font-medium text-slate-700">State</label>
+									<select id="state" name="state" class="w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required>
+										<option value="">Select State</option>
+										<option value="CA">California</option>
+										<option value="FL">Florida</option>
+										<option value="GA">Georgia</option>
+										<option value="IL">Illinois</option>
+										<option value="NY">New York</option>
+										<option value="TX">Texas</option>
+										<option value="OTHER">Other</option>
+									</select>
+								</div>
+								<div class="sm:col-span-2">
+									<label for="zipcode" class="mb-2 block text-sm font-medium text-slate-700">ZIP Code</label>
+									<input id="zipcode" name="zipcode" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="e.g. 90001" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
+								</div>
+
+								<div class="sm:col-span-2">
+									<label class="flex items-start gap-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-700">
+										<input id="shipping_different" name="shipping_different" type="checkbox" class="mt-0.5 h-4 w-4" />
+										<span>My shipping address is different from my residence/service address.</span>
+									</label>
+								</div>
+							</div>
+
+							<div id="shipping-fields" class="mt-5 hidden grid gap-4 rounded-lg border border-slate-200 bg-slate-50 p-4 sm:grid-cols-2">
+								<div class="sm:col-span-2">
+									<h4 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">Shipping Address</h4>
+								</div>
+								<div class="sm:col-span-2">
+									<label for="shipping_address1" class="mb-2 block text-sm font-medium text-slate-700">Street Address</label>
+									<input id="shipping_address1" name="shipping_address1" type="text" class="shipping-input w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" />
+								</div>
+								<div class="sm:col-span-2">
+									<label for="shipping_address2" class="mb-2 block text-sm font-medium text-slate-700">Apt, Suite, Unit (Optional)</label>
+									<input id="shipping_address2" name="shipping_address2" type="text" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" />
+								</div>
+								<div>
+									<label for="shipping_city" class="mb-2 block text-sm font-medium text-slate-700">City</label>
+									<input id="shipping_city" name="shipping_city" type="text" class="shipping-input w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" />
+								</div>
+								<div>
+									<label for="shipping_state" class="mb-2 block text-sm font-medium text-slate-700">State</label>
+									<select id="shipping_state" name="shipping_state" class="shipping-input w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30">
+										<option value="">Select State</option>
+										<option value="CA">California</option>
+										<option value="FL">Florida</option>
+										<option value="GA">Georgia</option>
+										<option value="IL">Illinois</option>
+										<option value="NY">New York</option>
+										<option value="TX">Texas</option>
+										<option value="OTHER">Other</option>
+									</select>
+								</div>
+								<div class="sm:col-span-2">
+									<label for="shipping_zipcode" class="mb-2 block text-sm font-medium text-slate-700">ZIP Code</label>
+									<input id="shipping_zipcode" name="shipping_zipcode" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="e.g. 90001" class="shipping-input w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" />
+								</div>
+							</div>
+						</div>
+
+						<div>
+							<h3 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">Eligibility Details</h3>
+							<div class="mt-3 space-y-4">
+								<fieldset>
+									<legend class="text-sm font-medium text-slate-700">Program Qualification</legend>
+									<div class="mt-2 grid gap-3 sm:grid-cols-2">
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="snap" class="h-4 w-4" required /> SNAP / Food Stamps</label>
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="medicaid" class="h-4 w-4" required /> Medicaid</label>
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="ssi" class="h-4 w-4" required /> SSI</label>
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="veterans" class="h-4 w-4" required /> Veterans Pension</label>
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700 sm:col-span-2"><input type="radio" name="program" value="income" class="h-4 w-4" required /> Household Income Qualification</label>
+									</div>
+								</fieldset>
+
+								<div>
+									<label for="contact_method" class="mb-2 block text-sm font-medium text-slate-700">Preferred Contact Method</label>
+									<select id="contact_method" name="contact_method" class="w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required>
+										<option value="">Select Contact Method</option>
+										<option value="phone">Phone Call</option>
+										<option value="text">Text Message</option>
+										<option value="email">Email</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+							<label class="flex items-start gap-2"><input id="consent_info" name="consent_info" type="checkbox" class="mt-0.5 h-4 w-4" required /> <span>I certify that the information provided is true and accurate.</span></label>
+							<label class="flex items-start gap-2"><input id="consent_terms" name="consent_terms" type="checkbox" class="mt-0.5 h-4 w-4" required /> <span>I agree to program terms, conditions, and one benefit per eligible household rules.</span></label>
+						</div>
+
+						<button type="submit" class="w-full rounded-md bg-brand-navy px-6 py-3 font-semibold text-white transition hover:bg-[#02284d] focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2">
+							Submit Enrollment Request
+						</button>
 					</form>
 				</div>
 			</div>
@@ -252,6 +372,8 @@
 	<script>
 		const menuToggle = document.getElementById("menu-toggle");
 		const mobileMenu = document.getElementById("mobile-menu");
+		const shippingDifferent = document.getElementById("shipping_different");
+		const shippingFields = document.getElementById("shipping-fields");
 
 		if (menuToggle && mobileMenu) {
 			menuToggle.addEventListener("click", function () {
@@ -259,6 +381,30 @@
 				menuToggle.setAttribute("aria-expanded", String(!expanded));
 				mobileMenu.classList.toggle("hidden");
 			});
+		}
+
+		if (shippingDifferent && shippingFields) {
+			const shippingInputs = shippingFields.querySelectorAll(".shipping-input");
+
+			const syncShippingFields = function () {
+				const shouldShow = shippingDifferent.checked;
+				shippingFields.classList.toggle("hidden", !shouldShow);
+
+				shippingInputs.forEach(function (input) {
+					if (input.id !== "shipping_address2") {
+						input.required = shouldShow;
+					} else {
+						input.required = false;
+					}
+
+					if (!shouldShow) {
+						input.value = "";
+					}
+				});
+			};
+
+			shippingDifferent.addEventListener("change", syncShippingFields);
+			syncShippingFields();
 		}
 	</script>
 </body>
