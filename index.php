@@ -115,7 +115,7 @@
 				<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
 					<h2 class="text-center text-2xl font-bold text-brand-navy sm:text-3xl">Start Your Enrollment</h2>
 					<p class="mt-2 text-center text-slate-600">Complete this form to check eligibility and begin your free government phone service application.</p>
-					<form class="mt-6 space-y-6" action="#" method="post" aria-label="Enrollment form">
+					<form id="enrollment-form" class="mt-6 space-y-6" action="#" method="post" aria-label="Enrollment form" novalidate>
 						<div>
 							<h3 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">Applicant Information</h3>
 							<div class="mt-3 grid gap-4 sm:grid-cols-2">
@@ -369,11 +369,14 @@
 		</div>
 	</footer>
 
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 	<script>
 		const menuToggle = document.getElementById("menu-toggle");
 		const mobileMenu = document.getElementById("mobile-menu");
 		const shippingDifferent = document.getElementById("shipping_different");
 		const shippingFields = document.getElementById("shipping-fields");
+		const enrollmentForm = document.getElementById("enrollment-form");
 
 		if (menuToggle && mobileMenu) {
 			menuToggle.addEventListener("click", function () {
@@ -401,10 +404,128 @@
 						input.value = "";
 					}
 				});
+
+				if (!shouldShow && window.jQuery) {
+					window.jQuery("#shipping-fields label.error").remove();
+					window.jQuery(shippingInputs).removeClass("border-red-500 ring-1 ring-red-300");
+				}
 			};
 
 			shippingDifferent.addEventListener("change", syncShippingFields);
 			syncShippingFields();
+		}
+
+		if (window.jQuery && enrollmentForm) {
+			window.jQuery.validator.addMethod("phoneUS", function (value, element) {
+				const digits = (value || "").replace(/\D/g, "");
+				return this.optional(element) || digits.length === 10;
+			}, "Please enter a valid 10-digit phone number.");
+
+			window.jQuery("#enrollment-form").validate({
+				ignore: ":hidden",
+				errorElement: "label",
+				errorClass: "error mt-1 block text-xs font-medium text-red-600",
+				rules: {
+					first_name: { required: true, minlength: 2 },
+					last_name: { required: true, minlength: 2 },
+					dob: { required: true },
+					phone: { required: true, phoneUS: true },
+					email: { required: true, email: true },
+					address1: { required: true },
+					city: { required: true },
+					state: { required: true },
+					zipcode: { required: true, digits: true, minlength: 5, maxlength: 5 },
+					shipping_address1: {
+						required: {
+							depends: function () {
+								return !!(shippingDifferent && shippingDifferent.checked);
+							}
+						}
+					},
+					shipping_city: {
+						required: {
+							depends: function () {
+								return !!(shippingDifferent && shippingDifferent.checked);
+							}
+						}
+					},
+					shipping_state: {
+						required: {
+							depends: function () {
+								return !!(shippingDifferent && shippingDifferent.checked);
+							}
+						}
+					},
+					shipping_zipcode: {
+						required: {
+							depends: function () {
+								return !!(shippingDifferent && shippingDifferent.checked);
+							}
+						},
+						digits: true,
+						minlength: 5,
+						maxlength: 5
+					},
+					program: { required: true },
+					contact_method: { required: true },
+					consent_info: { required: true },
+					consent_terms: { required: true }
+				},
+				messages: {
+					first_name: "Please enter your first name.",
+					last_name: "Please enter your last name.",
+					dob: "Please select your date of birth.",
+					phone: "Please enter a valid 10-digit phone number.",
+					email: "Please enter a valid email address.",
+					address1: "Please enter your service address.",
+					city: "Please enter your city.",
+					state: "Please select your state.",
+					zipcode: {
+						required: "Please enter your ZIP code.",
+						digits: "ZIP code must contain numbers only.",
+						minlength: "ZIP code must be 5 digits.",
+						maxlength: "ZIP code must be 5 digits."
+					},
+					shipping_address1: "Please enter your shipping street address.",
+					shipping_city: "Please enter your shipping city.",
+					shipping_state: "Please select your shipping state.",
+					shipping_zipcode: {
+						required: "Please enter your shipping ZIP code.",
+						digits: "Shipping ZIP code must contain numbers only.",
+						minlength: "Shipping ZIP code must be 5 digits.",
+						maxlength: "Shipping ZIP code must be 5 digits."
+					},
+					program: "Please select your program qualification.",
+					contact_method: "Please select your preferred contact method.",
+					consent_info: "You must certify that your information is accurate.",
+					consent_terms: "You must agree to the terms and conditions."
+				},
+				highlight: function (element) {
+					window.jQuery(element).addClass("border-red-500 ring-1 ring-red-300");
+				},
+				unhighlight: function (element) {
+					window.jQuery(element).removeClass("border-red-500 ring-1 ring-red-300");
+				},
+				errorPlacement: function (error, element) {
+					if (element.attr("name") === "program") {
+						error.insertAfter(element.closest("fieldset").find("div").last());
+						return;
+					}
+
+					if (element.attr("type") === "checkbox") {
+						error.insertAfter(element.closest("label"));
+						return;
+					}
+
+					error.insertAfter(element);
+				}
+			});
+
+			window.jQuery("#shipping_different").on("change", function () {
+				window.jQuery("#shipping_address1, #shipping_city, #shipping_state, #shipping_zipcode").each(function () {
+					window.jQuery(this).valid();
+				});
+			});
 		}
 	</script>
 </body>
