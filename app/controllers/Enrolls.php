@@ -93,6 +93,7 @@ class Enrolls extends Controller
     $city = trim($_POST['city'] ?? '');
     $program = trim($_POST['program'] ?? '');
     $contactMethod = trim($_POST['contact_method'] ?? '');
+    $signatureText = trim($_POST['signature_text'] ?? '');
     $consentInfo = ($_POST['consent_info'] ?? '0') === '1';
     $consentTerms = ($_POST['consent_terms'] ?? '0') === '1';
     $shippingDifferent = ($_POST['shipping_different'] ?? '0') === '1';
@@ -140,12 +141,16 @@ class Enrolls extends Controller
       $errors['zipcode'] = 'ZIP code must be 5 digits.';
     }
 
-    if (!in_array($program, ['snap', 'medicaid', 'ssi', 'veterans', 'income'], true)) {
+    if (!in_array($program, ['100001', '100004', '100002', '100006', '100000', '100014', '100011', '100008', '100010', '100009'], true)) {
       $errors['program'] = 'Please select your program qualification.';
     }
 
     if (!in_array($contactMethod, ['phone', 'text', 'email'], true)) {
       $errors['contact_method'] = 'Please select your preferred contact method.';
+    }
+
+    if ($signatureText === '' || strlen($signatureText) < 3) {
+      $errors['signature_text'] = 'Please type your full name as your electronic signature.';
     }
 
     if (!$consentInfo) {
@@ -208,6 +213,7 @@ class Enrolls extends Controller
       'shipping_state' => $shippingDifferent ? $shippingState : null,
       'shipping_zipcode' => $shippingDifferent ? $shippingZipcode : null,
       'program_benefit' => $program,
+      'signature_text' => $signatureText,
       'order_step' => 'Landing Form',
       'URL' => $currentUrl,
       'utms' => $utms,
@@ -449,7 +455,7 @@ public function old_check()
   {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       file_put_contents("stepLog.txt", "start first step\n");
-      $secret = "6LeVbyYsAAAAALRrpPD-3ut44yhQEbX4maS9iizb";
+      $secret = RECAPTCHA_SECRET;
       $responseKey = $_POST['g-recaptcha-response'];
       $remoteip = $_SERVER['REMOTE_ADDR'];
       
@@ -864,17 +870,19 @@ public function old_check()
     $mail = $mailer->load();
     $mail->SMTPDebug = 0;                                       // Enable verbose debug output
     $mail->isSMTP();                                            // Set mailer to use SMTP
-    $mail->Host       = 'smtp-mail.outlook.com';            // Specify main and backup SMTP servers
+    $mail->Host       = SMTP_HOST;            // Specify main and backup SMTP servers
     $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-    $mail->Username   = 'lifeline@galaxydistribution.com';                     // SMTP username
-    $mail->Password   = 'Life@2025$$Galaxy';                               // SMTP password
-    $mail->SMTPSecure = 'TLS/StartTLS';                                  // Enable TLS encryption, `ssl` also accepted
-    $mail->Port       = 587;  
-    $mail->setFrom('lifeline@galaxydistribution.com', 'Lifeline');
-    $mail->addAddress('currutia@gotruewireless.com');
+    $mail->Username   = SMTP_USERNAME;                     // SMTP username
+    $mail->Password   = SMTP_PASSWORD;                               // SMTP password
+    $mail->SMTPSecure = SMTP_ENCRYPTION;                                  // Enable TLS encryption, `ssl` also accepted
+    $mail->Port       = SMTP_PORT;  
+    $mail->setFrom(MAIL_FROM_ADDRESS, MAIL_FROM_NAME_DOCS);
+    $mail->addAddress(MAIL_DOCS_TO);
     //$mail->addCC('jparker@galaxydistribution.com'); 
     //$mail->addCC('currutia44@gmail.com');      // Add a recipient
-    $mail->addBCC('xneriox@gmail.com');
+    if (!empty(MAIL_DOCS_BCC)) {
+      $mail->addBCC(MAIL_DOCS_BCC);
+    }
     $mail->isHTML(true);
     $mail->Subject = $subject;
     $mail->Body = nl2br($message);
@@ -1760,15 +1768,15 @@ public function old_check()
     $mail = $mailer->load();
     $mail->SMTPDebug = 0;                                       // Enable verbose debug output
     $mail->isSMTP();                                            // Set mailer to use SMTP
-    $mail->Host       = 'smtp-mail.outlook.com';            // Specify main and backup SMTP servers
+    $mail->Host       = SMTP_HOST;            // Specify main and backup SMTP servers
     $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-    $mail->Username   = 'lifeline@galaxydistribution.com';                     // SMTP username
-    $mail->Password   = 'Life@2025$$Galaxy';                               // SMTP password
-    $mail->SMTPSecure = 'TLS/StartTLS';                                  // Enable TLS encryption, `ssl` also accepted
-    $mail->Port       = 587;                                 // TCP port to connect to
+    $mail->Username   = SMTP_USERNAME;                     // SMTP username
+    $mail->Password   = SMTP_PASSWORD;                               // SMTP password
+    $mail->SMTPSecure = SMTP_ENCRYPTION;                                  // Enable TLS encryption, `ssl` also accepted
+    $mail->Port       = SMTP_PORT;                                 // TCP port to connect to
     //Recipients
-    $mail->setFrom('lifeline@galaxydistribution.com', 'Galaxy Lileline Orders');
-    $mail->addAddress('info@truewireless.com');
+    $mail->setFrom(MAIL_FROM_ADDRESS, MAIL_FROM_NAME_ORDERS);
+    $mail->addAddress(MAIL_ORDERS_TO);
     //$mail->addAddress('currutia@gotruewireless.com');
     //$mail->addCC('jparker@galaxydistribution.com'); 
     //$mail->addCC('currutia44@gmail.com');      // Add a recipient
