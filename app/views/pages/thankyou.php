@@ -16,8 +16,14 @@
 			</div>
 			<h1 class="mt-6 text-center text-3xl font-bold text-slate-900">Thank you for your submission</h1>
 			<p class="mt-3 text-center text-base text-slate-600">Your enrollment request was received successfully. A team member will contact you soon to continue the process.</p>
+			<?php if (!empty($data['customer_id'])) : ?>
+				<p class="mt-3 text-center text-sm text-slate-500">You can upload your ID and Proof of Benefit now or come back later using your customer ID.</p>
+			<?php endif; ?>
 			<div class="mt-8 text-center">
-				<a href="<?php echo URLROOT; ?>" class="inline-flex items-center rounded-md bg-[#003366] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#02284d]">Return to home</a>
+				<?php if (!empty($data['customer_id'])) : ?>
+					<a href="<?php echo URLROOT; ?>/enrolls/getdocuments/<?php echo urlencode($data['customer_id']); ?>" class="inline-flex items-center rounded-md bg-brand-red px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700">Upload Documents Now</a>
+				<?php endif; ?>
+				<a href="<?php echo URLROOT; ?>" class="ml-2 inline-flex items-center rounded-md bg-[#003366] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#02284d]">Return to home</a>
 			</div>
 		</section>
 	</main>

@@ -53,7 +53,7 @@
 										<p id="newOrderID"><b>Order ID:</b> <?php echo $data['order_id']; ?></p>
 										<p id="newACPStatus"><b>NLAD Status:</b> <?php echo $data['acp_status']; ?></p>
 									<?php } ?>
-									<p><b>ETC:</b> <?php echo ($data['ETC']=="GTW")?"American Assist":$data['ETC']; ?></p>
+									<p><b>ETC:</b> <?php echo ($data['ETC']=="GTW")?"True Wireless":$data['ETC']; ?></p>
 									
 								</div>
 							</div>
@@ -143,7 +143,7 @@
 																					} ?>>Test</option>
 														</select>
 														<input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id'] ?>" />
-														<input type="hidden" name="username" id="status-username" value="<?php echo $_SESSION['email']; ?>">
+														<input type="hidden" name="username" id="username" value="<?php echo $_SESSION['email']; ?>">
 														<input type="submit" id="submit-status" class="btn btn-secondary" value="Change Status">
 													</div>
 												</div>
@@ -181,10 +181,10 @@
 																	<option value="">Please select</option>
 																</select>
 																<input type="hidden" name="contractProcess" value="staffTook" />
-																<input type="hidden" name="customer_id" value="<?php echo $data['customer_id'];; ?>" />
+																<input type="hidden" id="customer_id" name="customer_id" value="<?php echo $data['customer_id'];; ?>" />
 																<input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>" />
 																<input type="hidden" name="user_email" id="user_email" value="<?php echo $_SESSION['email']; ?>" />
-																<input type="hidden" name="username" id="staff-username" value="<?php echo $_SESSION['name']; ?>">
+																<input type="hidden" name="username" id="username" value="<?php echo $_SESSION['name']; ?>">
 																<input type="submit" id="assign-agent" class="btn btn-outline-secondary" value="Assign Agent">
 															</div>
 														</div>
@@ -223,7 +223,7 @@
 																	</span> </div>
 															</div>
 															<div class="col-lg-2 col-md-12 mb-2">
-																<input type="hidden" name="customer_id" value="<?php echo $data['customer_id']; ?>" />
+																<input type="hidden" id="customer_id" name="customer_id" value="<?php echo $data['customer_id']; ?>" />
 																<input type="hidden" name="user_id" id="user_id" value="<?php echo $_SESSION['user_id']; ?>" />
 																<input type="hidden" name="user_name" id="user_name" value="<?php echo $_SESSION['name']; ?>" />
 
@@ -462,7 +462,6 @@
 					<div style="padding: 13px;" id="msjresusersAdd">
 					</div>
 					<input type="hidden" value="<?php echo $data['id']; ?>" id="leadId">
-					<input type="hidden" value="<?php echo $data['customer_id']; ?>" id="leadCustomerId">
 					<input type="hidden" value="<?php echo $data['company']; ?>" id="company">
 					<div class="row">
 						<div class="col-md-12">
@@ -752,7 +751,7 @@
 			$("#notify-documents").click(function() {
 				event.preventDefault();
 
-				var customer_id = $("#leadCustomerId").val();
+				var customer_id = $("#customer_id").val();
 				var email_edit = $("#email_edit").val();
 				//var user_name = $("#user_active").val();
 
@@ -832,7 +831,7 @@
 			$("#send_internal").click(function() {
 				event.preventDefault();
 
-				var customer_id = $("#leadCustomerId").val();
+				var customer_id = $("#customer_id").val();
 				var id_user = $("#user_id").val();
 				var username = $("#user_name").val();
 				var note = $("#internal").val();
@@ -911,7 +910,7 @@
 				event.preventDefault();
 
 				var id_order = $("#id_order").val();
-				var username = $("#status-username").val();
+				var username = $("#username").val();
 				var order_status = $("#order_status option:selected").val();
 
 				var parameter = {
@@ -1192,7 +1191,7 @@
 		}
 		function addNotes(Note) {
 
-			var customer_id = $("#leadCustomerId").val();
+			var customer_id = $("#customer_id").val();
 				var id_user = $("#user_id").val();
 				var username = $("#user_name").val();
 				var note = Note;
@@ -1251,7 +1250,7 @@
 			// 	"internal": note,
 			// }
 
-			var customer_id = $("#leadCustomerId").val();
+			var customer_id = $("#customer_id").val();
 				var id_user = $("#user_id").val();
 				var username = $("#user_name").val();
 				var note = $("#internalNote").val();

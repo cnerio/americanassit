@@ -231,7 +231,7 @@
 
 					var resultObj = JSON.parse(data);
 
-					if (!resultObj.fields || resultObj.fields.length < 1) {
+					if (resultObj.fields.lentgh < 1) {
 						result.innerHTML = "NO RECORDS FOUND";
 					} else {
 

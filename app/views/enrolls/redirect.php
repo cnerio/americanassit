@@ -1,7 +1,7 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 <?php 
 $apply=false;
-$powered="GTW";
+$powered="AMBT";
 require APPROOT . '/views/inc/navbar.php'; 
 ?>
 
@@ -13,7 +13,7 @@ require APPROOT . '/views/inc/navbar.php';
             <div class="text-center">
                 <h1 class="display-4 fw-bold mb-5"><span class="underline">Good News!</span>.</h1>
                 <p class="fs-5 text-muted mb-5">We currently do not have coverage in this area.<br />
-      but you may qualify with our partner True Wireless.</p>
+      but you may qualify with our partner network through American Assist.</p>
                  <div class="mb-3">
                     <p>Please wait to be redirected and fill the form. <span id="count">5</span> seconds...</p>
                  </div>

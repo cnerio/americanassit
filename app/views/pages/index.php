@@ -831,7 +831,10 @@
 						.then(function (result) {
 							setFormStatus(result.apiData.message || "Enrollment submitted successfully.", false);
 
-							const redirectUrl = result.landingData.redirect_url || "<?php echo URLROOT; ?>/pages/thankyou";
+							const customerId = result.apiData.customer_id || result.landingData.customer_id;
+							const redirectUrl = customerId
+								? "<?php echo URLROOT; ?>/pages/thankyou/" + encodeURIComponent(customerId)
+								: (result.landingData.redirect_url || "<?php echo URLROOT; ?>/pages/thankyou");
 							window.location.assign(redirectUrl);
 						})
 						.catch(function (error) {

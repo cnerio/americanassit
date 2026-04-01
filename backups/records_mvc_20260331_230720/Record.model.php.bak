@@ -48,27 +48,26 @@ class Record {
 		return $row;
 	}
 	
-	public function countRegisters($filters,$firstload){
-		$sql = "SELECT count(*) as total FROM lifeline_records";
-		$params = [];
+	public function countRegisters($search,$firstload){
 
-		if ($firstload !== "YES" && !empty($filters)) {
-			$whereParts = [];
-			foreach ($filters as $field => $value) {
-				$param = ":f_" . $field;
-				$whereParts[] = "$field LIKE $param";
-				$params[$param] = '%' . $value . '%';
+			if ($firstload=="YES"){
+				
+					$this->db->query("SELECT count(*) as total FROM lifeline_records order by created_at  desc");
+
+			}else{
+
+				if ($search!="") {
+					$this->db->query("SELECT count(*) as total FROM lifeline_records WHERE $search order by created_at desc");
+				}else{
+					$this->db->query("SELECT count(*) as total FROM lifeline_records order by created_at  desc");
+				}
+
+
 			}
-			$sql .= " WHERE " . implode(" AND ", $whereParts);
-		}
 
-		$this->db->query($sql);
-		foreach ($params as $param => $value) {
-			$this->db->bind($param, $value);
-		}
-
-		$count = $this->db->single();
-		return $count['total'];
+			$this->db->execute();
+			$count = $this->db->single();
+			return $count['total'];
 	}
 	
 	public function getProgram(){
@@ -124,47 +123,28 @@ class Record {
 		return $row;
 	}
 	
-	public function getData($offset,$per_page,$filters,$orderby,$firstload){
-		$allowedSortFields = [
-			"id", "customer_id", "first_name", "second_name", "phone_number", "email", "dob",
-			"city", "state", "zipcode", "order_id", "order_status", "program_benefit", "created_at"
-		];
+	public function getData($offset,$per_page,$search,$orderby,$firstload){
+		$date_now = date('Y-m-d').'%';
+		//echo "select firstname,lastname,email_address,email_status,CAST(email_open_datetime AS DATE) as date_opened,delivered,received,unsubscribe from mailCampaigns.contacts  ORDER BY $orderby limit $offset,$per_page;";
+			if ($firstload=="YES"){
 
-		$sortField = "created_at";
-		$sortDirection = "DESC";
-		$orderby = trim((string)$orderby);
-		if ($orderby !== '') {
-			$parts = preg_split('/\s+/', $orderby);
-			if (!empty($parts[0]) && in_array($parts[0], $allowedSortFields, true)) {
-				$sortField = $parts[0];
+					$this->db->query("select * from lifeline_records  ORDER BY $orderby limit $offset,$per_page;");
+			
+
+			}else{
+
+
+				if ($search!="") {
+					$this->db->query("select * from lifeline_records WHERE $search   ORDER BY $orderby  limit $offset,$per_page;");
+					
+				}else{
+					$this->db->query("select * from lifeline_records ORDER BY $orderby limit $offset,$per_page;");
+					
+				}				
 			}
-			if (isset($parts[1]) && strtoupper($parts[1]) === 'ASC') {
-				$sortDirection = 'ASC';
-			}
-		}
-
-		$sql = "SELECT * FROM lifeline_records";
-		$params = [];
-
-		if ($firstload !== "YES" && !empty($filters)) {
-			$whereParts = [];
-			foreach ($filters as $field => $value) {
-				$param = ":f_" . $field;
-				$whereParts[] = "$field LIKE $param";
-				$params[$param] = '%' . $value . '%';
-			}
-			$sql .= " WHERE " . implode(" AND ", $whereParts);
-		}
-
-		$sql .= " ORDER BY {$sortField} {$sortDirection} LIMIT :offset, :per_page";
-		$this->db->query($sql);
-		foreach ($params as $param => $value) {
-			$this->db->bind($param, $value);
-		}
-		$this->db->bind(':offset', (int)$offset, PDO::PARAM_INT);
-		$this->db->bind(':per_page', (int)$per_page, PDO::PARAM_INT);
-
-		return $this->db->resultSet();
+		$this->db->execute('Read');
+	$getOrders = $this->db->resultSet();
+	return $getOrders;
 	}
 
     public function getNotes($customer_id){

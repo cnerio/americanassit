@@ -3,10 +3,12 @@
 class AmbtApiHelper
 {
   private $endpoint;
+  private $uploadDocumentEndpoint;
 
   public function __construct($endpoint = null)
   {
     $this->endpoint = $endpoint ?: AMBT_ADD_SUBSCRIBER_URL;
+    $this->uploadDocumentEndpoint = AMBT_UPLOAD_DOCUMENT_URL;
   }
 
   public function selectPackageForCustomer($customerData, $packages)
@@ -157,6 +159,104 @@ class AmbtApiHelper
       'request' => $requestBody,
       'response' => $decoded ?: $response
     ];
+  }
+
+  public function uploadDocument($credentialData, $orderId, $documentName, $base64Input, $documentTypeId)
+  {
+    $normalizedBase64 = $this->normalizeBase64DocumentInput($base64Input);
+    if ($normalizedBase64 === '') {
+      return [
+        'status' => 'error',
+        'msg' => 'Invalid base64 document payload.',
+        'url' => $this->uploadDocumentEndpoint,
+        'request' => null,
+        'response' => null
+      ];
+    }
+
+    $payload = [
+      'Credential' => [
+        'CLECID' => (string)($credentialData['CLECID'] ?? ''),
+        'UserName' => (string)($credentialData['UserName'] ?? ''),
+        'TokenPassword' => (string)($credentialData['TokenPassword'] ?? ''),
+        'PIN' => (string)($credentialData['PIN'] ?? '')
+      ],
+      'SubscriberOrderId' => (string)$orderId,
+      'DocumentName' => (string)$documentName,
+      'DocumentTypeID' => (string)$documentTypeId,
+      'DocumentData' => $normalizedBase64
+    ];
+
+    return $this->postJson($this->uploadDocumentEndpoint, $payload);
+  }
+
+  private function postJson($url, $payload)
+  {
+    $requestBody = json_encode($payload);
+
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+      CURLOPT_URL => $url,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_CUSTOMREQUEST => 'POST',
+      CURLOPT_POSTFIELDS => $requestBody,
+      CURLOPT_SSL_VERIFYHOST => IS_LOCALHOST ? 0 : 2,
+      CURLOPT_SSL_VERIFYPEER => IS_LOCALHOST ? 0 : 1,
+      CURLOPT_HTTPHEADER => [
+        'Content-Type: application/json'
+      ]
+    ]);
+
+    $response = curl_exec($curl);
+    $curlError = curl_error($curl);
+    $curlErrno = curl_errno($curl);
+    $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+
+    if ($curlErrno) {
+      return [
+        'status' => 'error',
+        'msg' => $curlError,
+        'url' => $url,
+        'request' => $requestBody,
+        'response' => null
+      ];
+    }
+
+    $decoded = json_decode($response, true);
+
+    if ($httpCode >= 400) {
+      return [
+        'status' => 'error',
+        'msg' => 'HTTP ERROR CODE: ' . $httpCode,
+        'url' => $url,
+        'request' => $requestBody,
+        'response' => $response
+      ];
+    }
+
+    return [
+      'status' => 'success',
+      'url' => $url,
+      'request' => $requestBody,
+      'response' => $decoded ?: $response
+    ];
+  }
+
+  private function normalizeBase64DocumentInput($base64Input)
+  {
+    $base64Input = trim((string)$base64Input);
+    if ($base64Input === '') {
+      return '';
+    }
+
+    if (strpos($base64Input, 'base64,') !== false) {
+      $base64Input = substr($base64Input, strpos($base64Input, 'base64,') + 7);
+    }
+
+    return str_replace(' ', '+', $base64Input);
   }
 
   private function toApiBoolean($value)

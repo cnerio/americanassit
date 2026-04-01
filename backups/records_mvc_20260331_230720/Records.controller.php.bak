@@ -31,19 +31,10 @@
 
 	public function updateRecordInput(){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
-			$field = isset($_POST['field']) ? trim($_POST['field']) : '';
-			$allowedFields = ['program_before', 'program_benefit', 'source'];
-
-			$id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-
-			if (!in_array($field, $allowedFields, true) || !isset($_POST[$field]) || $id <= 0) {
-				echo json_encode(["status" => false, "message" => "Invalid update request"]);
-				return;
-			}
-
+			$field = $_POST['field'];
 			$data=[
-				$field=>trim($_POST[$field]),
-				"id"=>$id
+				$field=>$_POST[$field],
+				"id"=>$_POST['id']
 			];
 			//print_r($data);
 			$result = $this->enrollsModel->updateDataById($data,"lifeline_records");
@@ -173,13 +164,22 @@
 		
 			//print_r($data);
 			$camposBase=array("customer_id","first_name","second_name","phone_number","email","dob","city","state","zipcode","order_id","order_status","program_benefit","created_at");
-			$filters = [];
-			for($index=0;$index<count($camposBase);$index++){
-				$rawValue = isset($data['arrayCampos'][$index]) ? trim((string)$data['arrayCampos'][$index]) : '';
-				if($rawValue !== ''){
-					$filters[$camposBase[$index]] = $rawValue;
+			$addWhere="";
+			$count=0;
+			for($index=0;$index<count($data['arrayCampos']);$index++){
+				$count += ($data['arrayCampos'][$index]!='')?1:0;
+				
+					if(!empty($data['arrayCampos'][$index])){
+
+if($count<=1){
+	$addWhere.=" ".$camposBase[$index]." LIKE '%".$data['arrayCampos'][$index]."%'";
+}else{
+	$addWhere.=" and ".$camposBase[$index]." LIKE '%".$data['arrayCampos'][$index]."%'";
+}
+
+
+					}
 				}
-			}
 			//$status  = $this->getOrderStatus();
 			
 			$consultaBusqueda = "";
@@ -189,7 +189,7 @@
 			$adjacents  = 2; //brecha entre páginas después de varios adyacentes
 			$offset = ($data['page'] - 1) * $per_page;
 			$offsetnumeroMostrar = ($data['page']-1) * $per_page + 1;
-			$numrows = $this->recordsModel->countRegisters($filters,$data['firstload']);
+			$numrows = $this->recordsModel->countRegisters($addWhere,$data['firstload']);
 			$total_pages = ceil($numrows/$per_page);
 			$reload = 'index.php';
 			$data['per_page']=$per_page;
@@ -202,7 +202,7 @@
 			$data['pagination']=$paginate;
 			//$per_page = 30; //la cantidad de registros que desea mostrar
 			
-			$getOrders = $this->recordsModel->getData($data['offset'],$data['per_page'],$filters,$data['order_by'], $data['firstload']);
+			$getOrders = $this->recordsModel->getData($data['offset'],$data['per_page'],$addWhere,$data['order_by'], $data['firstload']);
 
 			$data['fields']=$getOrders;
 		
@@ -300,48 +300,6 @@
 			$row = $this->userModel->getStaff();
 			echo json_encode($row);
 		/*}*/
-	}
-
-	public function getScripts(){
-		if($_SERVER['REQUEST_METHOD']=='POST'){
-			$source = isset($_POST['source']) ? trim($_POST['source']) : '';
-			if ($source === '') {
-				echo json_encode([]);
-				return;
-			}
-
-			$row = $this->recordsModel->getScript($source);
-			echo json_encode($row);
-		}
-	}
-
-	public function savessn(){
-		if($_SERVER['REQUEST_METHOD']=='POST'){
-			$id = isset($_POST['idrecord']) ? (int)$_POST['idrecord'] : 0;
-			$ssnRaw = isset($_POST['ssn']) ? (string)$_POST['ssn'] : '';
-			$ssn = preg_replace('/\D+/', '', $ssnRaw);
-
-			if ($id <= 0 || strlen($ssn) < 4) {
-				echo json_encode(['response' => 'ERROR', 'message' => 'Missing information']);
-				return;
-			}
-
-			$data = [
-				'id' => $id,
-				'ssn' => substr($ssn, -4)
-			];
-			$result = $this->enrollsModel->updateDataById($data, 'lifeline_records');
-			echo json_encode(['response' => $result ? 'OK' : 'ERROR']);
-		}
-	}
-
-	public function sendSMS(){
-		if($_SERVER['REQUEST_METHOD']=='POST'){
-			echo json_encode([
-				'response' => 'ERROR',
-				'message' => 'SMS endpoint is not configured in this environment'
-			]);
-		}
 	}
 
 	public function assignStaff(){

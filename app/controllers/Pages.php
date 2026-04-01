@@ -49,9 +49,10 @@
       $this->view('pages/contact', $data);
     }
 
-    public function thankyou(){
+    public function thankyou($customer_id = null){
       $data = [
-        'title' => 'Thank You'
+        'title' => 'Thank You',
+        'customer_id' => $customer_id
       ];
 
       $this->view('pages/thankyou', $data);

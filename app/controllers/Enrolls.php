@@ -921,7 +921,9 @@ public function old_check()
           "filepath" => $filepath,
           "type_doc" => $fileType
         ];
-        $fileData['status'] = ($this->enrollModel->saveData($fileData, 'lifeline_documents')) ? true : false;
+      $docId = $this->enrollModel->saveData($fileData, 'lifeline_documents');
+      $fileData['id_lifeline_doc'] = $docId;
+      $fileData['status'] = ((int)$docId > 0);
         return $fileData;
   }
 
@@ -977,9 +979,77 @@ public function old_check()
         $data['pobFileStatus']=$this->saveFiles($data['benefit_proof'],$data['customer_id'],"POB");
         $data['pobFileName']=basename($data['pobFileStatus']['filepath']);
       }
+
+      $customerRows = $this->enrollModel->getCustomerData($data['customer_id']);
+      if (!empty($customerRows) && !empty($customerRows[0])) {
+        $customerData = $customerRows[0];
+        $company = !empty($customerData['ETC']) ? $customerData['ETC'] : 'AMBT';
+        $orderId = $customerData['order_id'] ?? null;
+
+        if (!empty($orderId)) {
+          $credentials = $this->enrollModel->getCredentials($company);
+
+          if (!empty($credentials) && !empty($credentials[0])) {
+            $ambtApi = new AmbtApiHelper();
+
+            if (!empty($data['identity_proof']) && !empty($data['idFileStatus']['status'])) {
+              $idUploadApi = $ambtApi->uploadDocument(
+                $credentials[0],
+                $orderId,
+                $data['idFileName'] ?? ('ID_' . $data['customer_id']),
+                $data['identity_proof'],
+                '100001'
+              );
+
+              $this->enrollModel->saveData([
+                'customer_id' => $data['customer_id'],
+                'url' => $idUploadApi['url'] ?? AMBT_UPLOAD_DOCUMENT_URL,
+                'request' => $idUploadApi['request'] ?? '',
+                'response' => is_array($idUploadApi['response'] ?? null) ? json_encode($idUploadApi['response']) : ($idUploadApi['response'] ?? ''),
+                'title' => 'UploadDocumentAPI_100001'
+              ], 'lifeline_apis_log');
+
+              if (($idUploadApi['status'] ?? 'error') === 'success' && !empty($data['idFileStatus']['id_lifeline_doc'])) {
+                $this->enrollModel->updateDocStatus([
+                  'id_lifeline_doc' => $data['idFileStatus']['id_lifeline_doc'],
+                  'to_unavo' => 1
+                ], 'lifeline_documents');
+              }
+            }
+
+            if (!empty($data['benefit_proof']) && !empty($data['pobFileStatus']['status'])) {
+              $pobUploadApi = $ambtApi->uploadDocument(
+                $credentials[0],
+                $orderId,
+                $data['pobFileName'] ?? ('POB_' . $data['customer_id']),
+                $data['benefit_proof'],
+                '100000'
+              );
+
+              $this->enrollModel->saveData([
+                'customer_id' => $data['customer_id'],
+                'url' => $pobUploadApi['url'] ?? AMBT_UPLOAD_DOCUMENT_URL,
+                'request' => $pobUploadApi['request'] ?? '',
+                'response' => is_array($pobUploadApi['response'] ?? null) ? json_encode($pobUploadApi['response']) : ($pobUploadApi['response'] ?? ''),
+                'title' => 'UploadDocumentAPI_100000'
+              ], 'lifeline_apis_log');
+
+              if (($pobUploadApi['status'] ?? 'error') === 'success' && !empty($data['pobFileStatus']['id_lifeline_doc'])) {
+                $this->enrollModel->updateDocStatus([
+                  'id_lifeline_doc' => $data['pobFileStatus']['id_lifeline_doc'],
+                  'to_unavo' => 1
+                ], 'lifeline_documents');
+              }
+            }
+          }
+        }
+      }
+
       //}
       $this->sendDocumentsEmail($data);
       $data["message"]="Files Upload Susccesfully";
+      $data["success"]=true;
+      $data["redirect_url"]=URLROOT.'/pages/thankyou/'.$data['customer_id'];
       $updatedata = [
         "customer_id"=>$data['customer_id'],
         "order_status"=>"Docs Received"

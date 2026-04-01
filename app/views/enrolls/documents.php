@@ -56,6 +56,7 @@ require APPROOT . '/views/inc/navbar.php';
                     </div>
 
                     <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="<?php echo URLROOT; ?>/pages/thankyou/<?php echo urlencode($data['customer_id']); ?>" class="btn btn-outline-secondary ms-2">Upload Later</a>
                     <input type="hidden" name="customer_id" id="customer_id" value="<?php echo $data['customer_id']; ?>">
                     <div id="response" class="mt-3 text-success"></div>
                 </form>
@@ -259,9 +260,13 @@ require APPROOT . '/views/inc/navbar.php';
             })
             .then(res => res.json())
             .then(response => {
+                if (response && response.success && response.redirect_url) {
+                    window.location.assign(response.redirect_url);
+                    return;
+                }
+
                 $("#uploadSection").hide();
                 $("#thankyou").show();
-                //document.getElementById('response2').textContent = response.message || 'Upload successful!';
             })
             .catch(err => {
                 console.error(err);

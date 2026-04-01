@@ -5,7 +5,7 @@ function redirect($page){
 
 function saveBase64File($base64_string,$customer_id,$doctype) {
     //$projectRoot = dirname(__DIR__, 1);
-    $folder = "../public/uploads/".$customer_id."/";
+    $folder = "../public/files/".$customer_id."/";
     // Extract the file type and base64 data
     if (preg_match('/^data:(.*?);base64,/', $base64_string, $matches)) {
         $mimeType = $matches[1]; // like "application/pdf", "image/png", etc.
@@ -38,13 +38,18 @@ function saveBase64File($base64_string,$customer_id,$doctype) {
             mkdir($folder, 0755, true);
         }
 
-        //$filename = uniqid('file_', true) . '.' . $extension;
-        $filename = $doctype."_".$customer_id. '.' .$extension;
+        try {
+            $randomSuffix = bin2hex(random_bytes(3));
+        } catch (Exception $e) {
+            $randomSuffix = (string)mt_rand(100000, 999999);
+        }
+
+        $filename = $doctype . "_" . $customer_id . "_" . date('YmdHis') . "_" . $randomSuffix . '.' . $extension;
         $filepath = $folder . $filename;
 
         file_put_contents($filepath, $decodedData);
 
-        return URLROOT."/uploads/".$customer_id."/".$filename;
+        return URLROOT."/public/files/".$customer_id."/".$filename;
     } else {
         throw new Exception('Invalid base64 format');
     }

@@ -3,9 +3,9 @@
      <div class="row justify-content-center">
                 <div class="col-lg-10 col-md-12 pt-3 pb-3">
                     <p class="legal-text"><span class="legal-span">*DISCLAIMER: Lifeline is a government assistance program. Only eligible consumers may enroll in Lifeline. Availability is limited to select states and specific zip&nbsp;codes.</span> </p>
-                    <p class="legal-text"><span class="legal-span">True Wireless Inc. "True Wireless" is a recognized service provider of Lifeline services. True Wireless has engaged and supervises to provide prospective beneficiaries enrollment services and customer support to qualified residents. True Wireless operates the lifeline.truewireless.com website. All references to True Wireless herein shall refer to "True Wireless".</span> </p>
+                    <p class="legal-text"><span class="legal-span">American Assist provides enrollment support for qualified Lifeline applicants and works with approved service providers to complete activation when eligibility is confirmed.</span> </p>
                     <p class="legal-text"><span class="legal-span">Completion of this form is required. This form is used for the purpose of verifying your eligibility for and enrolling you in Lifeline benefits and an eligible service plan and will not be used for any other purpose. LifeLine benefits are subject to verification of eligibility by the National Verifier and/or a Third-Party Administrator “TPA”.<br></span></p>
-                    <p class="legal-text"><span class="legal-span">Lifeline services are subject to availability and <a target="_BLANK" href="https://gotruewireless.com/TermsConditions.php" alt="americanassistance">Terms and Conditions</a> and Policies are available at <a target="_BLANK" href="https://www.gotruewireless.com/PrivacyPolicy.php" alt="americanassistance">Here</a>.</span> </p>
+                    <p class="legal-text"><span class="legal-span">Lifeline services are subject to availability and applicable terms, conditions, and privacy policies.</span> </p>
                     <!-- <p class="legal-text"><span class="legal-span">Requires 5G/4G LTE Unlocked AT&amp;T Compatible Phone.</span></p> -->
                     <!-- <p class="legal-text"><span class="legal-span">True Wireless are wholly owned subsidiaries of Galaxy Distribution.</span></p> -->
 
@@ -14,11 +14,11 @@
             </div>
     <div class="container py-4 py-lg-5">
        
-        <div class="text-muted d-flex justify-content-between align-items-center pt-3">
-            <p class="mb-0">Copyright © <span id="year"></span> True Wireless | <a href="https://www.gotruewireless.com/PrivacyPolicy.php" target="_blank" rel="noopener noreferrer nofollow">
-  Privacy Policy
-</a> | <a href="https://gotruewireless.com/TermsConditions.php" target="_blank" rel="noopener noreferrer nofollow">
-  Terms of Service
+                <div class="text-muted d-flex justify-content-between align-items-center pt-3">
+                        <p class="mb-0">Copyright © <span id="year"></span> American Assist | <a href="<?php echo URLROOT; ?>/pages/privacy" target="_blank" rel="noopener noreferrer nofollow">
+    Privacy Policy
+</a> | <a href="<?php echo URLROOT; ?>/pages/terms" target="_blank" rel="noopener noreferrer nofollow">
+    Terms of Service
 </a></p>
             <ul class="list-inline mb-0">
                 <li class="list-inline-item"><svg class="bi bi-facebook" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
@@ -36,7 +36,6 @@
 </footer>
 
   <script src="<?php echo URLROOT; ?>/js/jquery.min.js"></script>
-  <script src="<?php echo URLROOT; ?>/bootstrap/js/bootstrap.min.js"></script>
   <script src="<?php echo URLROOT; ?>/js/jquery.validate.js"></script>
   <script src="<?php echo URLROOT; ?>/js/additional-methods.js"></script>
   <script src="<?php echo URLROOT; ?>/js/jquery.steps.js"></script>
