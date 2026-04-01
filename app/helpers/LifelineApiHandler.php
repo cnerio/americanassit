@@ -71,10 +71,9 @@ class LifelineApiHandler {
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
             $data['request'] = json_encode($payload);
         }
-        /* only for test effect */
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        /* end test line */
+        // Disable SSL verification only in local development.
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, IS_LOCALHOST ? 0 : 2);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, IS_LOCALHOST ? 0 : 1);
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error    = curl_error($ch);

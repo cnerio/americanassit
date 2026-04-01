@@ -168,6 +168,8 @@ Class APIprocess{
           CURLOPT_POSTFIELDS =>'{
             "orderId":'.$orderId.'
         }',
+          CURLOPT_SSL_VERIFYHOST => IS_LOCALHOST ? 0 : 2,
+          CURLOPT_SSL_VERIFYPEER => IS_LOCALHOST ? 0 : 1,
           CURLOPT_HTTPHEADER => array(
             'Content-Type: application/json'
           ),

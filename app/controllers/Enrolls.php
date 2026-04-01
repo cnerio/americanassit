@@ -85,6 +85,7 @@ class Enrolls extends Controller
     $firstName = trim($_POST['first_name'] ?? '');
     $lastName = trim($_POST['last_name'] ?? '');
     $dob = trim($_POST['dob'] ?? '');
+    $ssnLast4 = preg_replace('/\D/', '', $_POST['ssn'] ?? '');
     $email = trim(strtolower($_POST['email'] ?? ''));
     $state = strtoupper(trim($_POST['state'] ?? ''));
     $zipcode = preg_replace('/\D/', '', $_POST['zipcode'] ?? '');
@@ -93,7 +94,12 @@ class Enrolls extends Controller
     $city = trim($_POST['city'] ?? '');
     $program = trim($_POST['program'] ?? '');
     $contactMethod = trim($_POST['contact_method'] ?? '');
+    $phoneType = trim($_POST['phone_type'] ?? '');
+    if ($phoneType === '') {
+      $phoneType = 'Android';
+    }
     $signatureText = trim($_POST['signature_text'] ?? '');
+    $consentDateTime = trim($_POST['consentdatetime'] ?? '');
     $consentInfo = ($_POST['consent_info'] ?? '0') === '1';
     $consentTerms = ($_POST['consent_terms'] ?? '0') === '1';
     $shippingDifferent = ($_POST['shipping_different'] ?? '0') === '1';
@@ -119,6 +125,10 @@ class Enrolls extends Controller
 
     if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $errors['email'] = 'Please enter a valid email address.';
+    }
+
+    if (strlen($ssnLast4) !== 4) {
+      $errors['ssn'] = 'Please enter the last 4 digits of your SSN.';
     }
 
     if (strlen($phoneNumber) !== 10) {
@@ -149,6 +159,10 @@ class Enrolls extends Controller
       $errors['contact_method'] = 'Please select your preferred contact method.';
     }
 
+    if (!in_array($phoneType, ['Android', 'iPhone'], true)) {
+      $errors['phone_type'] = 'Please select your phone type.';
+    }
+
     if ($signatureText === '' || strlen($signatureText) < 3) {
       $errors['signature_text'] = 'Please type your full name as your electronic signature.';
     }
@@ -159,6 +173,14 @@ class Enrolls extends Controller
 
     if (!$consentTerms) {
       $errors['consent_terms'] = 'You must agree to the terms and conditions.';
+    }
+
+    if ($consentTerms) {
+      if ($consentDateTime === '') {
+        $consentDateTime = date('Y-m-d H:i:s');
+      } elseif (strtotime($consentDateTime) === false) {
+        $errors['consent_terms'] = 'Invalid consent datetime.';
+      }
     }
 
     if ($shippingDifferent) {
@@ -200,6 +222,7 @@ class Enrolls extends Controller
       'first_name' => ucfirst(strtolower($firstName)),
       'second_name' => ucfirst(strtolower($lastName)),
       'dob' => $dob,
+      'ssn' => $ssnLast4,
       'email' => $email,
       'phone_number' => $phoneNumber,
       'address1' => $address1,
@@ -213,11 +236,14 @@ class Enrolls extends Controller
       'shipping_state' => $shippingDifferent ? $shippingState : null,
       'shipping_zipcode' => $shippingDifferent ? $shippingZipcode : null,
       'program_benefit' => $program,
+      'phone_type' => $phoneType,
       'signature_text' => $signatureText,
+      'datetimeConsent' => $consentDateTime,
       'order_step' => 'Landing Form',
       'URL' => $currentUrl,
       'utms' => $utms,
-      'company' => 'American Assist'
+      'company' => 'American Assist',
+      'ETC' => 'AMBT'
     ];
 
     try {
@@ -248,6 +274,110 @@ class Enrolls extends Controller
         'message' => 'Server error while processing your request.'
       ]);
     }
+  }
+
+  public function submitAmbtOrder($customer_id = null)
+  {
+    header('Content-Type: application/json');
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+      http_response_code(405);
+      echo json_encode([
+        'success' => false,
+        'message' => 'Method not allowed.'
+      ]);
+      return;
+    }
+
+    $customerId = $customer_id ?: ($_POST['customer_id'] ?? null);
+    if (!$customerId) {
+      http_response_code(422);
+      echo json_encode([
+        'success' => false,
+        'message' => 'customer_id is required.'
+      ]);
+      return;
+    }
+
+    $rows = $this->enrollModel->getCustomerData($customerId);
+    if (empty($rows) || empty($rows[0])) {
+      http_response_code(404);
+      echo json_encode([
+        'success' => false,
+        'message' => 'Customer not found.'
+      ]);
+      return;
+    }
+
+    $customerData = $rows[0];
+    $company = !empty($customerData['ETC']) ? $customerData['ETC'] : 'AMBT';
+
+    $credentials = $this->enrollModel->getCredentials($company);
+    if (empty($credentials) || empty($credentials[0])) {
+      http_response_code(500);
+      echo json_encode([
+        'success' => false,
+        'message' => 'Credentials not found for company ' . $company
+      ]);
+      return;
+    }
+
+    $packages = $this->enrollModel->getPackages($company);
+
+    $ambtApi = new AmbtApiHelper();
+    $selectedPackage = $ambtApi->selectPackageForCustomer($customerData, $packages);
+    $payload = $ambtApi->buildAddSubscriberPayload($customerData, $credentials[0], $selectedPackage);
+
+    if (empty($payload['DOB']) || preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $payload['DOB']) !== 1) {
+      http_response_code(422);
+      echo json_encode([
+        'success' => false,
+        'message' => 'Invalid DOB format. Expected mm/dd/yyyy.',
+        'customer_id' => $customerId
+      ]);
+      return;
+    }
+
+    $apiResult = $ambtApi->submitAddSubscriberOrder($payload);
+
+    $logData = [
+      'customer_id' => $customerId,
+      'url' => $apiResult['url'] ?? AMBT_ADD_SUBSCRIBER_URL,
+      'request' => $apiResult['request'] ?? json_encode($payload),
+      'response' => is_array($apiResult['response'] ?? null) ? json_encode($apiResult['response']) : ($apiResult['response'] ?? ''),
+      'title' => 'AddSubscriberOrderWithEBBData'
+    ];
+    $this->enrollModel->saveData($logData, 'lifeline_apis_log');
+
+    if (($apiResult['status'] ?? 'error') !== 'success') {
+      http_response_code(502);
+      echo json_encode([
+        'success' => false,
+        'message' => $apiResult['msg'] ?? 'AMBT API request failed.',
+        'payload' => $payload
+      ]);
+      return;
+    }
+
+    $responseBody = is_array($apiResult['response'] ?? null) ? $apiResult['response'] : [];
+    $updateData = [
+      'customer_id' => $customerId,
+      'order_id' => $responseBody['SubscriberOrderID'] ?? null,
+      'account' => $responseBody['AccountNumber'] ?? null,
+      'acp_status' => $responseBody['NLADStatus'] ?? ($responseBody['Status'] ?? null),
+      'status_text' => $responseBody['StatusText'] ?? null,
+      'process_status' => 'AddSubscriberOrderWithEBBData API'
+    ];
+    $this->enrollModel->updateData($updateData, 'lifeline_records');
+
+    echo json_encode([
+      'success' => true,
+      'message' => 'AMBT order submitted successfully.',
+      'customer_id' => $customerId,
+      'order_id' => $updateData['order_id'],
+      'payload' => $payload,
+      'response' => $responseBody
+    ]);
   }
 
   public function getStep($stepName){

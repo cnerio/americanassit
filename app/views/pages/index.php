@@ -133,7 +133,11 @@
 								</div>
 								<div>
 									<label for="phone" class="mb-2 block text-sm font-medium text-slate-700">Phone Number</label>
-									<input id="phone" name="phone" type="tel" placeholder="e.g. (555) 123-4567" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
+									<input id="phone" name="phone" type="tel" inputmode="numeric" maxlength="14" placeholder="e.g. (555) 123-4567" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
+								</div>
+								<div>
+									<label for="ssn" class="mb-2 block text-sm font-medium text-slate-700">Last 4 of SSN</label>
+									<input id="ssn" name="ssn" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="e.g. 1234" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
 								</div>
 								<div class="sm:col-span-2">
 									<label for="email" class="mb-2 block text-sm font-medium text-slate-700">Email Address</label>
@@ -337,6 +341,14 @@
 										<option value="email">Email</option>
 									</select>
 								</div>
+
+								<div>
+									<label for="phone_type" class="mb-2 block text-sm font-medium text-slate-700">Phone Type</label>
+									<select id="phone_type" name="phone_type" class="w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30">
+										<option value="Android" selected>Android</option>
+										<option value="iPhone">iPhone</option>
+									</select>
+								</div>
 							</div>
 						</div>
 
@@ -352,6 +364,7 @@
 						<div class="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
 							<label class="flex items-start gap-2"><input id="consent_info" name="consent_info" type="checkbox" class="mt-0.5 h-4 w-4" required /> <span>I certify that the information provided is true and accurate.</span></label>
 							<label class="flex items-start gap-2"><input id="consent_terms" name="consent_terms" type="checkbox" class="mt-0.5 h-4 w-4" required /> <span>I agree to program terms, conditions, and one benefit per eligible household rules.</span></label>
+							<input id="consentdatetime" name="consentdatetime" type="hidden" value="" />
 						</div>
 
 						<button type="submit" class="w-full rounded-md bg-brand-navy px-6 py-3 font-semibold text-white transition hover:bg-[#02284d] focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2">
@@ -482,8 +495,40 @@
 		const shippingDifferent = document.getElementById("shipping_different");
 		const shippingFields = document.getElementById("shipping-fields");
 		const enrollmentForm = document.getElementById("enrollment-form");
+		const phoneInput = document.getElementById("phone");
+		const ssnInput = document.getElementById("ssn");
+		const zipcodeInput = document.getElementById("zipcode");
+		const shippingZipcodeInput = document.getElementById("shipping_zipcode");
+		const consentTermsCheckbox = document.getElementById("consent_terms");
+		const consentDateTimeInput = document.getElementById("consentdatetime");
 		const formStatus = document.getElementById("form-status");
 		let syncShippingFields = function () {};
+
+		const keepOnlyDigits = function (value, maxLength) {
+			return String(value || "").replace(/\D/g, "").slice(0, maxLength);
+		};
+
+		const formatPhoneMask = function (value) {
+			const digits = keepOnlyDigits(value, 10);
+			if (digits.length <= 3) {
+				return digits.length ? "(" + digits : "";
+			}
+
+			if (digits.length <= 6) {
+				return "(" + digits.slice(0, 3) + ") " + digits.slice(3);
+			}
+
+			return "(" + digits.slice(0, 3) + ") " + digits.slice(3, 6) + "-" + digits.slice(6);
+		};
+
+		const getCurrentDateTime = function () {
+			const now = new Date();
+			const pad = function (value) {
+				return String(value).padStart(2, "0");
+			};
+
+			return now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate()) + " " + pad(now.getHours()) + ":" + pad(now.getMinutes()) + ":" + pad(now.getSeconds());
+		};
 
 		const setFormStatus = function (message, isError) {
 			if (!formStatus) {
@@ -509,6 +554,30 @@
 				const expanded = menuToggle.getAttribute("aria-expanded") === "true";
 				menuToggle.setAttribute("aria-expanded", String(!expanded));
 				mobileMenu.classList.toggle("hidden");
+			});
+		}
+
+		if (phoneInput) {
+			phoneInput.addEventListener("input", function () {
+				phoneInput.value = formatPhoneMask(phoneInput.value);
+			});
+		}
+
+		if (ssnInput) {
+			ssnInput.addEventListener("input", function () {
+				ssnInput.value = keepOnlyDigits(ssnInput.value, 4);
+			});
+		}
+
+		if (zipcodeInput) {
+			zipcodeInput.addEventListener("input", function () {
+				zipcodeInput.value = keepOnlyDigits(zipcodeInput.value, 5);
+			});
+		}
+
+		if (shippingZipcodeInput) {
+			shippingZipcodeInput.addEventListener("input", function () {
+				shippingZipcodeInput.value = keepOnlyDigits(shippingZipcodeInput.value, 5);
 			});
 		}
 
@@ -541,6 +610,16 @@
 			syncShippingFields();
 		}
 
+		if (consentTermsCheckbox && consentDateTimeInput) {
+			consentTermsCheckbox.addEventListener("change", function () {
+				if (consentTermsCheckbox.checked) {
+					consentDateTimeInput.value = getCurrentDateTime();
+				} else {
+					consentDateTimeInput.value = "";
+				}
+			});
+		}
+
 		if (window.jQuery && enrollmentForm) {
 			const $enrollmentForm = window.jQuery("#enrollment-form");
 
@@ -558,6 +637,7 @@
 					last_name: { required: true, minlength: 2 },
 					dob: { required: true },
 					phone: { required: true, phoneUS: true },
+						ssn: { required: true, digits: true, minlength: 4, maxlength: 4 },
 					email: { required: true, email: true },
 					address1: { required: true },
 					city: { required: true },
@@ -605,6 +685,12 @@
 					last_name: "Please enter your last name.",
 					dob: "Please select your date of birth.",
 					phone: "Please enter a valid 10-digit phone number.",
+						ssn: {
+							required: "Please enter the last 4 digits of your SSN.",
+							digits: "SSN must contain numbers only.",
+							minlength: "SSN must be 4 digits.",
+							maxlength: "SSN must be 4 digits."
+						},
 					email: "Please enter a valid email address.",
 					address1: "Please enter your service address.",
 					city: "Please enter your city.",
@@ -626,7 +712,7 @@
 					},
 					program: "Please select your program qualification.",
 					contact_method: "Please select your preferred contact method.",
-						signature_text: "Please type your full name as your electronic signature.",
+					signature_text: "Please type your full name as your electronic signature.",
 					consent_info: "You must certify that your information is accurate.",
 					consent_terms: "You must agree to the terms and conditions."
 				},
@@ -664,6 +750,10 @@
 					formData.set("shipping_different", shippingDifferent && shippingDifferent.checked ? "1" : "0");
 					formData.set("consent_info", document.getElementById("consent_info").checked ? "1" : "0");
 					formData.set("consent_terms", document.getElementById("consent_terms").checked ? "1" : "0");
+					if (consentTermsCheckbox && consentDateTimeInput && consentTermsCheckbox.checked && !consentDateTimeInput.value) {
+						consentDateTimeInput.value = getCurrentDateTime();
+					}
+					formData.set("consentdatetime", consentDateTimeInput ? consentDateTimeInput.value : "");
 
 					if (submitButton) {
 						submitButton.disabled = true;
@@ -697,9 +787,51 @@
 								});
 						})
 						.then(function (data) {
-							setFormStatus(data.message || "Enrollment request submitted successfully.", false);
+							if (!data.customer_id) {
+								throw {
+									message: "Enrollment was saved but customer id was not returned."
+								};
+							}
 
-							const redirectUrl = data.redirect_url || "<?php echo URLROOT; ?>/pages/thankyou";
+							setFormStatus("Information saved. Submitting order to carrier...", false);
+
+							const ambtBody = new URLSearchParams();
+							ambtBody.append("customer_id", data.customer_id);
+
+							return fetch("<?php echo URLROOT; ?>/enrolls/submitAmbtOrder", {
+								method: "POST",
+								headers: {
+									"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+									"X-Requested-With": "XMLHttpRequest"
+								},
+								body: ambtBody.toString()
+							})
+								.then(function (response) {
+									return response.json()
+										.catch(function () {
+											return {
+												success: false,
+												message: "Unexpected carrier API response."
+											};
+										})
+										.then(function (apiData) {
+											if (!response.ok || !apiData.success) {
+												throw {
+													message: apiData.message || "Saved locally, but failed to submit order to carrier."
+												};
+											}
+
+											return {
+												landingData: data,
+												apiData: apiData
+											};
+										});
+								});
+						})
+						.then(function (result) {
+							setFormStatus(result.apiData.message || "Enrollment submitted successfully.", false);
+
+							const redirectUrl = result.landingData.redirect_url || "<?php echo URLROOT; ?>/pages/thankyou";
 							window.location.assign(redirectUrl);
 						})
 						.catch(function (error) {

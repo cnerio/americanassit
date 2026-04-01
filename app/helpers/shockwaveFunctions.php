@@ -10,9 +10,11 @@ function create_shockwave_accountTEST($data, $customer_id, $company, $carrier, $
 	switch ($company) {
 		case "TERRACOM":
 			$OrderRequest = lifeline_payload($data, $credentials, $carrier, $company, $configs);
-			break;
-		case "SURGE":
-			//$OrderRequest = surge_payload($data, $credentials, $carrier, $company);
+		//    CURLOPT_HTTPHEADER => array(
+		// 	   'Content-Type: application/json'
+		//    ),
+		//    CURLOPT_SSL_VERIFYHOST => IS_LOCALHOST ? 0 : 2,
+		//    CURLOPT_SSL_VERIFYPEER => IS_LOCALHOST ? 0 : 1
 			break;
 		case "TORCH":
 			//$OrderRequest = torch_payload($data, $credentials, $carrier, $company);
@@ -178,6 +180,8 @@ function nladEnrollTEST($order_id, $customer_id, $company, $source)
 		"Author": "' . $author . '",
 		"EnrollLifeLine": "true",
 		"EnrollEBB": "false",
+			   CURLOPT_SSL_VERIFYHOST => IS_LOCALHOST ? 0 : 2,
+			   CURLOPT_SSL_VERIFYPEER => IS_LOCALHOST ? 0 : 1,
 		"RepNotAssisted": "true"
 	}';
 	//$response = unavoAPICall($url, $payload);
@@ -725,6 +729,8 @@ function unavoAPICall($url, $request){
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_POSTFIELDS => $request,
+		CURLOPT_SSL_VERIFYHOST => IS_LOCALHOST ? 0 : 2,
+		CURLOPT_SSL_VERIFYPEER => IS_LOCALHOST ? 0 : 1,
         CURLOPT_HTTPHEADER => array(
             'Content-Type: application/json'
         ),
@@ -781,7 +787,9 @@ function getCredentialCLEC($company, $source){
 		CURLOPT_FOLLOWLOCATION => true,
 		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 		CURLOPT_CUSTOMREQUEST => 'POST',
-		CURLOPT_POSTFIELDS => json_encode($payload)
+		CURLOPT_POSTFIELDS => json_encode($payload),
+		CURLOPT_SSL_VERIFYHOST => IS_LOCALHOST ? 0 : 2,
+		CURLOPT_SSL_VERIFYPEER => IS_LOCALHOST ? 0 : 1
 	));
 
 	$response = curl_exec($curl);

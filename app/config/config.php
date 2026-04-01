@@ -62,6 +62,8 @@
     define('MAIL_DOCS_BCC', $config['mail_docs_bcc'] ?? '');
     define('MAIL_ORDERS_TO', $config['mail_orders_to'] ?? '');
     define('MAIL_NOTIFY_DOCS_BCC', $config['mail_notify_docs_bcc'] ?? '');
+    define('AMBT_ADD_SUBSCRIBER_URL', $config['ambt_add_subscriber_url'] ?? '');
+    define('IS_LOCALHOST', $isLocalhost);
   //echo $_SERVER['DOCUMENT_ROOT'];
   
   // App Root
@@ -72,6 +74,6 @@
   // URL Root
   define('URLROOT', $GLOBALS["urlroot"]);
   // Site Name
-  define('SITENAME', 'Truewireless Lifeline');
+  define('SITENAME', 'American Assist');
   // App Version
   define('APPVERSION', '1.0.0');
