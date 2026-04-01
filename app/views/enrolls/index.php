@@ -468,10 +468,9 @@ $fbclid = isset($_GET['fbclid']) ? $_GET['fbclid'] : null
                             </div> -->
                             <div class="row mb-2">
                                 <div class="col-md-12">
-                                    <!-- <span class="btn btn-lg btn-primary" id="uploadBtn">Click to upload your government ID <span class="requiredmark">*</span></span> -->
-                                    <span class="btn btn-lg btn-primary" id="uploadBtn">Click to upload your government ID</span>
+                                    <span class="btn btn-lg btn-primary" id="uploadBtn">Click to upload your government ID <span class="requiredmark">*</span></span>
                                     <br>
-                                    <span><b>Not Required</b></span>
+                                    <span><b>Required</b></span>
                                     <br>
                                     <label id="fileInputerror" style="display:none;" class="error" for="fileInput"></label>
                                     <input type="file" name="fileInput" id="fileInput" accept="image/*,application/pdf,.doc,.docx" capture="camera" style="display: none;" />
@@ -481,10 +480,9 @@ $fbclid = isset($_GET['fbclid']) ? $_GET['fbclid'] : null
 
                             <div class="row">
                                 <div class="col-md-12">
-                                    <!-- <span class="btn btn-lg btn-primary" id="uploadBtnpob">Click to upload your Proof of Benefit <span class="requiredmark">*</span></span> -->
-                                    <span class="btn btn-lg btn-primary" id="uploadBtnpob">Click to upload your Proof of Benefit </span>
+                                    <span class="btn btn-lg btn-primary" id="uploadBtnpob">Click to upload your Proof of Benefit <span class="requiredmark">*</span></span>
                                     <br>
-                                    <span><b>Not Required</b></span>
+                                    <span><b>Required</b></span>
                                     <br><label id="fileInputerror2" style="display:none;" class="error" for="fileInput2"></label>
                                     <input type="file" name="fileInput2" id="fileInput2" accept="image/*,application/pdf,.doc,.docx" capture="camera" style="display: none;" />
                                     <div id="preview2"></div>
@@ -801,29 +799,29 @@ $fbclid = isset($_GET['fbclid']) ? $_GET['fbclid'] : null
                     }
 
                 } else if (currentIndex === 1) {
-                    //let step2Data = $("#enrollForm-p-1 :input").serialize();  
-                    //benefitProgram = (benefitProgram=="")?$("#eligibility_program").val():benefitProgram;
-                    //console.log(base64String)
-                    //console.log(pobbase64String)
-                    // if(!base64String && !pobbase64String){
-                    //     $("#fileInputerror").show()
-                    //     $("#fileInputerror").html('File ID and Proof of Benefit are required, you must upload your files')
-                    //     $("#fileInputerror2").show()
-                    //     $("#fileInputerror2").html('File ID and Proof of Benefit are required, you must upload your files')
-                    //     //$("#fileInputerror").html('File ID is required, you must upload your files')
-                    // }else if(!base64String){
-                    //     $("#fileInputerror").show()
-                    //     $("#fileInputerror").html('File ID is required, you must upload your government ID')
-                    // }else if(!pobbase64String){
-                    //     $("#fileInputerror2").show()    
-                    //     $("#fileInputerror2").html('Proof of Benefit is required, you must upload your proof of benefit')
-                        
-                    // }else{
-                        
-                    //     $("#fileInputerror").hide()
-                    //     $("#fileInputerror").html("")
-                    //     $("#fileInputerror2").hide()
-                    //     $("#fileInputerror2").html("")
+                    if(!base64String && !pobbase64String){
+                        $("#fileInputerror").show();
+                        $("#fileInputerror").html('Government ID and Proof of Benefit are required.');
+                        $("#fileInputerror2").show();
+                        $("#fileInputerror2").html('Government ID and Proof of Benefit are required.');
+                        canProceed = false;
+                    } else if(!base64String){
+                        $("#fileInputerror").show();
+                        $("#fileInputerror").html('Government ID is required.');
+                        $("#fileInputerror2").hide();
+                        $("#fileInputerror2").html("");
+                        canProceed = false;
+                    } else if(!pobbase64String){
+                        $("#fileInputerror").hide();
+                        $("#fileInputerror").html("");
+                        $("#fileInputerror2").show();
+                        $("#fileInputerror2").html('Proof of Benefit is required.');
+                        canProceed = false;
+                    } else {
+                        $("#fileInputerror").hide();
+                        $("#fileInputerror").html("");
+                        $("#fileInputerror2").hide();
+                        $("#fileInputerror2").html("");
                         $.ajax({
                             url: "<?php echo URLROOT; ?>/enrolls/savestep2",
                             method: "POST",
@@ -851,6 +849,10 @@ $fbclid = isset($_GET['fbclid']) ? $_GET['fbclid'] : null
                                     getDatetime();
                                 }else{
                                     canProceed = false;
+                                    if(myOBj.message){
+                                        $("#fileInputerror2").show();
+                                        $("#fileInputerror2").html(myOBj.message);
+                                    }
                                 }
 
                             },
@@ -858,7 +860,7 @@ $fbclid = isset($_GET['fbclid']) ? $_GET['fbclid'] : null
                                 alert("Error saving step " + currentIndex);
                             }
                         });
-                    //}
+                    }
 
                     
                 }
@@ -1055,6 +1057,7 @@ $fbclid = isset($_GET['fbclid']) ? $_GET['fbclid'] : null
     if (!file) return;
 
     $("#fileInputerror").html('');
+    $("#fileInputerror").hide();
     uploadedFileName = file.name;
 
     if (file.type.startsWith('image/')) {
@@ -1107,7 +1110,8 @@ $('#fileInput2').on('change', function () {
     const file = this.files[0];
     if (!file) return;
 
-    $("#fileInputerror").html('');
+    $("#fileInputerror2").html('');
+    $("#fileInputerror2").hide();
     pobuploadedFileName = file.name;
 
     if (file.type.startsWith('image/')) {

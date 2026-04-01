@@ -108,6 +108,8 @@ class Enrolls extends Controller
     $shippingCity = trim($_POST['shipping_city'] ?? '');
     $shippingState = strtoupper(trim($_POST['shipping_state'] ?? ''));
     $shippingZipcode = preg_replace('/\D/', '', $_POST['shipping_zipcode'] ?? '');
+    $identityProof = trim($_POST['identity_proof'] ?? '');
+    $benefitProof = trim($_POST['benefit_proof'] ?? '');
 
     $errors = [];
 
@@ -205,6 +207,14 @@ class Enrolls extends Controller
       $errors['current_page_url'] = 'Invalid source URL.';
     }
 
+    if ($identityProof === '') {
+      $errors['identity_proof'] = 'Government ID document is required.';
+    }
+
+    if ($benefitProof === '') {
+      $errors['benefit_proof'] = 'Proof of Benefit document is required.';
+    }
+
     if (!empty($errors)) {
       http_response_code(422);
       echo json_encode([
@@ -252,6 +262,21 @@ class Enrolls extends Controller
       if ((int)$lastId > 0) {
         $customerId = $this->genCustomerId($data, $lastId);
         $this->enrollModel->updateCusId($lastId, $customerId, 'lifeline_records');
+
+        $idFileStatus = $this->saveFiles($identityProof, $customerId, 'ID');
+        $pobFileStatus = $this->saveFiles($benefitProof, $customerId, 'POB');
+
+        if (empty($idFileStatus['status']) || empty($pobFileStatus['status'])) {
+          file_put_contents("stepLog.txt", "submitLanding document save failed for customer " . $customerId . "\n", FILE_APPEND);
+          http_response_code(500);
+          echo json_encode([
+            'success' => false,
+            'message' => 'Enrollment was saved but required documents could not be stored. Please try again.'
+          ]);
+          return;
+        }
+
+        file_put_contents("stepLog.txt", "submitLanding documents saved for customer " . $customerId . "\n", FILE_APPEND);
 
         echo json_encode([
           'success' => true,
@@ -370,11 +395,33 @@ class Enrolls extends Controller
     ];
     $this->enrollModel->updateData($updateData, 'lifeline_records');
 
+    $documentUploads = [];
+    $orderId = $updateData['order_id'];
+
+    if (!empty($orderId)) {
+      $idDoc = $this->enrollModel->getFiles($customerId, 'ID');
+      $idToUnavo = is_array($idDoc) ? (int)($idDoc['to_unavo'] ?? 0) : (int)($idDoc->to_unavo ?? 0);
+      if (!empty($idDoc) && $idToUnavo !== 1) {
+        $documentUploads['ID'] = $this->sendDocuments($customerId, $orderId, 'ID', $company);
+      }
+
+      $pobDoc = $this->enrollModel->getFiles($customerId, 'POB');
+      $pobToUnavo = is_array($pobDoc) ? (int)($pobDoc['to_unavo'] ?? 0) : (int)($pobDoc->to_unavo ?? 0);
+      if (!empty($pobDoc) && $pobToUnavo !== 1) {
+        $documentUploads['POB'] = $this->sendDocuments($customerId, $orderId, 'POB', $company);
+      }
+
+      if (!empty($documentUploads)) {
+        file_put_contents("stepLog.txt", "submitAmbtOrder document upload attempts for customer " . $customerId . ": " . json_encode($documentUploads) . "\n", FILE_APPEND);
+      }
+    }
+
     echo json_encode([
       'success' => true,
       'message' => 'AMBT order submitted successfully.',
       'customer_id' => $customerId,
       'order_id' => $updateData['order_id'],
+      'documents' => $documentUploads,
       'payload' => $payload,
       'response' => $responseBody
     ]);
@@ -713,6 +760,15 @@ public function old_check()
   {
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
       //print_r($_POST);
+      if (empty($_POST['govId']) || empty($_POST['pob'])) {
+        file_put_contents("stepLog.txt", "Step 2 validation failed: missing required ID/POB documents\n", FILE_APPEND);
+        echo json_encode([
+          'statusFile' => false,
+          'message' => 'Government ID and Proof of Benefit are required.'
+        ]);
+        return;
+      }
+
       $data = [
         "program_benefit" => $_POST['eligibility_program'],
         "nverification_number" => trim($_POST['nv_application_id']),
@@ -725,6 +781,10 @@ public function old_check()
 
       $this->enrollModel->updateData($data, 'lifeline_records');
       file_put_contents("stepLog.txt", "Update New Data", FILE_APPEND);
+      $fileData = [
+        'statusFile' => true
+      ];
+
       if (!empty($_POST['govId'])) {
         $base64_string = $_POST['govId'];
         $customer_id = $data['customer_id'];
@@ -735,9 +795,10 @@ public function old_check()
           "filepath" => $filepath,
           "type_doc" => "ID"
         ];
-        $fileData['statusFile'] = ($this->enrollModel->saveData($fileData, 'lifeline_documents')) ? true : false;
-      } else {
-        $fileData['statusFile'] = true;
+        $idSaved = $this->enrollModel->saveData($fileData, 'lifeline_documents');
+        if (!$idSaved) {
+          $fileData['statusFile'] = false;
+        }
       }
 
       if (!empty($_POST['pob'])) {
@@ -750,10 +811,13 @@ public function old_check()
           "filepath" => $filepath2,
           "type_doc" => "POB"
         ];
-        $fileData['statusFile'] = ($this->enrollModel->saveData($pobData, 'lifeline_documents')) ? true : false;
-      } else {
-        $fileData['statusFile'] = true;
+        $pobSaved = $this->enrollModel->saveData($pobData, 'lifeline_documents');
+        if (!$pobSaved) {
+          $fileData['statusFile'] = false;
+        }
       }
+
+      file_put_contents("stepLog.txt", "Step 2 complete: required document log persisted for customer " . $data['customer_id'] . "\n", FILE_APPEND);
 
 
       echo json_encode($fileData);
@@ -1120,12 +1184,13 @@ public function old_check()
     $credentials=$this->enrollModel->getCredentials($company);
     if($orderId>0){
       if($fileData){
-                // Read the image file into a binary string 
-                $imageData = file_get_contents($fileData['filepath']);
+                // Convert URL-based filepath to absolute disk path for reliable reading
+                $diskFilePath = rtrim(APPROOT, '/\\') . '/' . ltrim(str_replace(URLROOT, '', $fileData['filepath']), '/\\');
+                $imageData = file_get_contents($diskFilePath);
                 $filename = basename($fileData['filepath']);
                 // Encode the binary data to base64
                 $base64 = base64_encode($imageData);
-                $upload=UploadDocument($credentials[0], $orderId, $filename, $base64, $fileID);
+                $upload=UploadDocument($credentials[0], $orderId, $filename, $base64, $fileID, $company);
                 if($upload['status']=="success"){
                   $saveCreateIDLog=[
                     "customer_id"=>$customerId,
@@ -1879,15 +1944,9 @@ public function old_check()
   public function thankyou()
   {
     $customerId = $_POST['customer_id'] ?? null;
-    $hasIdOrPobDocument = false;
-
-    if ($customerId) {
-      $hasIdOrPobDocument = $this->enrollModel->hasIdOrPobDocument($customerId);
-    }
 
     $data = [
-      'customer_id' => $customerId,
-      'hasIdOrPobDocument' => $hasIdOrPobDocument
+      'customer_id' => $customerId
     ];
 
     $this->view('enrolls/thankyou', $data);

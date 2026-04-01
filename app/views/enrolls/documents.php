@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>American Assist | Document Upload</title>
+    <link rel="icon" type="image/svg+xml" href="<?php echo URLROOT; ?>/public/img/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo URLROOT; ?>/public/img/favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {

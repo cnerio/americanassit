@@ -28,6 +28,8 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet" />
+	<!-- <link rel="icon" type="image/svg+xml" href="<?php// echo URLROOT; ?>/public/img/favicon.svg"> -->
+	<link rel="icon" type="image/png" sizes="32x32" href="<?php echo URLROOT; ?>/public/img/favicon.png">
 </head>
 <body class="bg-white text-slate-800 antialiased">
 	<a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-brand-navy focus:shadow">
@@ -95,10 +97,10 @@
 							Lifeline + ACP Support
 						</p>
 						<h1 class="text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">
-							Free Government Phone Services for Eligible Households
+							Free Government Phone Services for Eligible&nbsp;Households
 						</h1>
 						<p class="mt-4 text-base text-slate-100 sm:text-lg">
-							Stay connected with dependable wireless coverage, unlimited talk and text, and data plans designed for your everyday needs.
+							Stay connected with dependable wireless coverage, unlimited talk and text, and data plans designed for your everyday&nbsp;needs.
 						</p>
 						<div class="mt-8">
 							<a href="#eligibility" class="inline-flex items-center rounded-md bg-brand-red px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-brand-red focus:ring-offset-2 focus:ring-offset-brand-navy">
@@ -114,7 +116,7 @@
 			<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
 				<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
 					<h2 class="text-center text-2xl font-bold text-brand-navy sm:text-3xl">Start Your Enrollment</h2>
-					<p class="mt-2 text-center text-slate-600">Complete this form to check eligibility and begin your free government phone service application.</p>
+					<p class="mt-2 text-center text-slate-600">Complete this form to check eligibility and begin your free government phone service&nbsp;application.</p>
 					<form id="enrollment-form" class="mt-6 space-y-6" action="<?php echo URLROOT; ?>/enrolls/submitLanding" method="post" aria-label="Enrollment form" novalidate>
 						<div>
 							<h3 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">Applicant Information</h3>
@@ -319,16 +321,16 @@
 								<fieldset>
 									<legend class="text-sm font-medium text-slate-700">Program Qualification</legend>
 									<div class="mt-2 grid gap-3 sm:grid-cols-2">
-										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100001" class="h-4 w-4" required /> Supplemental Nutrition Assistance Program (SNAP)</label>
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100001" class="h-4 w-4" required /> Supplemental Nutrition Assistance Program&nbsp;(SNAP)</label>
 										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100004" class="h-4 w-4" required /> Medicaid</label>
 										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100002" class="h-4 w-4" required /> Household Income</label>
-										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100006" class="h-4 w-4" required /> Supplemental Security Income (SSI)</label>
-										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100000" class="h-4 w-4" required /> Federal Public Housing Assistance (Section 8)</label>
-										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100014" class="h-4 w-4" required /> Veteran's Pension or Survivors Benefit Programs</label>
-										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100011" class="h-4 w-4" required /> Bureau of Indian Affairs General Assistance</label>
-										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100008" class="h-4 w-4" required /> Tribally-Administered Temporary Assistance for Needy Families (TTANF)</label>
-										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100010" class="h-4 w-4" required /> Food Distribution Program on Indian Reservations (FDPIR)</label>
-										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100009" class="h-4 w-4" required /> Head Start (if income eligibility criteria are met)</label>
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100006" class="h-4 w-4" required /> Supplemental Security Income&nbsp;(SSI)</label>
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100000" class="h-4 w-4" required /> Federal Public Housing Assistance&nbsp;(Section 8)</label>
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100014" class="h-4 w-4" required /> Veteran's Pension or Survivors Benefit&nbsp;Programs</label>
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100011" class="h-4 w-4" required /> Bureau of Indian Affairs General&nbsp;Assistance</label>
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100008" class="h-4 w-4" required /> Tribally-Administered Temporary Assistance for Needy Families&nbsp;(TTANF)</label>
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100010" class="h-4 w-4" required /> Food Distribution Program on Indian Reservations&nbsp;(FDPIR)</label>
+										<label class="flex items-center gap-2 rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700"><input type="radio" name="program" value="100009" class="h-4 w-4" required /> Head Start&nbsp;(if income eligibility criteria are met)</label>
 									</div>
 								</fieldset>
 
@@ -353,8 +355,29 @@
 						</div>
 
 						<div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
+							<h3 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">Required Documents</h3>
+							<p class="mt-2 text-sm text-slate-600">Upload both files to continue: one government-issued ID and one proof of program&nbsp;eligibility.</p>
+
+							<div class="mt-4 grid gap-4 sm:grid-cols-2">
+								<div>
+									<label for="identity_proof_file" class="mb-2 block text-sm font-medium text-slate-700">Government ID</label>
+									<input id="identity_proof_file" name="identity_proof_file" type="file" accept=".jpg,.jpeg,.png,.pdf" class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-brand-navy file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[#02284d]" required />
+									<p class="mt-1 text-xs text-slate-500">Accepted: JPG, PNG, PDF</p>
+									<div id="identity_preview" class="mt-2"></div>
+								</div>
+
+								<div>
+									<label for="benefit_proof_file" class="mb-2 block text-sm font-medium text-slate-700">Proof of Benefit</label>
+									<input id="benefit_proof_file" name="benefit_proof_file" type="file" accept=".jpg,.jpeg,.png,.pdf" class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-brand-navy file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[#02284d]" required />
+									<p class="mt-1 text-xs text-slate-500">Accepted: JPG, PNG, PDF</p>
+									<div id="benefit_preview" class="mt-2"></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
 							<h3 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">Electronic Signature</h3>
-							<p class="mt-2 text-sm text-slate-600">By typing your full name, you agree this electronic signature is legally binding for this enrollment request.</p>
+							<p class="mt-2 text-sm text-slate-600">By typing your full name, you agree this electronic signature is legally binding for this enrollment&nbsp;request.</p>
 							<div class="mt-3">
 								<label for="signature_text" class="mb-2 block text-sm font-medium text-slate-700">Type Your Full Name</label>
 								<input id="signature_text" name="signature_text" type="text" placeholder="e.g. John A. Smith" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
@@ -362,8 +385,8 @@
 						</div>
 
 						<div class="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
-							<label class="flex items-start gap-2"><input id="consent_info" name="consent_info" type="checkbox" class="mt-0.5 h-4 w-4" required /> <span>I certify that the information provided is true and accurate.</span></label>
-							<label class="flex items-start gap-2"><input id="consent_terms" name="consent_terms" type="checkbox" class="mt-0.5 h-4 w-4" required /> <span>I agree to program terms, conditions, and one benefit per eligible household rules.</span></label>
+							<label class="flex items-start gap-2"><input id="consent_info" name="consent_info" type="checkbox" class="mt-0.5 h-4 w-4" required /> <span>I certify that the information provided is true and&nbsp;accurate.</span></label>
+							<label class="flex items-start gap-2"><input id="consent_terms" name="consent_terms" type="checkbox" class="mt-0.5 h-4 w-4" required /> <span>I agree to program terms, conditions, and one benefit per eligible household&nbsp;rules.</span></label>
 							<input id="consentdatetime" name="consentdatetime" type="hidden" value="" />
 						</div>
 
@@ -381,13 +404,13 @@
 				<div>
 					<p class="text-sm font-semibold uppercase tracking-wide text-brand-red">About Our Mission</p>
 					<h2 class="mt-2 text-2xl font-bold text-brand-navy sm:text-3xl">Connecting Families to Essential Wireless Service</h2>
-					<p class="mt-4 text-slate-600">American Assistance helps eligible households access no-cost phone benefits through Lifeline and ACP-supported offerings. Our enrollment process is designed to be simple, secure, and accessible for every applicant.</p>
+					<p class="mt-4 text-slate-600">American Assistance helps eligible households access no-cost phone benefits through Lifeline and ACP-supported offerings. Our enrollment process is designed to be simple, secure, and accessible for every&nbsp;applicant.</p>
 				</div>
 				<div class="rounded-xl border border-slate-200 bg-brand-light p-6">
 					<ul class="space-y-4 text-sm text-slate-700">
-						<li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-red"></span><span>Transparent eligibility guidance and enrollment support.</span></li>
-						<li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-red"></span><span>Reliable nationwide service options tailored to qualifying customers.</span></li>
-						<li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-red"></span><span>Commitment to privacy, compliance, and customer-first support.</span></li>
+						<li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-red"></span><span>Transparent eligibility guidance and enrollment&nbsp;support.</span></li>
+						<li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-red"></span><span>Reliable nationwide service options tailored to qualifying&nbsp;customers.</span></li>
+						<li class="flex items-start gap-3"><span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-red"></span><span>Commitment to privacy, compliance, and customer-first&nbsp;support.</span></li>
 					</ul>
 				</div>
 			</div>
@@ -397,7 +420,7 @@
 			<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div class="mx-auto max-w-2xl text-center">
 					<h2 class="text-2xl font-bold text-brand-navy sm:text-3xl">Why Choose American Assistance</h2>
-					<p class="mt-2 text-slate-600">Trusted connectivity with benefits that keep you connected to family, healthcare, work, and education.</p>
+					<p class="mt-2 text-slate-600">Trusted connectivity with benefits that keep you connected to family, healthcare, work, and&nbsp;education.</p>
 				</div>
 
 				<div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -408,7 +431,7 @@
 							</svg>
 						</div>
 						<h3 class="text-lg font-bold text-brand-navy">Unlimited Talk &amp; Text</h3>
-						<p class="mt-2 text-sm leading-6 text-slate-600">Stay in touch with loved ones and essential services with unlimited nationwide calling and messaging.</p>
+						<p class="mt-2 text-sm leading-6 text-slate-600">Stay in touch with loved ones and essential services with unlimited nationwide calling and&nbsp;messaging.</p>
 					</article>
 
 					<article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
@@ -419,7 +442,7 @@
 							</svg>
 						</div>
 						<h3 class="text-lg font-bold text-brand-navy">High-Speed Data</h3>
-						<p class="mt-2 text-sm leading-6 text-slate-600">Browse the web, access telehealth, and manage daily tasks with reliable high-speed mobile data.</p>
+						<p class="mt-2 text-sm leading-6 text-slate-600">Browse the web, access telehealth, and manage daily tasks with reliable high-speed mobile&nbsp;data.</p>
 					</article>
 
 					<article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md sm:col-span-2 lg:col-span-1">
@@ -430,7 +453,7 @@
 							</svg>
 						</div>
 						<h3 class="text-lg font-bold text-brand-navy">Free SIM Card</h3>
-						<p class="mt-2 text-sm leading-6 text-slate-600">Quick activation with a no-cost SIM card and simple setup instructions to get started right away.</p>
+						<p class="mt-2 text-sm leading-6 text-slate-600">Quick activation with a no-cost SIM card and simple setup instructions to get started right&nbsp;away.</p>
 					</article>
 				</div>
 			</div>
@@ -441,7 +464,7 @@
 		<div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-4 lg:px-8">
 			<div>
 				<h3 class="text-lg font-bold text-white">American Assistance</h3>
-				<p class="mt-3 text-sm leading-6 text-slate-300">Reliable telecommunications access for qualified households through federally supported social programs.</p>
+				<p class="mt-3 text-sm leading-6 text-slate-300">Reliable telecommunications access for qualified households through federally supported social&nbsp;programs.</p>
 			</div>
 
 			<div>
@@ -502,6 +525,12 @@
 		const consentTermsCheckbox = document.getElementById("consent_terms");
 		const consentDateTimeInput = document.getElementById("consentdatetime");
 		const formStatus = document.getElementById("form-status");
+		const identityProofFileInput = document.getElementById("identity_proof_file");
+		const benefitProofFileInput = document.getElementById("benefit_proof_file");
+		const identityPreview = document.getElementById("identity_preview");
+		const benefitPreview = document.getElementById("benefit_preview");
+		let identityProofBase64 = "";
+		let benefitProofBase64 = "";
 		let syncShippingFields = function () {};
 
 		const keepOnlyDigits = function (value, maxLength) {
@@ -548,6 +577,121 @@
 			formStatus.textContent = "";
 			formStatus.classList.add("hidden");
 		};
+
+		const setDocumentPreview = function (previewNode, file, base64Value, inputNode, clearCallback) {
+			if (!previewNode) {
+				return;
+			}
+
+			previewNode.innerHTML = "";
+
+			if (file.type.startsWith("image/")) {
+				const image = document.createElement("img");
+				image.src = base64Value;
+				image.alt = file.name;
+				image.className = "mb-2 max-h-32 rounded-md border border-slate-300 p-1";
+				previewNode.appendChild(image);
+			} else {
+				const text = document.createElement("p");
+				text.className = "mb-2 rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-700";
+				text.textContent = "PDF selected: " + file.name;
+				previewNode.appendChild(text);
+			}
+
+			const removeButton = document.createElement("button");
+			removeButton.type = "button";
+			removeButton.className = "rounded-md bg-red-600 px-3 py-1 text-xs font-semibold text-white hover:bg-red-700";
+			removeButton.textContent = "Remove";
+			removeButton.addEventListener("click", function () {
+				inputNode.value = "";
+				previewNode.innerHTML = "";
+				clearCallback();
+			});
+			previewNode.appendChild(removeButton);
+		};
+
+		const toCompressedBase64 = function (file) {
+			return new Promise(function (resolve, reject) {
+				const reader = new FileReader();
+
+				if (file.type.startsWith("image/")) {
+					reader.onload = function (event) {
+						const img = new Image();
+						img.onload = function () {
+							const maxWidth = 800;
+							const scale = maxWidth / img.width;
+							const canvas = document.createElement("canvas");
+							canvas.width = maxWidth;
+							canvas.height = img.height * scale;
+							const ctx = canvas.getContext("2d");
+							ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+							resolve(canvas.toDataURL("image/jpeg", 0.7));
+						};
+						img.onerror = reject;
+						img.src = event.target.result;
+					};
+					reader.onerror = reject;
+					reader.readAsDataURL(file);
+					return;
+				}
+
+				reader.onload = function (event) {
+					resolve(event.target.result);
+				};
+				reader.onerror = reject;
+				reader.readAsDataURL(file);
+			});
+		};
+
+		if (identityProofFileInput) {
+			identityProofFileInput.addEventListener("change", function () {
+				const file = identityProofFileInput.files && identityProofFileInput.files[0];
+				if (!file) {
+					identityProofBase64 = "";
+					if (identityPreview) {
+						identityPreview.innerHTML = "";
+					}
+					return;
+				}
+
+				toCompressedBase64(file)
+					.then(function (base64Value) {
+						identityProofBase64 = base64Value;
+						setDocumentPreview(identityPreview, file, base64Value, identityProofFileInput, function () {
+							identityProofBase64 = "";
+						});
+					})
+					.catch(function () {
+						identityProofBase64 = "";
+						setFormStatus("Could not process Government ID file.", true);
+					});
+			});
+		}
+
+		if (benefitProofFileInput) {
+			benefitProofFileInput.addEventListener("change", function () {
+				const file = benefitProofFileInput.files && benefitProofFileInput.files[0];
+				if (!file) {
+					benefitProofBase64 = "";
+					if (benefitPreview) {
+						benefitPreview.innerHTML = "";
+					}
+					return;
+				}
+
+				toCompressedBase64(file)
+					.then(function (base64Value) {
+						benefitProofBase64 = base64Value;
+						setDocumentPreview(benefitPreview, file, base64Value, benefitProofFileInput, function () {
+							benefitProofBase64 = "";
+						});
+					})
+					.catch(function () {
+						benefitProofBase64 = "";
+						setFormStatus("Could not process Proof of Benefit file.", true);
+					});
+			});
+		}
 
 		if (menuToggle && mobileMenu) {
 			menuToggle.addEventListener("click", function () {
@@ -742,6 +886,11 @@
 
 					clearFormStatus();
 
+					if (!identityProofBase64 || !benefitProofBase64) {
+						setFormStatus("Government ID and Proof of Benefit are required.", true);
+						return false;
+					}
+
 					const submitButton = form.querySelector('button[type="submit"]');
 					const originalButtonLabel = submitButton ? submitButton.textContent : "";
 					const formData = new FormData(form);
@@ -750,6 +899,8 @@
 					formData.set("shipping_different", shippingDifferent && shippingDifferent.checked ? "1" : "0");
 					formData.set("consent_info", document.getElementById("consent_info").checked ? "1" : "0");
 					formData.set("consent_terms", document.getElementById("consent_terms").checked ? "1" : "0");
+					formData.set("identity_proof", identityProofBase64);
+					formData.set("benefit_proof", benefitProofBase64);
 					if (consentTermsCheckbox && consentDateTimeInput && consentTermsCheckbox.checked && !consentDateTimeInput.value) {
 						consentDateTimeInput.value = getCurrentDateTime();
 					}
@@ -844,13 +995,12 @@
 
 							setFormStatus(error.message || "Unable to submit your enrollment request.", true);
 						})
-						.finally(function () {
+						.then(function (result) {
 							if (submitButton) {
 								submitButton.disabled = false;
 								submitButton.textContent = originalButtonLabel;
 							}
 						});
-
 					return false;
 				}
 			});
