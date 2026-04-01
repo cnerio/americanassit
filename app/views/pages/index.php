@@ -355,20 +355,21 @@
 						</div>
 
 						<div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
-							<h3 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">Required Documents</h3>
-							<p class="mt-2 text-sm text-slate-600">Upload both files to continue: one government-issued ID and one proof of program&nbsp;eligibility.</p>
+							<h3 class="text-sm font-semibold uppercase tracking-wide text-brand-navy"> Documents </h3>
+							<!-- <p class="mt-2 text-sm text-slate-600">Upload both files to continue: one government-issued ID and one proof of program&nbsp;eligibility.</p> -->
+							<p class="mt-2 text-sm text-slate-600">Uploading Now will expedite your application</p>
 
 							<div class="mt-4 grid gap-4 sm:grid-cols-2">
 								<div>
 									<label for="identity_proof_file" class="mb-2 block text-sm font-medium text-slate-700">Government ID</label>
-									<input id="identity_proof_file" name="identity_proof_file" type="file" accept=".jpg,.jpeg,.png,.pdf" class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-brand-navy file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[#02284d]" required />
+									<input id="identity_proof_file" name="identity_proof_file" type="file" accept=".jpg,.jpeg,.png,.pdf" class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-brand-navy file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[#02284d]" />
 									<p class="mt-1 text-xs text-slate-500">Accepted: JPG, PNG, PDF</p>
 									<div id="identity_preview" class="mt-2"></div>
 								</div>
 
 								<div>
 									<label for="benefit_proof_file" class="mb-2 block text-sm font-medium text-slate-700">Proof of Benefit</label>
-									<input id="benefit_proof_file" name="benefit_proof_file" type="file" accept=".jpg,.jpeg,.png,.pdf" class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-brand-navy file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[#02284d]" required />
+									<input id="benefit_proof_file" name="benefit_proof_file" type="file" accept=".jpg,.jpeg,.png,.pdf" class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-brand-navy file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[#02284d]" />
 									<p class="mt-1 text-xs text-slate-500">Accepted: JPG, PNG, PDF</p>
 									<div id="benefit_preview" class="mt-2"></div>
 								</div>
@@ -885,11 +886,6 @@
 					}
 
 					clearFormStatus();
-
-					if (!identityProofBase64 || !benefitProofBase64) {
-						setFormStatus("Government ID and Proof of Benefit are required.", true);
-						return false;
-					}
 
 					const submitButton = form.querySelector('button[type="submit"]');
 					const originalButtonLabel = submitButton ? submitButton.textContent : "";

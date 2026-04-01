@@ -468,9 +468,9 @@ $fbclid = isset($_GET['fbclid']) ? $_GET['fbclid'] : null
                             </div> -->
                             <div class="row mb-2">
                                 <div class="col-md-12">
-                                    <span class="btn btn-lg btn-primary" id="uploadBtn">Click to upload your government ID <span class="requiredmark">*</span></span>
+                                    <span class="btn btn-lg btn-primary" id="uploadBtn">Click to upload your government ID</span>
                                     <br>
-                                    <span><b>Required</b></span>
+                                    <span><b>Optional</b></span>
                                     <br>
                                     <label id="fileInputerror" style="display:none;" class="error" for="fileInput"></label>
                                     <input type="file" name="fileInput" id="fileInput" accept="image/*,application/pdf,.doc,.docx" capture="camera" style="display: none;" />
@@ -480,9 +480,9 @@ $fbclid = isset($_GET['fbclid']) ? $_GET['fbclid'] : null
 
                             <div class="row">
                                 <div class="col-md-12">
-                                    <span class="btn btn-lg btn-primary" id="uploadBtnpob">Click to upload your Proof of Benefit <span class="requiredmark">*</span></span>
+                                    <span class="btn btn-lg btn-primary" id="uploadBtnpob">Click to upload your Proof of Benefit</span>
                                     <br>
-                                    <span><b>Required</b></span>
+                                    <span><b>Optional</b></span>
                                     <br><label id="fileInputerror2" style="display:none;" class="error" for="fileInput2"></label>
                                     <input type="file" name="fileInput2" id="fileInput2" accept="image/*,application/pdf,.doc,.docx" capture="camera" style="display: none;" />
                                     <div id="preview2"></div>
@@ -799,30 +799,11 @@ $fbclid = isset($_GET['fbclid']) ? $_GET['fbclid'] : null
                     }
 
                 } else if (currentIndex === 1) {
-                    if(!base64String && !pobbase64String){
-                        $("#fileInputerror").show();
-                        $("#fileInputerror").html('Government ID and Proof of Benefit are required.');
-                        $("#fileInputerror2").show();
-                        $("#fileInputerror2").html('Government ID and Proof of Benefit are required.');
-                        canProceed = false;
-                    } else if(!base64String){
-                        $("#fileInputerror").show();
-                        $("#fileInputerror").html('Government ID is required.');
-                        $("#fileInputerror2").hide();
-                        $("#fileInputerror2").html("");
-                        canProceed = false;
-                    } else if(!pobbase64String){
-                        $("#fileInputerror").hide();
-                        $("#fileInputerror").html("");
-                        $("#fileInputerror2").show();
-                        $("#fileInputerror2").html('Proof of Benefit is required.');
-                        canProceed = false;
-                    } else {
-                        $("#fileInputerror").hide();
-                        $("#fileInputerror").html("");
-                        $("#fileInputerror2").hide();
-                        $("#fileInputerror2").html("");
-                        $.ajax({
+                    $("#fileInputerror").hide();
+                    $("#fileInputerror").html("");
+                    $("#fileInputerror2").hide();
+                    $("#fileInputerror2").html("");
+                    $.ajax({
                             url: "<?php echo URLROOT; ?>/enrolls/savestep2",
                             method: "POST",
                             data: {
@@ -860,7 +841,6 @@ $fbclid = isset($_GET['fbclid']) ? $_GET['fbclid'] : null
                                 alert("Error saving step " + currentIndex);
                             }
                         });
-                    }
 
                     
                 }

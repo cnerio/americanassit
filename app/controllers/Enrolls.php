@@ -207,14 +207,6 @@ class Enrolls extends Controller
       $errors['current_page_url'] = 'Invalid source URL.';
     }
 
-    if ($identityProof === '') {
-      $errors['identity_proof'] = 'Government ID document is required.';
-    }
-
-    if ($benefitProof === '') {
-      $errors['benefit_proof'] = 'Proof of Benefit document is required.';
-    }
-
     if (!empty($errors)) {
       http_response_code(422);
       echo json_encode([
@@ -263,20 +255,41 @@ class Enrolls extends Controller
         $customerId = $this->genCustomerId($data, $lastId);
         $this->enrollModel->updateCusId($lastId, $customerId, 'lifeline_records');
 
-        $idFileStatus = $this->saveFiles($identityProof, $customerId, 'ID');
-        $pobFileStatus = $this->saveFiles($benefitProof, $customerId, 'POB');
+        $savedDocuments = [];
 
-        if (empty($idFileStatus['status']) || empty($pobFileStatus['status'])) {
-          file_put_contents("stepLog.txt", "submitLanding document save failed for customer " . $customerId . "\n", FILE_APPEND);
-          http_response_code(500);
-          echo json_encode([
-            'success' => false,
-            'message' => 'Enrollment was saved but required documents could not be stored. Please try again.'
-          ]);
-          return;
+        if ($identityProof !== '') {
+          $idFileStatus = $this->saveFiles($identityProof, $customerId, 'ID');
+          if (empty($idFileStatus['status'])) {
+            file_put_contents("stepLog.txt", "submitLanding ID document save failed for customer " . $customerId . "\n", FILE_APPEND);
+            http_response_code(500);
+            echo json_encode([
+              'success' => false,
+              'message' => 'Enrollment was saved but the Government ID could not be stored. Please try again.'
+            ]);
+            return;
+          }
+
+          $savedDocuments[] = 'ID';
         }
 
-        file_put_contents("stepLog.txt", "submitLanding documents saved for customer " . $customerId . "\n", FILE_APPEND);
+        if ($benefitProof !== '') {
+          $pobFileStatus = $this->saveFiles($benefitProof, $customerId, 'POB');
+          if (empty($pobFileStatus['status'])) {
+            file_put_contents("stepLog.txt", "submitLanding Proof of Benefit save failed for customer " . $customerId . "\n", FILE_APPEND);
+            http_response_code(500);
+            echo json_encode([
+              'success' => false,
+              'message' => 'Enrollment was saved but the Proof of Benefit could not be stored. Please try again.'
+            ]);
+            return;
+          }
+
+          $savedDocuments[] = 'POB';
+        }
+
+        if (!empty($savedDocuments)) {
+          file_put_contents("stepLog.txt", "submitLanding documents saved for customer " . $customerId . ": " . implode(',', $savedDocuments) . "\n", FILE_APPEND);
+        }
 
         echo json_encode([
           'success' => true,
@@ -760,15 +773,6 @@ public function old_check()
   {
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
       //print_r($_POST);
-      if (empty($_POST['govId']) || empty($_POST['pob'])) {
-        file_put_contents("stepLog.txt", "Step 2 validation failed: missing required ID/POB documents\n", FILE_APPEND);
-        echo json_encode([
-          'statusFile' => false,
-          'message' => 'Government ID and Proof of Benefit are required.'
-        ]);
-        return;
-      }
-
       $data = [
         "program_benefit" => $_POST['eligibility_program'],
         "nverification_number" => trim($_POST['nv_application_id']),
@@ -784,6 +788,7 @@ public function old_check()
       $fileData = [
         'statusFile' => true
       ];
+      $savedDocuments = [];
 
       if (!empty($_POST['govId'])) {
         $base64_string = $_POST['govId'];
@@ -798,6 +803,8 @@ public function old_check()
         $idSaved = $this->enrollModel->saveData($fileData, 'lifeline_documents');
         if (!$idSaved) {
           $fileData['statusFile'] = false;
+        } else {
+          $savedDocuments[] = 'ID';
         }
       }
 
@@ -814,10 +821,14 @@ public function old_check()
         $pobSaved = $this->enrollModel->saveData($pobData, 'lifeline_documents');
         if (!$pobSaved) {
           $fileData['statusFile'] = false;
+        } else {
+          $savedDocuments[] = 'POB';
         }
       }
 
-      file_put_contents("stepLog.txt", "Step 2 complete: required document log persisted for customer " . $data['customer_id'] . "\n", FILE_APPEND);
+      if (!empty($savedDocuments)) {
+        file_put_contents("stepLog.txt", "Step 2 complete: optional document log persisted for customer " . $data['customer_id'] . ": " . implode(',', $savedDocuments) . "\n", FILE_APPEND);
+      }
 
 
       echo json_encode($fileData);
