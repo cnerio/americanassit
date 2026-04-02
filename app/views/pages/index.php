@@ -481,9 +481,9 @@
 			<div>
 				<h4 class="text-sm font-semibold uppercase tracking-wide text-white">Contact</h4>
 				<ul class="mt-3 space-y-2 text-sm text-slate-300">
-					<li>Phone: (800) 555-0142</li>
-					<li>Email: support@americanassistance.net</li>
-					<li>Hours: Mon-Fri, 9:00 AM-6:00 PM</li>
+					<li>Phone: <a href="tel:+18333345566">+1 (833) 334-5566</a></li>
+					<li>Email: <a href="mailto:info@americanassist.org">info@americanassist.org</a></li>
+					<!-- <li>Hours: Mon-Fri, 9:00 AM-6:00 PM</li> -->
 				</ul>
 			</div>
 
