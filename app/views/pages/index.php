@@ -505,7 +505,7 @@
 
 		<div class="border-t border-white/15">
 			<div class="mx-auto max-w-7xl px-4 py-6 text-xs leading-6 text-slate-300 sm:px-6 lg:px-8">
-				<p>Lifeline is a government assistance program. Eligibility is determined by federal or state criteria. Service is non-transferable, and only one discount is available per household. Terms and conditions apply.</p>
+				<p>Lifeline is a government assistance program. Eligibility is determined by federal or state criteria. Service is non-transferable, and only one discount is available per household. <a href="<?php echo URLROOT; ?>/terms" class="hover:text-white">Terms and Conditions</a> and <a href="<?php echo URLROOT; ?>/privacy" class="hover:text-white">Privacy Policy</a> apply.</p>
 				<p class="mt-2">&copy; 2026 American Assistance. All rights reserved.</p>
 			</div>
 		</div>

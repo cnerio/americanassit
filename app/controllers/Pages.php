@@ -35,6 +35,12 @@
         $this->view('pages/privacy', $data);
     }
 
+    public function terms()
+    {
+        $data = ['title' => 'Terms of Service'];
+        $this->view('pages/terms', $data);
+    }
+
     public function contact(){
       $data = [
           'title' => 'Contact Us',
