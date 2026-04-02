@@ -1,47 +1,49 @@
-<footer>
-     <hr />
-     <div class="row justify-content-center">
-                <div class="col-lg-10 col-md-12 pt-3 pb-3">
-                    <p class="legal-text"><span class="legal-span">*DISCLAIMER: Lifeline is a government assistance program. Only eligible consumers may enroll in Lifeline. Availability is limited to select states and specific zip&nbsp;codes.</span> </p>
-                    <p class="legal-text"><span class="legal-span">American Assist provides enrollment support for qualified Lifeline applicants and works with approved service providers to complete activation when eligibility is confirmed.</span> </p>
-                    <p class="legal-text"><span class="legal-span">Completion of this form is required. This form is used for the purpose of verifying your eligibility for and enrolling you in Lifeline benefits and an eligible service plan and will not be used for any other purpose. LifeLine benefits are subject to verification of eligibility by the National Verifier and/or a Third-Party Administrator “TPA”.<br></span></p>
-                    <p class="legal-text"><span class="legal-span">Lifeline services are subject to availability and applicable terms, conditions, and privacy policies.</span> </p>
-                    <!-- <p class="legal-text"><span class="legal-span">Requires 5G/4G LTE Unlocked AT&amp;T Compatible Phone.</span></p> -->
-                    <!-- <p class="legal-text"><span class="legal-span">True Wireless are wholly owned subsidiaries of Galaxy Distribution.</span></p> -->
+	<footer id="contact" class="bg-brand-navy text-slate-100">
+		<div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-4 lg:px-8">
+			<div>
+				<h3 class="text-lg font-bold text-white">American Assistance</h3>
+				<p class="mt-3 text-sm leading-6 text-slate-300">Reliable telecommunications access for qualified households through federally supported social&nbsp;programs.</p>
+			</div>
 
-                </div>
+			<div>
+				<h4 class="text-sm font-semibold uppercase tracking-wide text-white">Site Links</h4>
+				<ul class="mt-3 space-y-2 text-sm text-slate-300">
+					<li><a href="#" class="hover:text-white">Home</a></li>
+					<li><a href="#about" class="hover:text-white">About Us</a></li>
+					<li><a href="#plans" class="hover:text-white">Plans</a></li>
+					<li><a href="#eligibility" class="hover:text-white">Apply Now</a></li>
+				</ul>
+			</div>
 
-            </div>
-    <div class="container py-4 py-lg-5">
-       
-                <div class="text-muted d-flex justify-content-between align-items-center pt-3">
-                        <p class="mb-0">Copyright © <span id="year"></span> American Assist | <a href="<?php echo URLROOT; ?>/pages/privacy" target="_blank" rel="noopener noreferrer nofollow">
-    Privacy Policy
-</a> | <a href="<?php echo URLROOT; ?>/pages/terms" target="_blank" rel="noopener noreferrer nofollow">
-    Terms of Service
-</a></p>
-            <ul class="list-inline mb-0">
-                <li class="list-inline-item"><svg class="bi bi-facebook" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"></path>
-                    </svg></li>
-                <li class="list-inline-item"><svg class="bi bi-twitter" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15"></path>
-                    </svg></li>
-                <li class="list-inline-item"><svg class="bi bi-instagram" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"></path>
-                    </svg></li>
-            </ul>
-        </div>
-    </div>
-</footer>
+			<div>
+				<h4 class="text-sm font-semibold uppercase tracking-wide text-white">Contact</h4>
+				<ul class="mt-3 space-y-2 text-sm text-slate-300">
+					<li>Phone: <a href="tel:+18333345566">+1 (833) 334-5566</a></li>
+					<li>Email: <a href="mailto:support@americanassistance.us">support@americanassistance.us</a></li>
+					<!-- <li>Hours: Mon-Fri, 9:00 AM-6:00 PM</li> -->
+				</ul>
+			</div>
 
-  <script src="<?php echo URLROOT; ?>/js/jquery.min.js"></script>
-  <script src="<?php echo URLROOT; ?>/js/jquery.validate.js"></script>
-  <script src="<?php echo URLROOT; ?>/js/additional-methods.js"></script>
-  <script src="<?php echo URLROOT; ?>/js/jquery.steps.js"></script>
-  <script src="<?php echo URLROOT; ?>/js/startup-modern.js"></script>
-  <script src="<?php echo URLROOT; ?>/js/jquery.mask.js"></script>
-  <script src="<?php echo URLROOT; ?>/js/moment.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script>document.getElementById('year').appendChild(document.createTextNode(new Date().getFullYear()))</script>
+			<div>
+				<h4 class="text-sm font-semibold uppercase tracking-wide text-white">Follow Us</h4>
+				<div class="mt-3 flex items-center gap-3">
+					<a href="#" aria-label="Facebook" class="rounded-md bg-white/10 p-2 transition hover:bg-white/20">
+						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 9h3V6h-3c-2.2 0-4 1.8-4 4v2H7v3h2v6h3v-6h3l1-3h-4v-2c0-.6.4-1 1-1z" /></svg>
+					</a>
+					<a href="#" aria-label="Instagram" class="rounded-md bg-white/10 p-2 transition hover:bg-white/20">
+						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H7zm5 3.5A5.5 5.5 0 1112 19a5.5 5.5 0 010-11.5zm0 2A3.5 3.5 0 1012 17a3.5 3.5 0 000-7zm6-2.25a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z" /></svg>
+					</a>
+					<a href="#" aria-label="X (Twitter)" class="rounded-md bg-white/10 p-2 transition hover:bg-white/20">
+						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.7l-5.2-6.8L5.2 22H2l7.3-8.3L1 2h6.8l4.7 6.2L18.9 2zm-2.3 18h1.9L7.1 3.9H5.1L16.6 20z" /></svg>
+					</a>
+				</div>
+			</div>
+		</div>
 
+		<div class="border-t border-white/15">
+			<div class="mx-auto max-w-7xl px-4 py-6 text-xs leading-6 text-slate-300 sm:px-6 lg:px-8">
+				<p>Lifeline is a government assistance program. Eligibility is determined by federal or state criteria. Service is non-transferable, and only one discount is available per household. <a href="<?php echo URLROOT; ?>/terms" class="hover:text-white">Terms and Conditions</a> and <a href="<?php echo URLROOT; ?>/privacy" class="hover:text-white">Privacy Policy</a> apply.</p>
+				<p class="mt-2">&copy; <?php echo date('Y'); ?> American Assistance. All rights reserved.</p>
+			</div>
+		</div>
+	</footer>

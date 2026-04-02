@@ -461,59 +461,39 @@
 		</section>
 	</main>
 
-	<footer id="contact" class="bg-brand-navy text-slate-100">
-		<div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-4 lg:px-8">
-			<div>
-				<h3 class="text-lg font-bold text-white">American Assistance</h3>
-				<p class="mt-3 text-sm leading-6 text-slate-300">Reliable telecommunications access for qualified households through federally supported social&nbsp;programs.</p>
-			</div>
+<?php include APPROOT . '/views/inc/footer.php'; ?>
 
-			<div>
-				<h4 class="text-sm font-semibold uppercase tracking-wide text-white">Site Links</h4>
-				<ul class="mt-3 space-y-2 text-sm text-slate-300">
-					<li><a href="#" class="hover:text-white">Home</a></li>
-					<li><a href="#about" class="hover:text-white">About Us</a></li>
-					<li><a href="#plans" class="hover:text-white">Plans</a></li>
-					<li><a href="#eligibility" class="hover:text-white">Apply Now</a></li>
-				</ul>
-			</div>
-
-			<div>
-				<h4 class="text-sm font-semibold uppercase tracking-wide text-white">Contact</h4>
-				<ul class="mt-3 space-y-2 text-sm text-slate-300">
-					<li>Phone: <a href="tel:+18333345566">+1 (833) 334-5566</a></li>
-					<li>Email: <a href="mailto:info@americanassist.org">info@americanassist.org</a></li>
-					<!-- <li>Hours: Mon-Fri, 9:00 AM-6:00 PM</li> -->
-				</ul>
-			</div>
-
-			<div>
-				<h4 class="text-sm font-semibold uppercase tracking-wide text-white">Follow Us</h4>
-				<div class="mt-3 flex items-center gap-3">
-					<a href="#" aria-label="Facebook" class="rounded-md bg-white/10 p-2 transition hover:bg-white/20">
-						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 9h3V6h-3c-2.2 0-4 1.8-4 4v2H7v3h2v6h3v-6h3l1-3h-4v-2c0-.6.4-1 1-1z" /></svg>
-					</a>
-					<a href="#" aria-label="Instagram" class="rounded-md bg-white/10 p-2 transition hover:bg-white/20">
-						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H7zm5 3.5A5.5 5.5 0 1112 19a5.5 5.5 0 010-11.5zm0 2A3.5 3.5 0 1012 17a3.5 3.5 0 000-7zm6-2.25a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z" /></svg>
-					</a>
-					<a href="#" aria-label="X (Twitter)" class="rounded-md bg-white/10 p-2 transition hover:bg-white/20">
-						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.7l-5.2-6.8L5.2 22H2l7.3-8.3L1 2h6.8l4.7 6.2L18.9 2zm-2.3 18h1.9L7.1 3.9H5.1L16.6 20z" /></svg>
-					</a>
+	<div id="cookie-banner" class="fixed inset-x-0 bottom-4 z-[60] hidden px-4 sm:px-6 lg:px-8">
+		<div class="mx-auto max-w-5xl rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-2xl ring-1 ring-slate-200 backdrop-blur sm:p-5">
+			<div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+				<div class="max-w-3xl">
+					<p class="text-sm font-semibold uppercase tracking-[0.18em] text-brand-navy">Cookie Notice</p>
+					<p class="mt-2 text-sm leading-6 text-slate-600">
+						We use cookies and similar technologies to improve site performance, understand traffic, and support your enrollment experience. By continuing, you agree to our
+						<a href="<?php echo URLROOT; ?>/pages/privacy" class="font-semibold text-brand-navy underline underline-offset-4 hover:text-brand-red">Privacy Policy</a>
+						and
+						<a href="<?php echo URLROOT; ?>/pages/terms" class="font-semibold text-brand-navy underline underline-offset-4 hover:text-brand-red">Terms of Service</a>.
+					</p>
+				</div>
+				<div class="flex shrink-0 flex-col gap-2 sm:flex-row">
+					<button id="cookie-decline" type="button" class="inline-flex items-center justify-center rounded-md border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50">
+						Close
+					</button>
+					<button id="cookie-accept" type="button" class="inline-flex items-center justify-center rounded-md bg-brand-red px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-brand-red focus:ring-offset-2">
+						Accept Cookies
+					</button>
 				</div>
 			</div>
 		</div>
-
-		<div class="border-t border-white/15">
-			<div class="mx-auto max-w-7xl px-4 py-6 text-xs leading-6 text-slate-300 sm:px-6 lg:px-8">
-				<p>Lifeline is a government assistance program. Eligibility is determined by federal or state criteria. Service is non-transferable, and only one discount is available per household. <a href="<?php echo URLROOT; ?>/terms" class="hover:text-white">Terms and Conditions</a> and <a href="<?php echo URLROOT; ?>/privacy" class="hover:text-white">Privacy Policy</a> apply.</p>
-				<p class="mt-2">&copy; 2026 American Assistance. All rights reserved.</p>
-			</div>
-		</div>
-	</footer>
+	</div>
 
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 	<script>
+		const cookieBanner = document.getElementById("cookie-banner");
+		const cookieAcceptButton = document.getElementById("cookie-accept");
+		const cookieDeclineButton = document.getElementById("cookie-decline");
+		const cookieConsentKey = "aa_cookie_consent_v1";
 		const menuToggle = document.getElementById("menu-toggle");
 		const mobileMenu = document.getElementById("mobile-menu");
 		const shippingDifferent = document.getElementById("shipping_different");
@@ -577,6 +557,24 @@
 
 			formStatus.textContent = "";
 			formStatus.classList.add("hidden");
+		};
+
+		const hideCookieBanner = function () {
+			if (!cookieBanner) {
+				return;
+			}
+
+			cookieBanner.classList.add("hidden");
+		};
+
+		const persistCookieConsent = function () {
+			try {
+				window.localStorage.setItem(cookieConsentKey, "accepted");
+			} catch (error) {
+				// Ignore storage failures and just hide the banner for the current page load.
+			}
+
+			hideCookieBanner();
 		};
 
 		const setDocumentPreview = function (previewNode, file, base64Value, inputNode, clearCallback) {
@@ -692,6 +690,28 @@
 						setFormStatus("Could not process Proof of Benefit file.", true);
 					});
 			});
+		}
+
+		if (cookieBanner) {
+			let hasCookieConsent = false;
+
+			try {
+				hasCookieConsent = window.localStorage.getItem(cookieConsentKey) === "accepted";
+			} catch (error) {
+				hasCookieConsent = false;
+			}
+
+			if (!hasCookieConsent) {
+				cookieBanner.classList.remove("hidden");
+			}
+
+			if (cookieAcceptButton) {
+				cookieAcceptButton.addEventListener("click", persistCookieConsent);
+			}
+
+			if (cookieDeclineButton) {
+				cookieDeclineButton.addEventListener("click", hideCookieBanner);
+			}
 		}
 
 		if (menuToggle && mobileMenu) {
