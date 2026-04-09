@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>American Assist | Free Government Phone Services</title>
-	<meta name="description" content="Apply for Lifeline and ACP-supported wireless plans with free phone service, unlimited talk and text, and high-speed data." />
+	<meta name="description" content="Apply for Lifeline  plans with free phone service, unlimited talk and text, and high-speed data." />
 
 	<script src="https://cdn.tailwindcss.com"></script>
 	<script>
@@ -94,7 +94,7 @@
 				<div class="mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
 					<div class="max-w-2xl text-white">
 						<p class="mb-4 inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white ring-1 ring-white/30">
-							Lifeline + ACP Support
+							Lifeline
 						</p>
 						<h1 class="text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">
 							Free Government Phone Services for Eligible&nbsp;Households
@@ -405,7 +405,7 @@
 				<div>
 					<p class="text-sm font-semibold uppercase tracking-wide text-brand-red">About Our Mission</p>
 					<h2 class="mt-2 text-2xl font-bold text-brand-navy sm:text-3xl">Connecting Families to Essential Wireless Service</h2>
-					<p class="mt-4 text-slate-600">American Assistance helps eligible households access no-cost phone benefits through Lifeline and ACP-supported offerings. Our enrollment process is designed to be simple, secure, and accessible for every&nbsp;applicant.</p>
+					<p class="mt-4 text-slate-600">American Assistance helps eligible households access no-cost phone benefits through Lifeline offerings. Our enrollment process is designed to be simple, secure, and accessible for every&nbsp;applicant.</p>
 				</div>
 				<div class="rounded-xl border border-slate-200 bg-brand-light p-6">
 					<ul class="space-y-4 text-sm text-slate-700">

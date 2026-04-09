@@ -319,6 +319,14 @@
 		</section>
 	</main>
 
+	<section class="border-t border-slate-200 bg-white">
+		<div class="mx-auto max-w-7xl px-4 py-8 text-sm leading-6 text-slate-700 sm:px-6 lg:px-8">
+			<p><strong>*DISCLOSURE:</strong> American Assistance, a brand name wholly owned American Broadband &amp; Telecommunications, is a recognized service provider of Lifeline services.</p>
+			<p class="mt-4">Completion of this form is required. This form is used for the purpose of verifying your eligibility for and enrolling you in Lifeline benefits and an eligible "AMBT" service plan and will not be used for any other purpose. Lifeline benefits are subject to verification of eligibility by the National Verifier and/or a Third-Party Administrator "TPA". Lifeline services are subject to availability and AMBT's <a href="<?php echo URLROOT; ?>/pages/terms" class="font-semibold text-brand-navy underline underline-offset-4 hover:text-brand-red">Terms and Conditions</a> and <a href="<?php echo URLROOT; ?>/pages/privacy" class="font-semibold text-brand-navy underline underline-offset-4 hover:text-brand-red">Policies</a> are available here.</p>
+			<p class="mt-4">Requires 5G/4G LTE Unlocked AT&amp;T Compatible Phone.</p>
+		</div>
+	</section>
+
 	<footer id="contact" class="bg-brand-navy text-slate-100">
 		<div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-4 lg:px-8">
 			<div>
