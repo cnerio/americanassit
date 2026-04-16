@@ -21,6 +21,7 @@
 			<?php //if (!empty($data['customer_id'])) : ?>
 				<!-- <p class="mt-3 text-center text-sm text-slate-500">You can upload your ID and Proof of Benefit now or come back later using your customer ID.</p> -->
 			<?php //endif; ?>
+			<p  class="mt-3 text-center text-base text-slate-600">Your application has been submitted to the Lifeline National Verifier for eligibility&nbsp;determination.</p>
 			<div class="mt-8 text-center">
 				<!-- <?php //if (!empty($data['customer_id'])) : ?>
 					<a href="<?php //echo URLROOT; ?>/enrolls/getdocuments/<?php //echo urlencode($data['customer_id']); ?>" class="inline-flex items-center rounded-md bg-brand-red px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700">Upload Documents Now</a>

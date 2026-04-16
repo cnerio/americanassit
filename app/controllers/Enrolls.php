@@ -102,6 +102,7 @@ class Enrolls extends Controller
     $consentDateTime = trim($_POST['consentdatetime'] ?? '');
     $consentInfo = ($_POST['consent_info'] ?? '0') === '1';
     $consentTerms = ($_POST['consent_terms'] ?? '0') === '1';
+    $fccAgreement = ($_POST['fcc_agreement'] ?? '0') === '1';
     $shippingDifferent = ($_POST['shipping_different'] ?? '0') === '1';
     $currentUrl = trim($_POST['current_page_url'] ?? '');
     $shippingAddress1 = trim($_POST['shipping_address1'] ?? '');
@@ -177,6 +178,10 @@ class Enrolls extends Controller
       $errors['consent_terms'] = 'You must agree to the terms and conditions.';
     }
 
+    if (!$fccAgreement) {
+      $errors['fcc_agreement'] = 'You must acknowledge the representative authorization.';
+    }
+
     if ($consentTerms) {
       if ($consentDateTime === '') {
         $consentDateTime = date('Y-m-d H:i:s');
@@ -245,7 +250,10 @@ class Enrolls extends Controller
       'URL' => $currentUrl,
       'utms' => $utms,
       'company' => 'American Assist',
-      'ETC' => 'AMBT'
+      'ETC' => 'AMBT',
+      'fcc_agreement' => $fccAgreement ? 'Yes' : 'No',
+      'agree_terms' => $consentTerms ? 'Yes' : 'No',
+      'agree_pii' => $consentInfo ? 'Yes' : 'No'
     ];
 
     try {

@@ -120,6 +120,7 @@
 					<form id="enrollment-form" class="mt-6 space-y-6" action="<?php echo URLROOT; ?>/enrolls/submitLanding" method="post" aria-label="Enrollment form" novalidate>
 						<div>
 							<h3 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">Applicant Information</h3>
+							<p class="mt-2 text-xs text-gray-500">The information you provide will be used to determine your eligibility and may be transmitted to federal or state systems, including the National Verifier.</p>
 							<div class="mt-3 grid gap-4 sm:grid-cols-2">
 								<div>
 									<label for="first_name" class="mb-2 block text-sm font-medium text-slate-700">First Name</label>
@@ -385,15 +386,23 @@
 							</div>
 						</div>
 
+						<p class="text-xs text-gray-500">I understand that my information will be used to determine my eligibility through the Lifeline National Verifier or applicable state system.</p>
+
 						<div class="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
 							<label class="flex items-start gap-2"><input id="consent_info" name="consent_info" type="checkbox" class="mt-0.5 h-4 w-4" required /> <span>I certify that the information provided is true and&nbsp;accurate.</span></label>
 							<label class="flex items-start gap-2"><input id="consent_terms" name="consent_terms" type="checkbox" class="mt-0.5 h-4 w-4" required /> <span>I agree to program terms, conditions, and one benefit per eligible household&nbsp;rules.</span></label>
+							<label class="flex items-start gap-2"><input id="fcc_agreement" name="fcc_agreement" type="checkbox" class="mt-0.5 h-4 w-4" required /> <span>Authorized enrollment representatives may assist in submitting your application using the information you provide. These representatives will not modify your information.</span></label>
 							<input id="consentdatetime" name="consentdatetime" type="hidden" value="" />
 						</div>
 
+						<p class="rounded-md border border-slate-300 bg-slate-50 p-3 text-xs text-slate-700"><strong>By submitting this application, you authorize American Assist and its authorized representatives to submit your personal information to the Lifeline National Verifier (operated by the Universal Service Administrative Company on behalf of the Federal Communications Commission) to determine your eligibility.</strong></p>
+
 						<button type="submit" class="w-full rounded-md bg-brand-navy px-6 py-3 font-semibold text-white transition hover:bg-[#02284d] focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2">
-							Submit Enrollment Request
+							Start Application
 						</button>
+
+						<p class="text-center text-xs text-gray-500 mt-2">By continuing, you agree to provide your information for Lifeline eligibility determination.</p>
+						
 						<p id="form-status" class="hidden text-sm font-medium" role="status" aria-live="polite"></p>
 					</form>
 				</div>
@@ -843,7 +852,8 @@
 					contact_method: { required: true },
 						signature_text: { required: true, minlength: 3 },
 					consent_info: { required: true },
-					consent_terms: { required: true }
+					consent_terms: { required: true },
+					fcc_agreement: { required: true }
 				},
 				messages: {
 					first_name: "Please enter your first name.",
@@ -879,7 +889,8 @@
 					contact_method: "Please select your preferred contact method.",
 					signature_text: "Please type your full name as your electronic signature.",
 					consent_info: "You must certify that your information is accurate.",
-					consent_terms: "You must agree to the terms and conditions."
+					consent_terms: "You must agree to the terms and conditions.",
+					fcc_agreement: "You must acknowledge the representative authorization."
 				},
 				highlight: function (element) {
 					window.jQuery(element).addClass("border-red-500 ring-1 ring-red-300");
@@ -915,6 +926,7 @@
 					formData.set("shipping_different", shippingDifferent && shippingDifferent.checked ? "1" : "0");
 					formData.set("consent_info", document.getElementById("consent_info").checked ? "1" : "0");
 					formData.set("consent_terms", document.getElementById("consent_terms").checked ? "1" : "0");
+					formData.set("fcc_agreement", document.getElementById("fcc_agreement").checked ? "1" : "0");
 					formData.set("identity_proof", identityProofBase64);
 					formData.set("benefit_proof", benefitProofBase64);
 					if (consentTermsCheckbox && consentDateTimeInput && consentTermsCheckbox.checked && !consentDateTimeInput.value) {
