@@ -1,3 +1,12 @@
+<?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+	session_start();
+}
+
+if (empty($_SESSION['landing_csrf_token'])) {
+	$_SESSION['landing_csrf_token'] = bin2hex(random_bytes(32));
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,6 +127,8 @@
 					<h2 class="text-center text-2xl font-bold text-brand-navy sm:text-3xl">Start Your Enrollment</h2>
 					<p class="mt-2 text-center text-slate-600">Complete this form to check eligibility and begin your free government phone service&nbsp;application.</p>
 					<form id="enrollment-form" class="mt-6 space-y-6" action="<?php echo URLROOT; ?>/enrolls/submitLanding" method="post" aria-label="Enrollment form" novalidate>
+						<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['landing_csrf_token'], ENT_QUOTES, 'UTF-8'); ?>" />
+						<input type="text" name="verification_code" value="" autocomplete="off" tabindex="-1" aria-hidden="true" class="hidden" />
 						<div>
 							<h3 class="text-sm font-semibold uppercase tracking-wide text-brand-navy">Applicant Information</h3>
 							<p class="mt-2 text-xs text-gray-500">The information you provide will be used to determine your eligibility and may be transmitted to federal or state systems, including the National Verifier.</p>

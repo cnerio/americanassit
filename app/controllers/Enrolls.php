@@ -73,11 +73,36 @@ class Enrolls extends Controller
   {
     header('Content-Type: application/json');
 
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+      session_start();
+    }
+
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
       http_response_code(405);
       echo json_encode([
         'success' => false,
         'message' => 'Method not allowed.'
+      ]);
+      return;
+    }
+
+    $csrfToken = trim($_POST['csrf_token'] ?? '');
+    $sessionCsrfToken = $_SESSION['landing_csrf_token'] ?? '';
+    if ($csrfToken === '' || $sessionCsrfToken === '' || !hash_equals($sessionCsrfToken, $csrfToken)) {
+      http_response_code(419);
+      echo json_encode([
+        'success' => false,
+        'message' => 'Session expired. Please refresh and try again.'
+      ]);
+      return;
+    }
+
+    $antiSpamVerification = trim($_POST['verification_code'] ?? '');
+    if ($antiSpamVerification !== '') {
+      http_response_code(400);
+      echo json_encode([
+        'success' => false,
+        'message' => 'Invalid submission.'
       ]);
       return;
     }
@@ -224,6 +249,7 @@ class Enrolls extends Controller
 
     parse_str(parse_url($currentUrl, PHP_URL_QUERY) ?? '', $params);
     $utms = json_encode($params);
+    unset($_SESSION['landing_csrf_token']);
 
     $data = [
       'first_name' => ucfirst(strtolower($firstName)),
