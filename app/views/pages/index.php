@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>American Assist | Free Government Phone Services</title>
-	<meta name="description" content="Apply for Lifeline  plans with free phone service, unlimited talk and text, and high-speed data." />
+	<meta name="description" content="Apply for Lifeline  plans with free wireless service, unlimited talk and text, and high-speed data." />
 
 	<script src="https://cdn.tailwindcss.com"></script>
 	<script>
@@ -462,7 +462,7 @@
 								<path stroke-linecap="round" stroke-linejoin="round" d="M11 18h2" />
 							</svg>
 						</div>
-						<h3 class="text-lg font-bold text-brand-navy">Free SIM Card</h3>
+						<h3 class="text-lg font-bold text-brand-navy">Free Wireless Service</h3>
 						<p class="mt-2 text-sm leading-6 text-slate-600">Quick activation with a no-cost SIM card and simple setup instructions to get started right&nbsp;away.</p>
 					</article>
 				</div>
