@@ -46,6 +46,7 @@
             }
           }
         }
+      }
      
       $this->view('pages/index', $data);
     }
