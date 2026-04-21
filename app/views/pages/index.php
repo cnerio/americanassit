@@ -463,7 +463,7 @@
 							</svg>
 						</div>
 						<h3 class="text-lg font-bold text-brand-navy">Free Wireless Service</h3>
-						<p class="mt-2 text-sm leading-6 text-slate-600">Quick activation with a no-cost SIM card and simple setup instructions to get started right&nbsp;away.</p>
+						<p class="mt-2 text-sm leading-6 text-slate-600">Free wireless service provided through the federal Lifeline program, helping eligible households stay connected at no cost.</p>
 					</article>
 				</div>
 			</div>
