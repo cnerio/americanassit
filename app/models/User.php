@@ -51,10 +51,8 @@ class User {
         $this->db->bind(':email', $email);
        
         $row = $this->db->singleObj();
-        //print_r($row); 
-        $hash_password = $row->password;
 
-        if($row && password_verify($password, $hash_password)){
+        if($row && password_verify($password, $row->password)){
             return $row;
         }else{
             return false;

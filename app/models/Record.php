@@ -106,9 +106,13 @@ class Record {
 	}
 
     public function getCustomerInfo($customer_id){
-        $this->db->query('SELECT * FROM lifeline_records lr LEFT JOIN lifeline_programs lp ON lr.program_benefit = lp.id_program  WHERE customer_id=:id');
+        $this->db->query('SELECT lr.id, lr.customer_id, lr.first_name, lr.second_name, lr.email, lr.dob, lr.phone_number, lr.ssn, lr.address1, lr.address2, lr.city, lr.state, lr.zipcode, lr.order_id, lr.order_status, lr.program_benefit, lr.created_at, lp.name AS program_name FROM lifeline_records lr LEFT JOIN lifeline_programs lp ON lr.program_benefit = lp.id_program WHERE lr.customer_id=:id LIMIT 1');
 		$this->db->bind("id",$customer_id);
 		$getOrder = $this->db->single();
+
+		if(!$getOrder){
+			return null;
+		}
 
         $this->db->query('SELECT * FROM lifeline_documents WHERE customer_id=:id');
         $this->db->bind("id",$customer_id);
@@ -164,6 +168,11 @@ class Record {
 		$this->db->bind(':offset', (int)$offset, PDO::PARAM_INT);
 		$this->db->bind(':per_page', (int)$per_page, PDO::PARAM_INT);
 
+		return $this->db->resultSet();
+	}
+
+	public function getAllRecords(){
+		$this->db->query('SELECT id, customer_id, first_name, second_name, phone_number, email, dob, city, state, zipcode, order_id, order_status, program_benefit, created_at FROM lifeline_records ORDER BY created_at DESC');
 		return $this->db->resultSet();
 	}
 

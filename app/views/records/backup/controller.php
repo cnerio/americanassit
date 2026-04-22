@@ -29,14 +29,6 @@
         $this->view("records/index");
     }
 
-	public function getAllRecordsData(){
-		$rows = $this->recordsModel->getAllRecords();
-		header('Content-Type: application/json; charset=utf-8');
-		echo json_encode([
-			'data' => $rows
-		]);
-	}
-
 	public function updateRecordInput(){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
 			$field = isset($_POST['field']) ? trim($_POST['field']) : '';
@@ -295,86 +287,11 @@
 		}
 
         public function edit($customerId){
-			$customerId = trim((string)$customerId);
-			if($customerId === ''){
-				redirect('records/index');
-				return;
-			}
-
+			//echo $customerId;
             $data = $this->recordsModel->getCustomerInfo($customerId);
-			if(empty($data)){
-				flash('record_message', 'Record not found', 'rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700');
-				redirect('records/index');
-				return;
-			}
-
+            //print_r($data);
             $this->view("records/edit",$data);
         }
-
-	public function updateEdit(){
-		if($_SERVER['REQUEST_METHOD'] != 'POST'){
-			redirect('records/index');
-			return;
-		}
-
-		$id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-		$customerId = trim((string)($_POST['customer_id'] ?? ''));
-		if($id <= 0 || $customerId === ''){
-			flash('record_message', 'Invalid record request', 'rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700');
-			redirect('records/index');
-			return;
-		}
-
-		$allowedStatuses = [
-			'New',
-			'Complete',
-			'Duplicate',
-			'Do Not Serviceable',
-			'Rejected TG5',
-			'Address Issue',
-			'Docs Received',
-			'Waiting for Docs',
-			'SOLIX PENDING',
-			'TPIV',
-			'DEAD',
-			'Test'
-		];
-
-		$orderStatus = trim((string)($_POST['order_status'] ?? ''));
-		if($orderStatus !== '' && !in_array($orderStatus, $allowedStatuses, true)){
-			flash('record_message', 'Invalid status selected', 'rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700');
-			redirect('records/edit/' . $customerId);
-			return;
-		}
-
-		$ssnRaw = isset($_POST['ssn']) ? (string)$_POST['ssn'] : '';
-		$ssnDigits = preg_replace('/\D+/', '', $ssnRaw);
-
-		$data = [
-			'id' => $id,
-			'first_name' => trim(ucfirst(strtolower((string)($_POST['first_name'] ?? '')))),
-			'second_name' => trim(ucfirst(strtolower((string)($_POST['second_name'] ?? '')))),
-			'email' => trim(strtolower((string)($_POST['email'] ?? ''))),
-			'dob' => trim((string)($_POST['dob'] ?? '')),
-			'phone_number' => trim((string)($_POST['phone_number'] ?? '')),
-			'ssn' => $ssnDigits === '' ? '' : substr($ssnDigits, -4),
-			'address1' => trim((string)($_POST['address1'] ?? '')),
-			'address2' => trim((string)($_POST['address2'] ?? '')),
-			'city' => trim((string)($_POST['city'] ?? '')),
-			'state' => strtoupper(trim((string)($_POST['state'] ?? ''))),
-			'zipcode' => trim((string)($_POST['zipcode'] ?? '')),
-			'order_status' => $orderStatus
-		];
-
-		$result = $this->enrollsModel->updateDataById($data, 'lifeline_records');
-		if($result){
-			flash('record_message', 'Record updated successfully', 'rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700');
-		}else{
-			flash('record_message', 'Unable to update record', 'rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700');
-		}
-
-		redirect('records/edit/' . $customerId);
-	}
 
     public function getStaffs(){
 		/*if($_SERVER['REQUEST_METHOD']=='POST'){

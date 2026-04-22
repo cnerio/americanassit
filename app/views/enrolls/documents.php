@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>American Assist | Document Upload</title>
+    <title>American Assistance | Document Upload</title>
     <link rel="icon" type="image/svg+xml" href="<?php echo URLROOT; ?>/public/img/favicon.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="<?php echo URLROOT; ?>/public/img/favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -32,8 +32,8 @@
 <body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
     <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-            <a href="<?php echo URLROOT; ?>" class="flex items-center gap-3" aria-label="American Assist Home">
-                <img src="<?php echo URLROOT; ?>/public/img/AALogo.png" alt="American Assist" class="h-10 w-auto sm:h-11" />
+            <a href="<?php echo URLROOT; ?>" class="flex items-center gap-3" aria-label="American Assistance Home">
+                <img src="<?php echo URLROOT; ?>/public/img/AALogo.png" alt="American Assistance" class="h-10 w-auto sm:h-11" />
             </a>
 
             <nav class="hidden md:flex md:items-center md:justify-center md:gap-8" aria-label="Primary navigation">

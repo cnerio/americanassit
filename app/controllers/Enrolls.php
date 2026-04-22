@@ -275,7 +275,7 @@ class Enrolls extends Controller
       'order_step' => 'Landing Form',
       'URL' => $currentUrl,
       'utms' => $utms,
-      'company' => 'American Assist',
+      'company' => 'American Assistance',
       'ETC' => 'AMBT',
       'fcc_agreement' => $fccAgreement ? 'Yes' : 'No',
       'agree_terms' => $consentTerms ? 'Yes' : 'No',
