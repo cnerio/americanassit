@@ -166,7 +166,7 @@ $statusOptions = [
 
         <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
             <h2 class="text-lg font-bold text-slate-900">Internal Notes</h2>
-            <p class="mt-1 text-sm text-slate-500">Add internal comments and track who made each note.</p>
+            <!-- <p class="mt-1 text-sm text-slate-500">Add internal comments and track who made each note.</p> -->
 
             <form id="noteForm" class="mt-4 space-y-3">
                 <input type="hidden" id="noteCustomerId" value="<?php echo e($data['customer_id']); ?>">
