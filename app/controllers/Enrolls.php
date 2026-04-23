@@ -458,6 +458,24 @@ class Enrolls extends Controller
         $documentUploads['POB'] = $this->sendDocuments($customerId, $orderId, 'POB', $company);
       }
 
+      // Generate consent PDF and upload it to AMBT
+      $consentDoc = $this->enrollModel->getFiles($customerId, 'Consent');
+      $consentToUnavo = is_array($consentDoc) ? (int)($consentDoc['to_unavo'] ?? 0) : (int)($consentDoc->to_unavo ?? 0);
+      if (empty($consentDoc) || $consentToUnavo !== 1) {
+        $consentFile = $this->getConsentFile($orderId);
+        if (($consentFile['status'] ?? 'error') === 'success') {
+          $this->enrollModel->saveData([
+            'customer_id' => $customerId,
+            'filepath'    => $consentFile['URL'],
+            'type_doc'    => 'Consent'
+          ], 'lifeline_documents');
+          $documentUploads['Consent'] = $this->sendDocuments($customerId, $orderId, 'Consent', $company);
+        } else {
+          $documentUploads['Consent'] = ['status' => 'error', 'msg' => 'Consent PDF generation failed: ' . ($consentFile['msg'] ?? 'unknown error')];
+        }
+        file_put_contents("stepLog.txt", "submitAmbtOrder consent for customer " . $customerId . ": " . json_encode($documentUploads['Consent'] ?? []) . "\n", FILE_APPEND);
+      }
+
       if (!empty($documentUploads)) {
         file_put_contents("stepLog.txt", "submitAmbtOrder document upload attempts for customer " . $customerId . ": " . json_encode($documentUploads) . "\n", FILE_APPEND);
       }

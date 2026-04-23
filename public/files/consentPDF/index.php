@@ -31,7 +31,7 @@ $raw = file_get_contents("php://input");
 file_put_contents("receiving.txt", $raw);
 $arrayPost = json_decode($raw, true);
 
-$arrayPost['orderId']='WGT5894';
+//$arrayPost['orderId']='WGT5894'; // debug override removed
 $env = "prod";
 if (isset($arrayPost['orderId'])) {
     //file_put_contents("select.txt", json_encode($row));
@@ -531,7 +531,7 @@ if (isset($arrayPost['orderId'])) {
                 if ($env=="local"){
                 $url = "../../uploads/".$row['customer_id']."/". $docName;
             }else{
-                $url = URLROOT."/uploads/".$row['customer_id']."/". $docName;
+                $url = URLROOT."/public/uploads/".$row['customer_id']."/". $docName;
             }
 
                 if (!empty($pdfBase64)) {
