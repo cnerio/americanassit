@@ -10,6 +10,7 @@ if (empty($_SESSION['landing_csrf_token'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="facebook-domain-verification" content="dgiw69737edylbyo315x5iehz86uuy" />
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>American Assistance | Free Government Phone Services</title>
@@ -39,11 +40,23 @@ if (empty($_SESSION['landing_csrf_token'])) {
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet" />
 	<!-- <link rel="icon" type="image/svg+xml" href="<?php// echo URLROOT; ?>/public/img/favicon.svg"> -->
 	<link rel="icon" type="image/png" sizes="32x32" href="<?php echo URLROOT; ?>/public/img/favicon.png">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WF77KG4R');</script>
+<!-- End Google Tag Manager -->
+
 </head>
 <body class="bg-white text-slate-800 antialiased">
 	<a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-brand-navy focus:shadow">
 		Skip to main content
 	</a>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WF77KG4R"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 	<header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
 		<div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
