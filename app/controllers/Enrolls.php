@@ -1180,7 +1180,7 @@ public function old_check()
       $this->sendDocumentsEmail($data);
       $data["message"]="Files Upload Susccesfully";
       $data["success"]=true;
-      $data["redirect_url"]=URLROOT.'/pages/thankyou/'.$data['customer_id'];
+      $data["redirect_url"]=URLROOT.'/pages/thankyou';
       $updatedata = [
         "customer_id"=>$data['customer_id'],
         "order_status"=>"Docs Received"
