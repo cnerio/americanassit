@@ -33,7 +33,7 @@ Class APIprocess{
         if($createResponse['status']=="success"){
           
           if($createResponse['order_id']>0){
-            $folder = "../public/uploads/".$customerId."/";
+            $folder = dirname(APPROOT)."/public/uploads/".$customerId."/";
                 if (!is_dir($folder)) {
                 mkdir($folder, 0755, true);
             }

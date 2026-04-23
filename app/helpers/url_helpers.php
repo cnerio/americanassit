@@ -4,7 +4,7 @@ function redirect($page){
 }
 
 function saveBase64File($base64_string,$customer_id,$doctype) {
-    $folder = APPROOT . "/public/uploads/" . $customer_id . "/";
+    $folder = dirname(APPROOT) . "/public/uploads/" . $customer_id . "/";
     // Extract the file type and base64 data
     if (preg_match('/^data:(.*?);base64,/', $base64_string, $matches)) {
         $mimeType = $matches[1]; // like "application/pdf", "image/png", etc.

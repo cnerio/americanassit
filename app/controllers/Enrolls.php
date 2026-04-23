@@ -1053,7 +1053,11 @@ public function old_check()
       $customer_id=$data['customer_id'];
       $imageData = base64_decode($base64);
 
-      $savePath = '../public/uploads/'.$customer_id.'/' . basename($data['filename']);
+      $uploadDir = dirname(APPROOT).'/public/uploads/'.$customer_id.'/';
+      if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+      }
+      $savePath = $uploadDir . basename($data['filename']);
       file_put_contents($savePath, $imageData);
 
       echo json_encode(['success' => true, 'message' => 'Image saved', 'path' => $savePath]);
@@ -1230,7 +1234,11 @@ public function old_check()
     if($orderId>0){
       if($fileData){
                 // Convert URL-based filepath to absolute disk path for reliable reading
-                $diskFilePath = rtrim(APPROOT, '/\\') . '/' . ltrim(str_replace(URLROOT, '', $fileData['filepath']), '/\\');
+                $relativePath = ltrim(str_replace(URLROOT, '', $fileData['filepath']), '/\\');
+                if (strpos($relativePath, 'public/') === 0) {
+                  $relativePath = substr($relativePath, strlen('public/'));
+                }
+                $diskFilePath = rtrim(dirname(APPROOT), '/\\') . '/public/' . ltrim($relativePath, '/\\');
                 $imageData = file_get_contents($diskFilePath);
                 $filename = basename($fileData['filepath']);
                 // Encode the binary data to base64
