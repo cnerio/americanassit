@@ -18,7 +18,8 @@ $statusOptions = [
     'SOLIX PENDING',
     'TPIV',
     'DEAD',
-    'Test'
+    'Test',
+    'Missing Consents'
 ];
 ?>
 
@@ -138,6 +139,7 @@ $statusOptions = [
                 <div class="grid grid-cols-1 gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600 sm:grid-cols-2">
                     <p><span class="font-semibold">Order ID:</span> <?php echo e($data['order_id']); ?></p>
                     <p><span class="font-semibold">Created At:</span> <?php echo e($data['created_at']); ?></p>
+                    <p><span class="font-semibold">Shockwave Status:</span> <?php echo e($data['status_text'] ?: $data['status_text']); ?></p>
                     <p><span class="font-semibold">Program Benefit:</span> <?php echo e($data['program_name'] ?: $data['program_benefit']); ?></p>
                 </div>
 
