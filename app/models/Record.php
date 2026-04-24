@@ -106,7 +106,7 @@ class Record {
 	}
 
     public function getCustomerInfo($customer_id){
-        $this->db->query('SELECT lr.id, lr.customer_id, lr.first_name, lr.second_name, lr.email, lr.dob, lr.phone_number, lr.ssn, lr.address1, lr.address2, lr.city, lr.state, lr.zipcode, lr.order_id, lr.order_status, lr.program_benefit, lr.created_at, lp.name, lr.status_text AS program_name FROM lifeline_records lr LEFT JOIN lifeline_programs lp ON lr.program_benefit = lp.id_program WHERE lr.customer_id=:id LIMIT 1');
+        $this->db->query('SELECT lr.id, lr.customer_id, lr.first_name, lr.second_name, lr.email, lr.dob, lr.phone_number, lr.ssn, lr.address1, lr.address2, lr.city, lr.state, lr.zipcode, lr.order_id, lr.order_status, lr.program_benefit, lr.created_at, lr.status_text, lp.name AS program_name FROM lifeline_records lr LEFT JOIN lifeline_programs lp ON lr.program_benefit = lp.id_program WHERE lr.customer_id=:id LIMIT 1');
 		$this->db->bind("id",$customer_id);
 		$getOrder = $this->db->single();
 
