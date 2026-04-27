@@ -11,7 +11,7 @@ $statusOptions = [
     'Complete',
     'Duplicate',
     'Do Not Serviceable',
-    'Rejected TG5',
+    'Rejected by Shockwave',
     'Address Issue',
     'Docs Received',
     'Waiting for Docs',
@@ -19,7 +19,8 @@ $statusOptions = [
     'TPIV',
     'DEAD',
     'Test',
-    'Missing Consents'
+    'Missing Consents',
+    'Unknown Error'
 ];
 ?>
 

@@ -432,13 +432,22 @@ class Enrolls extends Controller
     }
 
     $responseBody = is_array($apiResult['response'] ?? null) ? $apiResult['response'] : [];
+
+    if($responseBody['SubscriberOrderID']==0){
+      $orderStatus="Rejected by Shockwave";
+    }else if ($responseBody['SubscriberOrderID'] > 0  ) {
+      $orderStatus = "New";
+    } else {
+      $orderStatus = 'Unknown Error';
+    }
     $updateData = [
       'customer_id' => $customerId,
       'order_id' => $responseBody['SubscriberOrderID'] ?? null,
       'account' => $responseBody['AccountNumber'] ?? null,
       'acp_status' => $responseBody['NLADStatus'] ?? ($responseBody['Status'] ?? null),
       'status_text' => $responseBody['StatusText'] ?? null,
-      'process_status' => 'AddSubscriberOrderWithEBBData API'
+      'process_status' => 'AddSubscriberOrderWithEBBData API',
+      'order_status' => $orderStatus
     ];
     $this->enrollModel->updateData($updateData, 'lifeline_records');
 

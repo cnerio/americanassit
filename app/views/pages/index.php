@@ -422,7 +422,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 						<p class="rounded-md border border-slate-300 bg-slate-50 p-3 text-xs text-slate-700"><strong>By submitting this application, you authorize American Assistance and its authorized representatives to submit your personal information to the Lifeline National Verifier (operated by the Universal Service Administrative Company on behalf of the Federal Communications Commission) to determine your eligibility.</strong></p>
 
 						<button type="submit" class="w-full rounded-md bg-brand-navy px-6 py-3 font-semibold text-white transition hover:bg-[#02284d] focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2">
-							Start Application
+							Submit Application
 						</button>
 
 						<p class="text-center text-xs text-gray-500 mt-2">By continuing, you agree to provide your information for Lifeline eligibility determination.</p>
