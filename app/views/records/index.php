@@ -284,18 +284,17 @@
             }
         });
 
-        tableEl.find('thead tr:eq(1) th input').off('keyup change');
-        recordsTable.columns().every(function(index) {
-            const input = $('#recordsTable thead tr:eq(1) th').eq(index).find('input');
-            if (!input.length) {
+        const tableContainer = $(recordsTable.table().container());
+
+        tableContainer.off('keyup change', '.column-filter').on('keyup change', '.column-filter', function() {
+            const columnIndex = $(this).closest('th').index();
+            if (columnIndex < 0 || !recordsTable.column(columnIndex).length) {
                 return;
             }
 
-            input.on('keyup change', function() {
-                if (recordsTable.column(index).search() !== this.value) {
-                    recordsTable.column(index).search(this.value).draw();
-                }
-            });
+            if (recordsTable.column(columnIndex).search() !== this.value) {
+                recordsTable.column(columnIndex).search(this.value).draw();
+            }
         });
 
         registerExternalFilters();
@@ -305,7 +304,9 @@
         });
 
         $('#clearFilters').off('click').on('click', function() {
-            $('#recordsTable thead .column-filter').val('');
+            if (recordsTable) {
+                $(recordsTable.table().container()).find('.column-filter').val('');
+            }
             $('#statusFilter').val('');
             $('#startDateFilter').val('');
             $('#endDateFilter').val('');
