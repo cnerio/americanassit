@@ -53,6 +53,10 @@
                     <h2 class="text-xl font-bold text-slate-900">Lifeline Records</h2>
 
                     <div class="flex flex-wrap items-center gap-2">
+                        <!-- <a href="<?php //echo URLROOT; ?>/shockwave/index" class="mt-5 inline-flex items-center rounded-lg bg-amber-500 px-3 py-2 text-sm font-semibold text-slate-950 transition hover:bg-amber-400">
+                            <i class="fa fa-refresh mr-2"></i> Retry Shockwave Leads
+                        </a> -->
+
                         <div>
                             <label for="statusFilter" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Order Status</label>
                             <select id="statusFilter" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100">

@@ -15,11 +15,13 @@ $statusOptions = [
     'Address Issue',
     'Docs Received',
     'Waiting for Docs',
+    'Unfinished',
     'SOLIX PENDING',
     'TPIV',
     'DEAD',
     'Test',
     'Missing Consents',
+    'Missing Documents',
     'Unknown Error'
 ];
 ?>

@@ -29,6 +29,10 @@
         $this->view("records/index");
     }
 
+	public function shockwave(){
+		redirect('shockwave/index');
+	}
+
 	public function getAllRecordsData(){
 		$rows = $this->recordsModel->getAllRecords();
 		header('Content-Type: application/json; charset=utf-8');
@@ -331,13 +335,17 @@
 			'Duplicate',
 			'Do Not Serviceable',
 			'Rejected TG5',
+			'Rejected by Shockwave',
 			'Address Issue',
 			'Docs Received',
 			'Waiting for Docs',
+			'Unfinished',
 			'SOLIX PENDING',
 			'TPIV',
 			'DEAD',
-			'Test'
+			'Test',
+			'Missing Documents',
+			'Unknown Error'
 		];
 
 		$orderStatus = trim((string)($_POST['order_status'] ?? ''));

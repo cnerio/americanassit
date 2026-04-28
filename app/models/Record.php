@@ -176,6 +176,17 @@ class Record {
 		return $this->db->resultSet();
 	}
 
+	public function getShockwaveRetryQueue(){
+		$this->db->query("SELECT id, customer_id, first_name, second_name, email, phone_number, order_id, order_status, status_text, created_at FROM lifeline_records WHERE LOWER(TRIM(COALESCE(order_status, ''))) IN ('unknown error', 'unknow error', 'unfinished') ORDER BY created_at DESC");
+		return $this->db->resultSet();
+	}
+
+	public function getShockwaveRetryRecord($customerId){
+		$this->db->query("SELECT * FROM lifeline_records WHERE customer_id = :customer_id AND LOWER(TRIM(COALESCE(order_status, ''))) IN ('unknown error', 'unknow error', 'unfinished') LIMIT 1");
+		$this->db->bind(':customer_id', $customerId);
+		return $this->db->single();
+	}
+
     public function getNotes($customer_id){
 		$this->db->query("SELECT * FROM internal_notes WHERE customer_id=:customer_id");
 		$this->db->bind("customer_id",$customer_id);
