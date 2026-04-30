@@ -273,7 +273,7 @@ class Enrolls extends Controller
     parse_str(parse_url($currentUrl, PHP_URL_QUERY) ?? '', $params);
     $utms = json_encode($params);
     unset($_SESSION['landing_csrf_token']);
-
+    $NYdate = new DateTime("now", new DateTimeZone("America/New_York"));
     $data = [
       'first_name' => ucfirst(strtolower($firstName)),
       'second_name' => ucfirst(strtolower($lastName)),
@@ -302,7 +302,8 @@ class Enrolls extends Controller
       'ETC' => 'AMBT',
       'fcc_agreement' => $fccAgreement ? 'Yes' : 'No',
       'agree_terms' => $consentTerms ? 'Yes' : 'No',
-      'agree_pii' => $consentInfo ? 'Yes' : 'No'
+      'agree_pii' => $consentInfo ? 'Yes' : 'No',
+      'created_at_ny' => $NYdate->format('Y-m-d H:i:s')
     ];
 
     try {
