@@ -10,6 +10,7 @@ if (empty($_SESSION['landing_csrf_token'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta name="facebook-domain-verification" content="dgiw69737edylbyo315x5iehz86uuy" />
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -154,13 +155,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 									<label for="last_name" class="mb-2 block text-sm font-medium text-slate-700">Last Name</label>
 									<input id="last_name" name="last_name" type="text" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
 								</div>
-								<div class="sm:col-span-2">
-									<label class="mb-2 block text-sm font-medium text-slate-700">Date of Birth</label>
-									<div class="grid grid-cols-3 gap-3">
-										<input id="dobM" name="dobM" type="text" inputmode="numeric" maxlength="2" placeholder="MM" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
-										<input id="dobD" name="dobD" type="text" inputmode="numeric" maxlength="2" placeholder="DD" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
-										<input id="dobY" name="dobY" type="text" inputmode="numeric" maxlength="4" placeholder="YYYY" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
-									</div>
+								<div>
+									<label for="dob" class="mb-2 block text-sm font-medium text-slate-700">Date of Birth</label>
+									<input id="dob" name="dob" type="date" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required />
 								</div>
 								<div>
 									<label for="phone" class="mb-2 block text-sm font-medium text-slate-700">Phone Number</label>
@@ -536,9 +533,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		const shippingDifferent = document.getElementById("shipping_different");
 		const shippingFields = document.getElementById("shipping-fields");
 		const enrollmentForm = document.getElementById("enrollment-form");
-		const dobMInput = document.getElementById("dobM");
-		const dobDInput = document.getElementById("dobD");
-		const dobYInput = document.getElementById("dobY");
 		const phoneInput = document.getElementById("phone");
 		const ssnInput = document.getElementById("ssn");
 		const zipcodeInput = document.getElementById("zipcode");
@@ -569,31 +563,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			}
 
 			return "(" + digits.slice(0, 3) + ") " + digits.slice(3, 6) + "-" + digits.slice(6);
-		};
-
-		const isValidDobParts = function (monthValue, dayValue, yearValue) {
-			if (!/^\d{2}$/.test(monthValue) || !/^\d{2}$/.test(dayValue) || !/^\d{4}$/.test(yearValue)) {
-				return false;
-			}
-
-			const month = Number(monthValue);
-			const day = Number(dayValue);
-			const year = Number(yearValue);
-			const dobDate = new Date(year, month - 1, day);
-
-			if (
-				dobDate.getFullYear() !== year ||
-				dobDate.getMonth() !== month - 1 ||
-				dobDate.getDate() !== day
-			) {
-				return false;
-			}
-
-			const today = new Date();
-			today.setHours(0, 0, 0, 0);
-			dobDate.setHours(0, 0, 0, 0);
-
-			return dobDate <= today;
 		};
 
 		const getCurrentDateTime = function () {
@@ -793,24 +762,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			});
 		}
 
-		if (dobMInput) {
-			dobMInput.addEventListener("input", function () {
-				dobMInput.value = keepOnlyDigits(dobMInput.value, 2);
-			});
-		}
-
-		if (dobDInput) {
-			dobDInput.addEventListener("input", function () {
-				dobDInput.value = keepOnlyDigits(dobDInput.value, 2);
-			});
-		}
-
-		if (dobYInput) {
-			dobYInput.addEventListener("input", function () {
-				dobYInput.value = keepOnlyDigits(dobYInput.value, 4);
-			});
-		}
-
 		if (ssnInput) {
 			ssnInput.addEventListener("input", function () {
 				ssnInput.value = keepOnlyDigits(ssnInput.value, 4);
@@ -876,13 +827,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				return this.optional(element) || digits.length === 10;
 			}, "Please enter a valid 10-digit phone number.");
 
-			window.jQuery.validator.addMethod("dobPartsUS", function () {
-				const month = String(window.jQuery("#dobM").val() || "").trim();
-				const day = String(window.jQuery("#dobD").val() || "").trim();
-				const year = String(window.jQuery("#dobY").val() || "").trim();
-				return isValidDobParts(month, day, year);
-			}, "Please enter a valid date of birth.");
-
 			const validator = $enrollmentForm.validate({
 				ignore: ":hidden",
 				errorElement: "label",
@@ -890,9 +834,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				rules: {
 					first_name: { required: true, minlength: 2 },
 					last_name: { required: true, minlength: 2 },
-					dobM: { required: true, digits: true, minlength: 2, maxlength: 2, range: [1, 12] },
-					dobD: { required: true, digits: true, minlength: 2, maxlength: 2, range: [1, 31] },
-					dobY: { required: true, digits: true, minlength: 4, maxlength: 4, dobPartsUS: true },
+					dob: { required: true },
 					phone: { required: true, phoneUS: true },
 						ssn: { required: true, digits: true, minlength: 4, maxlength: 4 },
 					email: { required: true, email: true },
@@ -941,27 +883,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				messages: {
 					first_name: "Please enter your first name.",
 					last_name: "Please enter your last name.",
-					dobM: {
-						required: "Enter month (MM).",
-						digits: "Month must be numbers only.",
-						minlength: "Month must be 2 digits.",
-						maxlength: "Month must be 2 digits.",
-						range: "Month must be between 01 and 12."
-					},
-					dobD: {
-						required: "Enter day (DD).",
-						digits: "Day must be numbers only.",
-						minlength: "Day must be 2 digits.",
-						maxlength: "Day must be 2 digits.",
-						range: "Day must be between 01 and 31."
-					},
-					dobY: {
-						required: "Enter year (YYYY).",
-						digits: "Year must be numbers only.",
-						minlength: "Year must be 4 digits.",
-						maxlength: "Year must be 4 digits.",
-						dobPartsUS: "Please enter a valid date of birth."
-					},
+					dob: "Please select your date of birth.",
 					phone: "Please enter a valid 10-digit phone number.",
 						ssn: {
 							required: "Please enter the last 4 digits of your SSN.",
@@ -1030,12 +952,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 					formData.set("consent_info", document.getElementById("consent_info").checked ? "1" : "0");
 					formData.set("consent_terms", document.getElementById("consent_terms").checked ? "1" : "0");
 					formData.set("fcc_agreement", document.getElementById("fcc_agreement").checked ? "1" : "0");
-					formData.set(
-						"dob",
-						String(formData.get("dobM") || "").padStart(2, "0") + "/" +
-						String(formData.get("dobD") || "").padStart(2, "0") + "/" +
-						String(formData.get("dobY") || "")
-					);
 					formData.set("identity_proof", identityProofBase64);
 					formData.set("benefit_proof", benefitProofBase64);
 					if (consentTermsCheckbox && consentDateTimeInput && consentTermsCheckbox.checked && !consentDateTimeInput.value) {
