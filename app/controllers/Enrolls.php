@@ -110,6 +110,9 @@ class Enrolls extends Controller
     $firstName = trim($_POST['first_name'] ?? '');
     $lastName = trim($_POST['last_name'] ?? '');
     $dob = trim($_POST['dob'] ?? '');
+    $dobMonthInput = trim($_POST['dobM'] ?? '');
+    $dobDayInput = trim($_POST['dobD'] ?? '');
+    $dobYearInput = trim($_POST['dobY'] ?? '');
     $ssnLast4 = preg_replace('/\D/', '', $_POST['ssn'] ?? '');
     $email = trim(strtolower($_POST['email'] ?? ''));
     $state = strtoupper(trim($_POST['state'] ?? ''));
@@ -139,6 +142,12 @@ class Enrolls extends Controller
 
     $errors = [];
 
+    $setDobErrors = function ($message) use (&$errors) {
+      $errors['dobM'] = $message;
+      $errors['dobD'] = $message;
+      $errors['dobY'] = $message;
+    };
+
     if ($firstName === '' || strlen($firstName) < 2) {
       $errors['first_name'] = 'Please enter your first name.';
     }
@@ -147,8 +156,22 @@ class Enrolls extends Controller
       $errors['last_name'] = 'Please enter your last name.';
     }
 
-    if ($dob === '' || strtotime($dob) === false) {
-      $errors['dob'] = 'Please select a valid date of birth.';
+    if ($dob === '' && $dobMonthInput !== '' && $dobDayInput !== '' && $dobYearInput !== '') {
+      $dob = sprintf('%02d/%02d/%04d', (int)$dobMonthInput, (int)$dobDayInput, (int)$dobYearInput);
+    }
+
+    if ($dob === '') {
+      $setDobErrors('Please enter your date of birth as MM/DD/YYYY.');
+    } elseif (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $dob) !== 1) {
+      $setDobErrors('Please enter your date of birth as MM/DD/YYYY.');
+    } else {
+      list($dobMonth, $dobDay, $dobYear) = array_map('intval', explode('/', $dob));
+
+      if (!checkdate($dobMonth, $dobDay, $dobYear)) {
+        $setDobErrors('Please enter a valid date of birth.');
+      } else {
+        $dob = sprintf('%04d-%02d-%02d', $dobYear, $dobMonth, $dobDay);
+      }
     }
 
     if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
