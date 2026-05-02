@@ -278,7 +278,7 @@ class Enrolls extends Controller
       http_response_code(422);
       echo json_encode([
         'success' => false,
-        'message' => 'Please review the highlighted fields and try again.'.($errors['msg'] ?? ''),
+        'message' => 'Please review the highlighted fields and try again.',
         'errors' => $errors
       ]);
       return;
