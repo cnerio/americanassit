@@ -263,11 +263,13 @@ class Enrolls extends Controller
 
       if (!$stateCovered) {
         $errors['state'] = 'No coverage area for the selected state.';
+        $errors['msg'] = 'Coverage is not available in your area based on the state you entered.';
       } elseif ($state === 'TX') {
         $zipCovered = $this->enrollModel->isZipcodeCovered('AMBT', $zipcode);
 
         if (!$zipCovered) {
           $errors['zipcode'] = 'No coverage area for this ZIP code.';
+          $errors['msg'] = 'Coverage is not available in your area based on the state and ZIP code you entered.';
         }
       }
     }
@@ -276,7 +278,7 @@ class Enrolls extends Controller
       http_response_code(422);
       echo json_encode([
         'success' => false,
-        'message' => 'Please review the highlighted fields and try again.',
+        'message' => ($errors['msg']) ? $errors['msg'] : 'Please review the highlighted fields and try again.',
         'errors' => $errors
       ]);
       return;
