@@ -21,10 +21,9 @@ class Enrolls extends Controller
             "state" => strtoupper(trim($_POST['state'] ?? '')),
             "zipcode" => $_POST['zipcode'],
             "agent" => $_POST['agent'],
-            "url" => $full_url,
-            "utms"=>$utms?:"",
+            //"url" => $full_url,
+            //"utms"=>$utms?:"",
             "powered"=>"GTW"
-            
           ];
 
           $this->view('enrolls/index2', $data);
@@ -32,7 +31,7 @@ class Enrolls extends Controller
 
   public function index($customer_id = null)
   {
-     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           $full_url = $_POST['url'];
             parse_str(parse_url($full_url, PHP_URL_QUERY), $params);
             $utms = json_encode($params);
@@ -65,7 +64,6 @@ class Enrolls extends Controller
             //$this->view('enrolls/index');
             redirect('index');
           }
-          
         }
   }
 
@@ -258,6 +256,20 @@ class Enrolls extends Controller
 
     if ($currentUrl !== '' && filter_var($currentUrl, FILTER_VALIDATE_URL) === false) {
       $errors['current_page_url'] = 'Invalid source URL.';
+    }
+
+    if (!isset($errors['state']) && !isset($errors['zipcode'])) {
+      $stateCovered = $this->enrollModel->isStateCovered('AMBT', $state);
+
+      if (!$stateCovered) {
+        $errors['state'] = 'No coverage area for the selected state.';
+      } elseif ($state === 'TX') {
+        $zipCovered = $this->enrollModel->isZipcodeCovered('AMBT', $zipcode);
+
+        if (!$zipCovered) {
+          $errors['zipcode'] = 'No coverage area for this ZIP code.';
+        }
+      }
     }
 
     if (!empty($errors)) {

@@ -166,4 +166,55 @@ class Enroll {
         return $result;
     }
 
+    public function isStateCovered($company, $state){
+        $state = strtoupper(trim((string)$state));
+        if ($state === '') {
+            return false;
+        }
+
+        switch($company){
+            case "AMBT":
+                $column = "AMBT";
+                break;
+            case "GTW":
+                $column = "GTW";
+                break;
+            case "NAL":
+                $column = "NAL";
+                break;
+            default:
+                return false;
+        }
+
+        $this->db->query("SELECT COUNT(*) AS total FROM lifeline_states WHERE abrv=:state AND {$column}=1;");
+        $this->db->bind(':state', $state);
+        $row = $this->db->single();
+
+        return !empty($row) && (int)$row['total'] > 0;
+    }
+
+    public function isZipcodeCovered($company, $zipcode){
+        $zipcode = preg_replace('/\D/', '', (string)$zipcode);
+        if (strlen($zipcode) !== 5) {
+            return false;
+        }
+
+        switch($company){
+            case "AMBT":
+                $column = "AMBT";
+                break;
+            case "GTW":
+                $column = "GTW";
+                break;
+            default:
+                return false;
+        }
+
+        $this->db->query("SELECT COUNT(*) AS total FROM lifeline_zipcodes WHERE zipcode=:zipcode AND {$column}=1;");
+        $this->db->bind(':zipcode', $zipcode);
+        $row = $this->db->single();
+
+        return !empty($row) && (int)$row['total'] > 0;
+    }
+
 }
