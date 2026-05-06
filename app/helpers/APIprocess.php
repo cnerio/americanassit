@@ -153,57 +153,68 @@ Class APIprocess{
 
     public function getConsentFile($orderId){
 
-        //echo URLROOT.'/public/files/consentPDF/';
-        $curl = curl_init();
+        $baseUrl = rtrim(URLROOT, '/');
+        $normalizedBaseUrl = preg_replace('/\/public$/i', '', $baseUrl);
+        $candidateUrls = array_values(array_unique([
+          $normalizedBaseUrl . '/files/consentPDF/',
+          $baseUrl . '/files/consentPDF/'
+        ]));
 
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => URLROOT.'/public/files/consentPDF/',
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => '',
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => 'POST',
-          CURLOPT_POSTFIELDS =>'{
-            "orderId":'.$orderId.'
-        }',
-          CURLOPT_SSL_VERIFYHOST => IS_LOCALHOST ? 0 : 2,
-          CURLOPT_SSL_VERIFYPEER => IS_LOCALHOST ? 0 : 1,
-          CURLOPT_HTTPHEADER => array(
-            'Content-Type: application/json'
-          ),
-        ));
+        $payload = json_encode([
+          'orderId' => $orderId
+        ]);
 
-        $response = curl_exec($curl);
-        $curl_error = curl_error($curl);
-        $curl_errno = curl_errno($curl);
-        $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-        
-        // Step 1: Check if cURL itself failed (connection problems, timeouts, DNS, etc.)
-        if ($curl_errno) {
-            //echo "cURL error: $curl_error"; // This includes many kinds of outages
-            $result = [
-              "status"=>"error",
-              "msg"=>$curl_error
-            ];
-            // Optionally log or retry here
-        } 
-        // Step 2: Check if API returned an HTTP error
-        elseif ($http_code >= 400) {
-            //echo "API HTTP error: $http_code";
-            $result = [
-              "status"=>"error",
-              "msg"=>"HTTP ERROR CODE: ".$http_code
-            ];
-            // Optional: you might want to parse $response for error details
+        $lastError = 'Consent endpoint did not return a valid response.';
+
+        foreach ($candidateUrls as $endpointUrl) {
+          $curl = curl_init();
+
+          curl_setopt_array($curl, array(
+            CURLOPT_URL => $endpointUrl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 3,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => $payload,
+            CURLOPT_SSL_VERIFYHOST => IS_LOCALHOST ? 0 : 2,
+            CURLOPT_SSL_VERIFYPEER => IS_LOCALHOST ? 0 : 1,
+            CURLOPT_HTTPHEADER => array(
+              'Content-Type: application/json'
+            ),
+          ));
+
+          $response = curl_exec($curl);
+          $curl_error = curl_error($curl);
+          $curl_errno = curl_errno($curl);
+          $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+          curl_close($curl);
+
+          if ($curl_errno) {
+            $lastError = 'cURL error for ' . $endpointUrl . ': ' . $curl_error;
+            continue;
+          }
+
+          if ($http_code >= 400) {
+            $lastError = 'HTTP ERROR CODE: ' . $http_code . ' at ' . $endpointUrl;
+            continue;
+          }
+
+          $decoded = json_decode($response, true);
+          if (is_array($decoded) && isset($decoded['status'])) {
+            return $decoded;
+          }
+
+          $lastError = 'Invalid consent response from ' . $endpointUrl;
         }
-        // Step 3: All good
-        else {
-            $result = json_decode($response,true);
-        }
-        return  $result;
+
+        return [
+          'status' => 'error',
+          'msg' => $lastError
+        ];
 
     }
 
