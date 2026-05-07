@@ -1978,6 +1978,7 @@ public function old_check()
               $this->enrollModel->updateData($processData,'lifeline_records');
             // exit();
             if($consentFile64['status']=="success"){
+              echo "success";
               $fileData = [
                  "customer_id"=>$customerId,
                  "filepath"=>$consentFile64['URL'],
@@ -1993,7 +1994,7 @@ public function old_check()
                 ];
               
             }else{
-              //echo "base64 error";
+              echo "base64 error";
               $result=[
                 "status"=>"success",
                 "msg"=>"We couldn't create a consent file"
