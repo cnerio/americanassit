@@ -1979,12 +1979,12 @@ public function old_check()
             // exit();
             if($consentFile64['status']=="success"){
               echo "success";
-              // $fileData = [
-              //    "customer_id"=>$customerId,
-              //    "filepath"=>$consentFile64['URL'],
-              //    "type_doc"=>"Consent"
-              //  ];
-              //  $this->enrollModel->saveData($fileData,'lifeline_documents');
+              $fileData = [
+                 "customer_id"=>$customerId,
+                 "filepath"=>$consentFile64['URL'],
+                 "type_doc"=>"Consent"
+               ];
+               $this->enrollModel->saveData($fileData,'lifeline_documents');
               $ConsentFileResult = $this->APIService->sendDocuments($customerId,$orderId,"Consent",$this->enrollModel,'AMBT');
               print_r($ConsentFileResult);
               $processData['process_status']=$ConsentFileResult['msg'];
