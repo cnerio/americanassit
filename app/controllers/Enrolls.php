@@ -1972,7 +1972,7 @@ public function old_check()
     $this->APIService = new APIprocess();
     $consentFile64=$this->APIService->getConsentFile($orderId);
             //$consentFile64 = getConsent64($row[0]);
-            //print_r($consentFile64);
+            print_r($consentFile64);
              $processData['customer_id']=$customerId;
               $processData['process_status']="generating consent File";
               $this->enrollModel->updateData($processData,'lifeline_records');
