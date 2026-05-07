@@ -1986,6 +1986,7 @@ public function old_check()
                ];
                $this->enrollModel->saveData($fileData,'lifeline_documents');
               $ConsentFileResult = $this->APIService->sendDocuments($customerId,$orderId,"Consent",$this->enrollModel);
+              print_r($ConsentFileResult);
               $processData['process_status']=$ConsentFileResult['msg'];
               $this->enrollModel->updateData($processData,'lifeline_records');
                 $result=[
