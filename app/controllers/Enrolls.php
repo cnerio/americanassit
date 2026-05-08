@@ -1972,13 +1972,13 @@ public function old_check()
     $this->APIService = new APIprocess();
     $consentFile64=$this->APIService->getConsentFile($orderId);
             //$consentFile64 = getConsent64($row[0]);
-            print_r($consentFile64);
+            //print_r($consentFile64);
              $processData['customer_id']=$customerId;
               $processData['process_status']="generating consent File";
               $this->enrollModel->updateData($processData,'lifeline_records');
             // exit();
             if($consentFile64['status']=="success"){
-              echo "success";
+              //echo "success";
               $fileData = [
                  "customer_id"=>$customerId,
                  "filepath"=>$consentFile64['URL'],
@@ -1995,9 +1995,9 @@ public function old_check()
                 ];
               
             }else{
-              echo "base64 error";
+              //echo "base64 error";
               $result=[
-                "status"=>"success",
+                "status"=>"error",
                 "msg"=>"We couldn't create a consent file"
               ];
                $processData['process_status']="Couldn't create a consent file";
