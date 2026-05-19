@@ -131,6 +131,9 @@ class Enrolls extends Controller
     $fccAgreement = ($_POST['fcc_agreement'] ?? '0') === '1';
     $shippingDifferent = ($_POST['shipping_different'] ?? '0') === '1';
     $currentUrl = trim($_POST['current_page_url'] ?? '');
+    if ($currentUrl !== '') {
+      $currentUrl = html_entity_decode($currentUrl, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
     $shippingAddress1 = trim($_POST['shipping_address1'] ?? '');
     $shippingCity = trim($_POST['shipping_city'] ?? '');
     $shippingState = strtoupper(trim($_POST['shipping_state'] ?? ''));
@@ -285,6 +288,17 @@ class Enrolls extends Controller
     }
 
     parse_str(parse_url($currentUrl, PHP_URL_QUERY) ?? '', $params);
+    if (!empty($params) && is_array($params)) {
+      $normalizedParams = [];
+      foreach ($params as $key => $value) {
+        $normalizedKey = preg_replace('/^(amp;)+/i', '', (string)$key);
+        if ($normalizedKey === '') {
+          $normalizedKey = (string)$key;
+        }
+        $normalizedParams[$normalizedKey] = $value;
+      }
+      $params = $normalizedParams;
+    }
     $utms = json_encode($params);
     unset($_SESSION['landing_csrf_token']);
     $NYdate = new DateTime("now", new DateTimeZone("America/New_York"));

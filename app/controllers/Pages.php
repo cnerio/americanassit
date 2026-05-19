@@ -27,6 +27,8 @@
             CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST  => 'GET',
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+            // CURLOPT_SSL_VERIFYPEER => false,
+            // CURLOPT_SSL_VERIFYHOST => 0,
           ]);
 
           $response = curl_exec($curl);
@@ -34,15 +36,26 @@
 
           if($response){
             $leadData = json_decode($response, true);
+            //print_r($leadData);
             // Response structure: { "success": true, "data": { "email", "city", "state", "zipcode" } }
             if(!empty($leadData['success']) && isset($leadData['data']) && is_array($leadData['data'])){
               $d = $leadData['data'];
-              
-                $data['email']  = isset($d['email'])   ? htmlspecialchars($d['email'],   ENT_QUOTES, 'UTF-8') : '';
-                $data['zipcode'] = isset($d['zipcode']) ? htmlspecialchars($d['zipcode'], ENT_QUOTES, 'UTF-8') : '';
-                $data['city']    = isset($d['city'])    ? htmlspecialchars($d['city'],    ENT_QUOTES, 'UTF-8') : '';
-                $data['state']   = isset($d['state'])   ? htmlspecialchars($d['state'],   ENT_QUOTES, 'UTF-8') : '';
-              
+              $pageUrlParams = '';
+              if (!empty($d['page_url'])) {
+                $decodedUrl = urldecode($d['page_url']);
+                $parsed = parse_url($decodedUrl);
+                if (!empty($parsed['query'])) {
+                  parse_str($parsed['query'], $queryParams);
+                  $pageUrlParams = http_build_query($queryParams);
+                }
+              }
+              $data['lead'] = [
+                'email'   => isset($d['email'])   ? htmlspecialchars($d['email'],   ENT_QUOTES, 'UTF-8') : '',
+                'zipcode' => isset($d['zipcode']) ? htmlspecialchars($d['zipcode'], ENT_QUOTES, 'UTF-8') : '',
+                'city'    => isset($d['city'])    ? htmlspecialchars($d['city'],    ENT_QUOTES, 'UTF-8') : '',
+                'state'   => isset($d['state'])   ? htmlspecialchars($d['state'],   ENT_QUOTES, 'UTF-8') : '',
+                'page_url_params' => $pageUrlParams,
+              ];
             }
           }
         }

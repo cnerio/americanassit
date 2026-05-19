@@ -172,7 +172,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 								</div>
 								<div class="sm:col-span-2">
 									<label for="email" class="mb-2 block text-sm font-medium text-slate-700">Email Address</label>
-									<input id="email" name="email" type="email" placeholder="name@example.com" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required <?php if(isset($data)){echo ($data['email'])?"value='".$data['email']."' readonly":"";} ?>/>
+									<input id="email" name="email" type="email" placeholder="name@example.com" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required <?php if(isset($data) && isset($data['lead']['email'])){echo ($data['lead']['email'])?"value='".$data['lead']['email']."' readonly":"";} ?>/>
 								</div>
 							</div>
 						</div>
@@ -190,69 +190,69 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 								</div>
 								<div>
 									<label for="city" class="mb-2 block text-sm font-medium text-slate-700">City</label>
-									<input id="city" name="city" type="text" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required <?php if(isset($data)){echo ($data['city'])?"value='".$data['city']."' readonly":"";} ?>/>
+									<input id="city" name="city" type="text" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required <?php if(isset($data) && isset($data['lead']['city'])){echo ($data['lead']['city'])?"value='".$data['lead']['city']."' readonly":"";} ?>/>
 								</div>
 								<div>
 									<label for="state" class="mb-2 block text-sm font-medium text-slate-700">State</label>
 									<select id="state" name="state" class="w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required>
 										<option value="">Select State</option>
-										<option value="AL" <?php if(isset($data)){echo($data['state']=="AL")?"selected":"";}?>>Alabama</option>
-										<option value="AK" <?php if(isset($data)){echo($data['state']=="AK")?"selected":"";}?>>Alaska</option>
-										<option value="AZ" <?php if(isset($data)){echo($data['state']=="AZ")?"selected":"";}?>>Arizona</option>
-										<option value="AR" <?php if(isset($data)){echo($data['state']=="AR")?"selected":"";}?>>Arkansas</option>
-										<option value="CA" <?php if(isset($data)){echo($data['state']=="CA")?"selected":"";}?>>California</option>
-										<option value="CO" <?php if(isset($data)){echo($data['state']=="CO")?"selected":"";}?>>Colorado</option>
-										<option value="CT" <?php if(isset($data)){echo($data['state']=="CT")?"selected":"";}?>>Connecticut</option>
-										<option value="DE" <?php if(isset($data)){echo($data['state']=="DE")?"selected":"";}?>>Delaware</option>
-										<option value="DC" <?php if(isset($data)){echo($data['state']=="DC")?"selected":"";}?>>District of Columbia</option>
-										<option value="FL" <?php if(isset($data)){echo($data['state']=="FL")?"selected":"";}?>>Florida</option>
-										<option value="GA" <?php if(isset($data)){echo($data['state']=="GA")?"selected":"";}?>>Georgia</option>
-										<option value="HI" <?php if(isset($data)){echo($data['state']=="HI")?"selected":"";}?>>Hawaii</option>
-										<option value="ID" <?php if(isset($data)){echo($data['state']=="ID")?"selected":"";}?>>Idaho</option>
-										<option value="IL" <?php if(isset($data)){echo($data['state']=="IL")?"selected":"";}?>>Illinois</option>
-										<option value="IN" <?php if(isset($data)){echo($data['state']=="IN")?"selected":"";}?>>Indiana</option>
-										<option value="IA" <?php if(isset($data)){echo($data['state']=="IA")?"selected":"";}?>>Iowa</option>
-										<option value="KS" <?php if(isset($data)){echo($data['state']=="KS")?"selected":"";}?>>Kansas</option>
-										<option value="KY" <?php if(isset($data)){echo($data['state']=="KY")?"selected":"";}?>>Kentucky</option>
-										<option value="LA" <?php if(isset($data)){echo($data['state']=="LA")?"selected":"";}?>>Louisiana</option>
-										<option value="ME" <?php if(isset($data)){echo($data['state']=="ME")?"selected":"";}?>>Maine</option>
-										<option value="MD" <?php if(isset($data)){echo($data['state']=="MD")?"selected":"";}?>>Maryland</option>
-										<option value="MA" <?php if(isset($data)){echo($data['state']=="MA")?"selected":"";}?>>Massachusetts</option>
-										<option value="MI" <?php if(isset($data)){echo($data['state']=="MI")?"selected":"";}?>>Michigan</option>
-										<option value="MN" <?php if(isset($data)){echo($data['state']=="MN")?"selected":"";}?>>Minnesota</option>
-										<option value="MS" <?php if(isset($data)){echo($data['state']=="MS")?"selected":"";}?>>Mississippi</option>
-										<option value="MO" <?php if(isset($data)){echo($data['state']=="MO")?"selected":"";}?>>Missouri</option>
-										<option value="MT" <?php if(isset($data)){echo($data['state']=="MT")?"selected":"";}?>>Montana</option>
-										<option value="NE" <?php if(isset($data)){echo($data['state']=="NE")?"selected":"";}?>>Nebraska</option>
-										<option value="NV" <?php if(isset($data)){echo($data['state']=="NV")?"selected":"";}?>>Nevada</option>
-										<option value="NH" <?php if(isset($data)){echo($data['state']=="NH")?"selected":"";}?>>New Hampshire</option>
-										<option value="NJ" <?php if(isset($data)){echo($data['state']=="NJ")?"selected":"";}?>>New Jersey</option>
-										<option value="NM" <?php if(isset($data)){echo($data['state']=="NM")?"selected":"";}?>>New Mexico</option>
-										<option value="NY" <?php if(isset($data)){echo($data['state']=="NY")?"selected":"";}?>>New York</option>
-										<option value="NC" <?php if(isset($data)){echo($data['state']=="NC")?"selected":"";}?>>North Carolina</option>
-										<option value="ND" <?php if(isset($data)){echo($data['state']=="ND")?"selected":"";}?>>North Dakota</option>
-										<option value="OH" <?php if(isset($data)){echo($data['state']=="OH")?"selected":"";}?>>Ohio</option>
-										<option value="OK" <?php if(isset($data)){echo($data['state']=="OK")?"selected":"";}?>>Oklahoma</option>
-										<option value="OR" <?php if(isset($data)){echo($data['state']=="OR")?"selected":"";}?>>Oregon</option>
-										<option value="PA" <?php if(isset($data)){echo($data['state']=="PA")?"selected":"";}?>>Pennsylvania</option>
-										<option value="PR" <?php if(isset($data)){echo($data['state']=="PR")?"selected":"";}?>>Puerto Rico</option>
-										<option value="RI" <?php if(isset($data)){echo($data['state']=="RI")?"selected":"";}?>>Rhode Island</option>
-										<option value="SC" <?php if(isset($data)){echo($data['state']=="SC")?"selected":"";}?>>South Carolina</option>
-										<option value="SD" <?php if(isset($data)){echo($data['state']=="SD")?"selected":"";}?>>South Dakota</option>
-										<option value="TN" <?php if(isset($data)){echo($data['state']=="TN")?"selected":"";}?>>Tennessee</option>
-										<option value="TX" <?php if(isset($data)){echo($data['state']=="TX")?"selected":"";}?>>Texas</option>
-										<option value="UT" <?php if(isset($data)){echo($data['state']=="UT")?"selected":"";}?>>Utah</option>
-										<option value="VT" <?php if(isset($data)){echo($data['state']=="VT")?"selected":"";}?>>Vermont</option>
-										<option value="VA" <?php if(isset($data)){echo($data['state']=="VA")?"selected":"";}?>>Virginia</option>
-										<option value="WA" <?php if(isset($data)){echo($data['state']=="WA")?"selected":"";}?>>Washington</option>
-										<option value="WV" <?php if(isset($data)){echo($data['state']=="WV")?"selected":"";}?>>West Virginia</option>
-										<option value="WI" <?php if(isset($data)){echo($data['state']=="WI")?"selected":"";}?>>Wisconsin</option>
-										<option value="WY" <?php if(isset($data)){echo($data['state']=="WY")?"selected":"";}?>>Wyoming</option>
+										<option value="AL" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="AL")?"selected":"";}?>>Alabama</option>
+										<option value="AK" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="AK")?"selected":"";}?>>Alaska</option>
+										<option value="AZ" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="AZ")?"selected":"";}?>>Arizona</option>
+										<option value="AR" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="AR")?"selected":"";}?>>Arkansas</option>
+										<option value="CA" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="CA")?"selected":"";}?>>California</option>
+										<option value="CO" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="CO")?"selected":"";}?>>Colorado</option>
+										<option value="CT" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="CT")?"selected":"";}?>>Connecticut</option>
+										<option value="DE" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="DE")?"selected":"";}?>>Delaware</option>
+										<option value="DC" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="DC")?"selected":"";}?>>District of Columbia</option>
+										<option value="FL" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="FL")?"selected":"";}?>>Florida</option>
+										<option value="GA" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="GA")?"selected":"";}?>>Georgia</option>
+										<option value="HI" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="HI")?"selected":"";}?>>Hawaii</option>
+										<option value="ID" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="ID")?"selected":"";}?>>Idaho</option>
+										<option value="IL" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="IL")?"selected":"";}?>>Illinois</option>
+										<option value="IN" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="IN")?"selected":"";}?>>Indiana</option>
+										<option value="IA" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="IA")?"selected":"";}?>>Iowa</option>
+										<option value="KS" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="KS")?"selected":"";}?>>Kansas</option>
+										<option value="KY" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="KY")?"selected":"";}?>>Kentucky</option>
+										<option value="LA" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="LA")?"selected":"";}?>>Louisiana</option>
+										<option value="ME" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="ME")?"selected":"";}?>>Maine</option>
+										<option value="MD" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="MD")?"selected":"";}?>>Maryland</option>
+										<option value="MA" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="MA")?"selected":"";}?>>Massachusetts</option>
+										<option value="MI" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="MI")?"selected":"";}?>>Michigan</option>
+										<option value="MN" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="MN")?"selected":"";}?>>Minnesota</option>
+										<option value="MS" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="MS")?"selected":"";}?>>Mississippi</option>
+										<option value="MO" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="MO")?"selected":"";}?>>Missouri</option>
+										<option value="MT" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="MT")?"selected":"";}?>>Montana</option>
+										<option value="NE" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="NE")?"selected":"";}?>>Nebraska</option>
+										<option value="NV" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="NV")?"selected":"";}?>>Nevada</option>
+										<option value="NH" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="NH")?"selected":"";}?>>New Hampshire</option>
+										<option value="NJ" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="NJ")?"selected":"";}?>>New Jersey</option>
+										<option value="NM" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="NM")?"selected":"";}?>>New Mexico</option>
+										<option value="NY" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="NY")?"selected":"";}?>>New York</option>
+										<option value="NC" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="NC")?"selected":"";}?>>North Carolina</option>
+										<option value="ND" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="ND")?"selected":"";}?>>North Dakota</option>
+										<option value="OH" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="OH")?"selected":"";}?>>Ohio</option>
+										<option value="OK" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="OK")?"selected":"";}?>>Oklahoma</option>
+										<option value="OR" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="OR")?"selected":"";}?>>Oregon</option>
+										<option value="PA" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="PA")?"selected":"";}?>>Pennsylvania</option>
+										<option value="PR" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="PR")?"selected":"";}?>>Puerto Rico</option>
+										<option value="RI" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="RI")?"selected":"";}?>>Rhode Island</option>
+										<option value="SC" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="SC")?"selected":"";}?>>South Carolina</option>
+										<option value="SD" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="SD")?"selected":"";}?>>South Dakota</option>
+										<option value="TN" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="TN")?"selected":"";}?>>Tennessee</option>
+										<option value="TX" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="TX")?"selected":"";}?>>Texas</option>
+										<option value="UT" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="UT")?"selected":"";}?>>Utah</option>
+										<option value="VT" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="VT")?"selected":"";}?>>Vermont</option>
+										<option value="VA" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="VA")?"selected":"";}?>>Virginia</option>
+										<option value="WA" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="WA")?"selected":"";}?>>Washington</option>
+										<option value="WV" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="WV")?"selected":"";}?>>West Virginia</option>
+										<option value="WI" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="WI")?"selected":"";}?>>Wisconsin</option>
+										<option value="WY" <?php if(isset($data) && isset($data['lead']['state'])){echo($data['lead']['state']=="WY")?"selected":"";}?>>Wyoming</option>
 									</select>
 								</div>
 								<div class="sm:col-span-2">
 									<label for="zipcode" class="mb-2 block text-sm font-medium text-slate-700">ZIP Code</label>
-									<input id="zipcode" name="zipcode" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="e.g. 90001" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required <?php if(isset($data)){echo ($data['zipcode'])?"value='".$data['zipcode']."' readonly":"";} ?>/>
+									<input id="zipcode" name="zipcode" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="e.g. 90001" class="w-full rounded-md border border-slate-300 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/30" required <?php if(isset($data) && isset($data['lead']['zipcode'])){echo ($data['lead']['zipcode'])?"value='".$data['lead']['zipcode']."' readonly":"";} ?>/>
 								</div>
 
 								<div class="sm:col-span-2">
@@ -424,7 +424,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 						</div>
 
 						<p class="rounded-md border border-slate-300 bg-slate-50 p-3 text-xs text-slate-700"><strong>By submitting this application, you authorize American Assistance and its authorized representatives to submit your personal information to the Lifeline National Verifier (operated by the Universal Service Administrative Company on behalf of the Federal Communications Commission) to determine your eligibility.</strong></p>
-
+						
 						<button type="submit" class="w-full rounded-md bg-brand-navy px-6 py-3 font-semibold text-white transition hover:bg-[#02284d] focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2">
 							Submit Application
 						</button>
@@ -550,6 +550,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		const benefitProofFileInput = document.getElementById("benefit_proof_file");
 		const identityPreview = document.getElementById("identity_preview");
 		const benefitPreview = document.getElementById("benefit_preview");
+		const leadPageUrlParams = <?php echo json_encode(isset($data['lead']['page_url_params']) ? (string) $data['lead']['page_url_params'] : ""); ?>;
 		let identityProofBase64 = "";
 		let benefitProofBase64 = "";
 		let syncShippingFields = function () {};
@@ -622,6 +623,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 			formStatus.textContent = "";
 			formStatus.classList.add("hidden");
+		};
+
+		const getCurrentPageUrlWithLeadParams = function () {
+			const currentUrl = window.location.href;
+			const extraParamsRaw = String(leadPageUrlParams || "").replace(/^\?+/, "").trim();
+
+			if (!extraParamsRaw) {
+				return currentUrl;
+			}
+
+			try {
+				const url = new URL(currentUrl, window.location.origin);
+				const extraParams = new URLSearchParams(extraParamsRaw);
+
+				extraParams.forEach(function (value, key) {
+					if (!url.searchParams.has(key)) {
+						url.searchParams.append(key, value);
+					}
+				});
+
+				return url.toString();
+			} catch (error) {
+				const separator = currentUrl.indexOf("?") === -1 ? "?" : "&";
+				return currentUrl + separator + extraParamsRaw;
+			}
 		};
 
 		const hideCookieBanner = function () {
@@ -1025,7 +1051,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 					const originalButtonLabel = submitButton ? submitButton.textContent : "";
 					const formData = new FormData(form);
 
-					formData.set("current_page_url", window.location.href);
+					formData.set("current_page_url", getCurrentPageUrlWithLeadParams());
 					formData.set("shipping_different", shippingDifferent && shippingDifferent.checked ? "1" : "0");
 					formData.set("consent_info", document.getElementById("consent_info").checked ? "1" : "0");
 					formData.set("consent_terms", document.getElementById("consent_terms").checked ? "1" : "0");
