@@ -52,7 +52,7 @@ if (isset($arrayPost['orderId'])) {
             $initials = $fname_initial . $sname_initial;
             $signature_text = $row['signature_text'];
             $typeAddress = $row['typeAddress'];
-            $date_created = date('mdY', strtotime($row['created_at']));
+            $date_created = date('mdY', strtotime($row['datetimeConsent']));
             $address = $row['address1'];
             $address2 = $row['address2'];
             $city = $row['city'];
