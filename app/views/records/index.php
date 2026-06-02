@@ -320,19 +320,12 @@
 
     function loadRecords() {
         $.ajax({
-            url: urlroot + '/getAllRecordsData',
+            url: urlroot + '/records/getAllRecordsData',
             type: 'GET',
+            dataType: 'json',
             success: function(response) {
                 console.log(response);
-                let parsed = response;
-                if (typeof response === 'string') {
-                    try {
-                        parsed = JSON.parse(response);
-                    } catch (e) {
-                        parsed = { data: [] };
-                    }
-                }
-                buildTable(parsed.data || []);
+                buildTable((response && response.data) ? response.data : []);
             },
             error: function() {
                 buildTable([]);
