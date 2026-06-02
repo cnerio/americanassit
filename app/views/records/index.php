@@ -320,7 +320,7 @@
 
     function loadRecords() {
         $.ajax({
-            url: urlroot + '/records/getAllRecordsData',
+            url: urlroot + '/getAllRecordsData',
             type: 'GET',
             dataType: 'json',
             success: function(response) {
