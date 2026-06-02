@@ -34,8 +34,9 @@
 	}
 
 	public function getAllRecordsData(){
-		$rows = $this->recordsModel->getAllRecords();
 		header('Content-Type: application/json; charset=utf-8');
+		$rows = $this->recordsModel->getAllRecords();
+		
 		echo json_encode([
 			'data' => $rows
 		]);
