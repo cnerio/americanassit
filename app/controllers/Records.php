@@ -39,7 +39,7 @@
 		$data = [
 			"data" => $rows
 		];
-		echo json_encode($data);
+		echo json_encode($rows);
 	}
 
 	public function updateRecordInput(){
