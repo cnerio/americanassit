@@ -323,6 +323,7 @@
             url: urlroot + '/getAllRecordsData',
             type: 'GET',
             success: function(response) {
+                console.log(response);
                 let parsed = response;
                 if (typeof response === 'string') {
                     try {
