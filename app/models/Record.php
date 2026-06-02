@@ -172,12 +172,12 @@ class Record {
 	}
 
 	public function getAllRecords(){
-		$this->db->query('SELECT id, customer_id, first_name, second_name, phone_number, email, dob, city, state, zipcode, order_id, order_status, lp.name as program_benefit, created_at AT TIME ZONE \'UTC\' AT TIME ZONE \'America/New_York\' AS created_at FROM lifeline_records lr LEFT JOIN lifeline_programs lp ON lp.id_program = lr.program_benefit ORDER BY created_at DESC');
+		$this->db->query('SELECT id, customer_id, first_name, second_name, phone_number, email, dob, city, state, zipcode, order_id, order_status, lp.name as program_benefit, created_at_ny AS created_at FROM lifeline_records lr LEFT JOIN lifeline_programs lp ON lp.id_program = lr.program_benefit ORDER BY created_at DESC');
 		return $this->db->resultSet();
 	}
 
 	public function getShockwaveRetryQueue(){
-		$this->db->query("SELECT id, customer_id, first_name, second_name, email, phone_number, order_id, order_status, status_text, created_at FROM lifeline_records WHERE LOWER(TRIM(COALESCE(order_status, ''))) IN ('unknown error', 'unknow error', 'unfinished') ORDER BY created_at DESC");
+		$this->db->query("SELECT id, customer_id, first_name, second_name, email, phone_number, order_id, order_status, status_text, created_at_ny AS created_at FROM lifeline_records WHERE LOWER(TRIM(COALESCE(order_status, ''))) IN ('unknown error', 'unknow error', 'unfinished') ORDER BY created_at DESC");
 		return $this->db->resultSet();
 	}
 
