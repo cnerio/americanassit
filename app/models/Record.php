@@ -172,7 +172,7 @@ class Record {
 	}
 
 	public function getAllRecords(){
-		$this->db->query('SELECT id, customer_id, first_name, second_name, phone_number, email, dob, city, state, zipcode, order_id, order_status, lp.name as program_benefit, created_at_ny AS created_at FROM lifeline_records lr LEFT JOIN lifeline_programs lp ON lp.id_program = lr.program_benefit ORDER BY created_at_ny DESC');
+		$this->db->query('SELECT lr.id, lr.customer_id, lr.first_name, lr.second_name, lr.phone_number, lr.email, lr.dob, lr.city, lr.state, lr.zipcode, lr.order_id, lr.order_status, lp.name as program_benefit, lr.created_at_ny AS created_at FROM lifeline_records lr LEFT JOIN lifeline_programs lp ON lp.id_program = lr.program_benefit ORDER BY lr.created_at_ny DESC');
 		return $this->db->resultSet();
 	}
 
