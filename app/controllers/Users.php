@@ -6,95 +6,231 @@ class Users extends Controller{
         $this->userModel = $this->model('User');
     }
 
+    private function isAdminUser(){
+        return isLoggedIn() && (int)($_SESSION['rol'] ?? 0) === 1;
+    }
+
+    private function ensureAdminJson(){
+        if(!$this->isAdminUser()){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Unauthorized"
+            ]);
+            return false;
+        }
+
+        return true;
+    }
+
     public function hashed($string){
         return password_hash($string, PASSWORD_DEFAULT);
     }
 
     public function adduser(){
-        if($_SERVER['REQUEST_METHOD']=="POST"){
-            //$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-            //$confirmPassword = trim($_POST['addconfirm_password']);
-            $data=[
-                "name"=>trim(ucfirst(strtolower($_POST['addname']))),
-                "email"=>trim(strtolower($_POST['addemail'])),
-                "password"=>trim($_POST['addpassword']),
-                "rol"=>$_POST['addrol']
-            ];
-            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-            $userId = $this->userModel->saveUser($data);
-            if($userId){
-                $result = [
-                    "status"=>"success",
-                    "user_id"=>$userId,
-                    "msg"=>"User added successfully"
-                ];
-            }else{
-                $result = [
-                    "status"=>"error",
-                    "msg"=>"Somthing Wrong adding user"
-                ];
-            }
-
-            echo json_encode($result);
+        if(!$this->ensureAdminJson()){
+            return;
         }
+
+        if($_SERVER['REQUEST_METHOD']!=="POST"){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Invalid request method"
+            ]);
+            return;
+        }
+
+        $name = trim($_POST['addname'] ?? '');
+        $email = trim(strtolower($_POST['addemail'] ?? ''));
+        $password = trim($_POST['addpassword'] ?? '');
+        $rol = isset($_POST['addrol']) ? (int) $_POST['addrol'] : -1;
+
+        if($name === '' || $email === '' || $password === '' || !in_array($rol, [0, 1], true)){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Please complete all required fields"
+            ]);
+            return;
+        }
+
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Please enter a valid email"
+            ]);
+            return;
+        }
+
+        if(strlen($password) < 6){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Password must be at least 6 characters"
+            ]);
+            return;
+        }
+
+        if($this->userModel->findUserByEmail($email)){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Email already exists"
+            ]);
+            return;
+        }
+
+        $data=[
+            "name"=>trim(ucfirst(strtolower($name))),
+            "email"=>$email,
+            "password"=>password_hash($password, PASSWORD_DEFAULT),
+            "rol"=>$rol
+        ];
+
+        $userId = $this->userModel->saveUser($data);
+        if($userId){
+            $result = [
+                "status"=>"success",
+                "user_id"=>$userId,
+                "msg"=>"User added successfully"
+            ];
+        }else{
+            $result = [
+                "status"=>"error",
+                "msg"=>"Somthing Wrong adding user"
+            ];
+        }
+
+        echo json_encode($result);
     }
 
        public function updateuser(){
-        if($_SERVER['REQUEST_METHOD']=="POST"){
-            //$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-            //$confirmPassword = trim($_POST['addconfirm_password']);
-            $data=[
-                "name"=>trim(ucfirst(strtolower($_POST['editname']))),
-                "email"=>trim(strtolower($_POST['editemail'])),
-                "rol"=>$_POST['editrol'],
-                "id"=>$_POST['id_user']
-            ];
-            if($_POST['resetPass']==="Y"){
-                 $data['password'] = password_hash($_POST['editpass'], PASSWORD_DEFAULT);
-            }
-           
-            $userId = $this->userModel->updateuser($data);
-            if($userId){
-                $result = [
-                    "status"=>"success",
-                    "msg"=>"User updated successfully"
-                ];
-            }else{
-                $result = [
+        if(!$this->ensureAdminJson()){
+            return;
+        }
+
+        if($_SERVER['REQUEST_METHOD']!=="POST"){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Invalid request method"
+            ]);
+            return;
+        }
+
+        $id = isset($_POST['id_user']) ? (int) $_POST['id_user'] : 0;
+        $name = trim($_POST['editname'] ?? '');
+        $email = trim(strtolower($_POST['editemail'] ?? ''));
+        $rol = isset($_POST['editrol']) ? (int) $_POST['editrol'] : -1;
+        $resetPass = $_POST['resetPass'] ?? 'N';
+
+        if($id <= 0 || $name === '' || $email === '' || !in_array($rol, [0, 1], true)){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Please complete all required fields"
+            ]);
+            return;
+        }
+
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Please enter a valid email"
+            ]);
+            return;
+        }
+
+        if($this->userModel->findOtherUserByEmail($email, $id)){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Email already exists"
+            ]);
+            return;
+        }
+
+        $data=[
+            "name"=>trim(ucfirst(strtolower($name))),
+            "email"=>$email,
+            "rol"=>$rol,
+            "id"=>$id
+        ];
+
+        if($resetPass === "Y"){
+            $password = trim($_POST['editpass'] ?? '');
+            $confirmPassword = trim($_POST['editconfirmpass'] ?? '');
+
+            if(strlen($password) < 6){
+                echo json_encode([
                     "status"=>"error",
-                    "user_id"=>$userId,
-                    "msg"=>"Something wrong updating infor"
-                ];
+                    "msg"=>"Password must be at least 6 characters"
+                ]);
+                return;
             }
 
-            echo json_encode($result);
+            if($password !== $confirmPassword){
+                echo json_encode([
+                    "status"=>"error",
+                    "msg"=>"Password confirmation does not match"
+                ]);
+                return;
+            }
+
+            $data['password'] = password_hash($password, PASSWORD_DEFAULT);
         }
+
+        $userId = $this->userModel->updateuser($data);
+        if($userId){
+            $result = [
+                "status"=>"success",
+                "msg"=>"User updated successfully"
+            ];
+        }else{
+            $result = [
+                "status"=>"error",
+                "user_id"=>$userId,
+                "msg"=>"Something wrong updating infor"
+            ];
+        }
+
+        echo json_encode($result);
     }
 
     public function removeUser(){
-        if($_SERVER['REQUEST_METHOD']=="POST"){
-            // $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-            //$confirmPassword = trim($_POST['addconfirm_password']);
-            $data=[
-                "id"=>$_POST['id'],
-                "active"=>0
-            ];
-           
-            $userId = $this->userModel->updateuser($data);
-            if($userId){
-                $result = [
-                    "status"=>"success",
-                    "msg"=>"User removed successfully"
-                ];
-            }else{
-                $result = [
-                    "status"=>"error",
-                    "msg"=>"Something wrong removing user"
-                ];
-            }
-
-            echo json_encode($result);
+        if(!$this->ensureAdminJson()){
+            return;
         }
+
+        if($_SERVER['REQUEST_METHOD']!=="POST"){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Invalid request method"
+            ]);
+            return;
+        }
+
+        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        if($id <= 0){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Invalid user id"
+            ]);
+            return;
+        }
+
+        $data=[
+            "id"=>$id,
+            "active"=>0
+        ];
+
+        $userId = $this->userModel->updateuser($data);
+        if($userId){
+            $result = [
+                "status"=>"success",
+                "msg"=>"User removed successfully"
+            ];
+        }else{
+            $result = [
+                "status"=>"error",
+                "msg"=>"Something wrong removing user"
+            ];
+        }
+
+        echo json_encode($result);
     }
 
     public function register(){
@@ -241,11 +377,27 @@ class Users extends Controller{
     }
 
     public function admin(){
-        //$data = $this->userModel->getAllUsers();
-        $this->view('users/admin');
+        if(!isLoggedIn()){
+            redirect('users/login');
+            return;
+        }
+
+        if(!$this->isAdminUser()){
+            redirect('records/index');
+            return;
+        }
+
+        $data = [
+            'users' => $this->userModel->getData(0, 1000, '', 'id desc', 'YES')
+        ];
+        $this->view('users/admin', $data);
     }
 
     public function getUser(){
+        if(!$this->ensureAdminJson()){
+            return;
+        }
+
         if($_SERVER['REQUEST_METHOD']=='POST'){
            // $_POST= filter_input_array(INPUT_POST,FILTER_SANITIZE_STRING);
             $id=$_POST['id'];
@@ -255,6 +407,10 @@ class Users extends Controller{
     }
 
     public function read(){
+			if(!$this->ensureAdminJson()){
+				return;
+			}
+
 			if($_SERVER['REQUEST_METHOD']=='POST'){
 		//if($_POST){
 			//die('Submit');

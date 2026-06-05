@@ -21,7 +21,7 @@
                 <li class="nav-item"><a class="nav-link" href="integrations.html">Integrations</a></li>
                 <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>-->
                 <li class="nav-item"><a class="nav-link" href="<?php echo URLROOT; ?>/records/">Home</a></li>
-                <?php if($_SESSION['rol']==1){ ?> <li class="nav-item"><a class="nav-link" href="<?php echo URLROOT; ?>/users/admin">Users</a></li> <?php }; ?>
+                <?php if((int)($_SESSION['rol'] ?? 0) === 1){ ?> <li class="nav-item"><a class="nav-link" href="<?php echo URLROOT; ?>/users/admin">Users</a></li> <?php }; ?>
            </ul><a class="btn btn-primary btn-shadow" href="<?php echo URLROOT; ?>/users/logout">Logout</a> <!-- <a class="btn btn-primary shadow" role="button" href="apply.html">apply</a> -->
         </div>
     </div>

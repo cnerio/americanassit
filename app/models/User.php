@@ -46,6 +46,15 @@ class User {
         }
     }
 
+    public function findOtherUserByEmail($email, $excludeId){
+        $this->db->query('SELECT id FROM users WHERE email = :email AND id <> :id LIMIT 1');
+        $this->db->bind(':email', $email);
+        $this->db->bind(':id', (int) $excludeId);
+
+        $this->db->singleObj();
+        return $this->db->rowCount() > 0;
+    }
+
     public function login($email, $password){
         $this->db->query('SELECT * FROM users where email = :email');
         $this->db->bind(':email', $email);

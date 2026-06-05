@@ -22,6 +22,32 @@
     #recordsTable thead th {
         white-space: nowrap;
     }
+
+    #recordsTable th:last-child,
+    #recordsTable td:last-child {
+        position: sticky;
+        right: 0;
+        min-width: 110px;
+        width: 110px;
+        white-space: nowrap;
+        text-align: center;
+        background: #fff;
+        box-shadow: -10px 0 12px -12px rgba(15, 23, 42, 0.7);
+    }
+
+    #recordsTable thead th:last-child {
+        z-index: 4;
+        background: #f8fafc;
+    }
+
+    #recordsTable tbody td:last-child {
+        z-index: 3;
+    }
+
+    #recordsTable td:last-child .btn {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
 </style>
 
 <header class="fixed inset-x-0 top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -31,12 +57,23 @@
             <span class="hidden text-sm font-semibold tracking-wide text-slate-700 sm:inline">Records Dashboard</span>
         </a>
 
-        <a
-            href="<?php echo URLROOT; ?>/users/logout"
-            class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300"
-        >
-            Logout
-        </a>
+        <div class="flex items-center gap-2">
+            <?php if ((int)($_SESSION['rol'] ?? 0) === 1): ?>
+                <a
+                    href="<?php echo URLROOT; ?>/users/admin"
+                    class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                >
+                    Admin Users
+                </a>
+            <?php endif; ?>
+
+            <a
+                href="<?php echo URLROOT; ?>/users/logout"
+                class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300"
+            >
+                Logout
+            </a>
+        </div>
     </div>
 </header>
 
@@ -61,6 +98,13 @@
                             <label for="statusFilter" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Order Status</label>
                             <select id="statusFilter" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100">
                                 <option value="">All Statuses</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="programBenefitFilter" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Program Benefit</label>
+                            <select id="programBenefitFilter" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100">
+                                <option value="">All Benefits</option>
                             </select>
                         </div>
 
@@ -130,6 +174,7 @@
     ];
     let recordsTable = null;
     let statusColumnIndex = -1;
+    let benefitColumnIndex = -1;
     let createdAtColumnIndex = -1;
     let externalFilterFn = null;
 
@@ -174,12 +219,20 @@
             }
 
             const selectedStatus = $('#statusFilter').val().trim().toLowerCase();
+            const selectedBenefit = $('#programBenefitFilter').val().trim().toLowerCase();
             const startDate = $('#startDateFilter').val();
             const endDate = $('#endDateFilter').val();
 
             if (statusColumnIndex > -1 && selectedStatus !== '') {
                 const rowStatus = String(data[statusColumnIndex] || '').trim().toLowerCase();
                 if (rowStatus !== selectedStatus) {
+                    return false;
+                }
+            }
+
+            if (benefitColumnIndex > -1 && selectedBenefit !== '') {
+                const rowBenefit = String(data[benefitColumnIndex] || '').trim().toLowerCase();
+                if (rowBenefit !== selectedBenefit) {
                     return false;
                 }
             }
@@ -223,6 +276,24 @@
         });
     }
 
+    function fillProgramBenefitFilter(records) {
+        const benefitSet = new Set();
+
+        records.forEach((record) => {
+            const benefit = (record.program_benefit == null ? '' : String(record.program_benefit)).trim();
+            if (benefit !== '') {
+                benefitSet.add(benefit);
+            }
+        });
+
+        const benefitFilter = $('#programBenefitFilter');
+        benefitFilter.find('option:not(:first)').remove();
+
+        Array.from(benefitSet).sort((a, b) => a.localeCompare(b)).forEach((benefit) => {
+            benefitFilter.append('<option value="' + escapeHtml(benefit) + '">' + escapeHtml(benefit) + '</option>');
+        });
+    }
+
     function buildTable(records) {
         const tableEl = $('#recordsTable');
         const thead = tableEl.find('thead');
@@ -249,6 +320,7 @@
         if (!records || !records.length) {
             tbody.html('<tr><td class="text-center" colspan="' + (columns.length + 1) + '">No records found</td></tr>');
             fillStatusFilter([]);
+            fillProgramBenefitFilter([]);
             return;
         }
 
@@ -259,10 +331,12 @@
         });
 
         statusColumnIndex = columns.indexOf('order_status');
+        benefitColumnIndex = columns.indexOf('program_benefit');
         createdAtColumnIndex = columns.indexOf('created_at');
         const createdAtIndex = createdAtColumnIndex;
 
         fillStatusFilter(records);
+        fillProgramBenefitFilter(records);
 
         recordsTable = tableEl.DataTable({
             destroy: true,
@@ -303,7 +377,7 @@
 
         registerExternalFilters();
 
-        $('#statusFilter, #startDateFilter, #endDateFilter').off('change').on('change', function() {
+        $('#statusFilter, #programBenefitFilter, #startDateFilter, #endDateFilter').off('change').on('change', function() {
             recordsTable.draw();
         });
 
@@ -312,6 +386,7 @@
                 $(recordsTable.table().container()).find('.column-filter').val('');
             }
             $('#statusFilter').val('');
+            $('#programBenefitFilter').val('');
             $('#startDateFilter').val('');
             $('#endDateFilter').val('');
             recordsTable.search('').columns().search('').draw();
