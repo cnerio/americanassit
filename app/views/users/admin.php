@@ -87,7 +87,7 @@ $initialUsers = isset($data['users']) && is_array($data['users']) ? $data['users
                         <p class="text-sm text-slate-500">Manage staff access and permissions</p>
                     </div>
 
-                    <button type="button" id="adduser" data-bs-toggle="modal" data-bs-target="#ModalAddUsers" data-toggle="modal" data-target="#ModalAddUsers" class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700">
+                    <button type="button" id="adduser" class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700">
                         <i class="fa fa-user-plus mr-2"></i> Add User
                     </button>
                 </div>
@@ -154,8 +154,8 @@ $initialUsers = isset($data['users']) && is_array($data['users']) ? $data['users
                                         </td>
                                         <td class="px-3 py-2 text-right">
                                             <div class="inline-flex items-center gap-2">
-                                                <button class="inline-flex items-center rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 editUser" data-user="<?php echo (int)($u['id'] ?? 0); ?>" data-bs-toggle="modal" data-bs-target="#EditUserModal"><i class="fa fa-pencil mr-1"></i>Edit</button>
-                                                <button data-user="<?php echo (int)($u['id'] ?? 0); ?>" data-bs-toggle="modal" data-bs-target="#DeleteUsersModal" class="inline-flex items-center rounded-lg border border-rose-300 px-2.5 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-50 deleteUser" type="button"><i class="fa fa-close mr-1"></i>Delete</button>
+                                                <button class="inline-flex items-center rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 editUser" data-user="<?php echo (int)($u['id'] ?? 0); ?>"><i class="fa fa-pencil mr-1"></i>Edit</button>
+                                                <button data-user="<?php echo (int)($u['id'] ?? 0); ?>" class="inline-flex items-center rounded-lg border border-rose-300 px-2.5 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-50 deleteUser" type="button"><i class="fa fa-close mr-1"></i>Delete</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -371,6 +371,18 @@ $initialUsers = isset($data['users']) && is_array($data['users']) ? $data['users
         if (window.jQuery && typeof $(modalEl).modal === 'function') {
             $(modalEl).modal('hide');
         }
+
+        setTimeout(cleanupModalArtifacts, 200);
+    }
+
+    function cleanupModalArtifacts() {
+        if ($('.modal.show').length > 0) {
+            return;
+        }
+
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+        $('body').css('padding-right', '');
     }
 
     function load(page, where = '', example_length, camposAscDesc, firstload = '') {
@@ -434,7 +446,7 @@ $initialUsers = isset($data['users']) && is_array($data['users']) ? $data['users
                     cell4.innerHTML = (v.active == 1)
                         ? '<span class="status-badge status-active">Active</span>'
                         : '<span class="status-badge status-inactive">Inactive</span>';
-                    cell5.innerHTML = '<div class="inline-flex items-center gap-2"><button class="inline-flex items-center rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 editUser" data-user="' + v.id + '" data-bs-toggle="modal" data-bs-target="#EditUserModal"><i class="fa fa-pencil mr-1"></i>Edit</button><button data-user="' + v.id + '" data-bs-toggle="modal" data-bs-target="#DeleteUsersModal" class="inline-flex items-center rounded-lg border border-rose-300 px-2.5 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-50 deleteUser" type="button"><i class="fa fa-close mr-1"></i>Delete</button></div>';
+                    cell5.innerHTML = '<div class="inline-flex items-center gap-2"><button class="inline-flex items-center rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 editUser" data-user="' + v.id + '"><i class="fa fa-pencil mr-1"></i>Edit</button><button data-user="' + v.id + '" class="inline-flex items-center rounded-lg border border-rose-300 px-2.5 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-50 deleteUser" type="button"><i class="fa fa-close mr-1"></i>Delete</button></div>';
 
                     i++;
                     c++;
@@ -656,6 +668,7 @@ $initialUsers = isset($data['users']) && is_array($data['users']) ? $data['users
         var validator = $("#formUserAdd").validate();
         validator.resetForm();
         $("#msjresusersAdd").html('');
+        cleanupModalArtifacts();
     });
 
     $('#EditUserModal').on('hidden.bs.modal', function() {
@@ -663,11 +676,13 @@ $initialUsers = isset($data['users']) && is_array($data['users']) ? $data['users
         var validator = $("#formEdit_users").validate();
         validator.resetForm();
         $("#updateResult").html('');
+        cleanupModalArtifacts();
     });
 
     $("#DeleteUsersModal").on('hidden.bs.modal', function() {
         $("#idusersDelete").val('');
         $("#nameDeleteUser").html('');
+        cleanupModalArtifacts();
     });
 
     $("#clean").on('click', function() {

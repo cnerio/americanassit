@@ -128,7 +128,7 @@ class User {
                     //echo "select * from users ORDER BY $orderby limit $offset,$per_page;";
 					
 				}	
-		$this->db->execute('Read');
+		//$this->db->execute('Read');
 	$getOrders = $this->db->resultSet();
 	return $getOrders;
 	}
