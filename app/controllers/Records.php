@@ -49,6 +49,42 @@
 		echo $json;
 	}
 
+	public function getRecordsServerSide() {
+		header('Content-Type: application/json; charset=utf-8');
+
+		$allowedColumns = ['id', 'customer_id', 'first_name', 'second_name', 'phone_number', 'email', 'dob', 'city', 'state', 'zipcode', 'order_id', 'order_status', 'program_benefit', 'created_at'];
+
+		$draw          = isset($_POST['draw'])   ? (int)$_POST['draw']   : 1;
+		$start         = isset($_POST['start'])  ? (int)$_POST['start']  : 0;
+		$length        = isset($_POST['length']) ? min((int)$_POST['length'], 100) : 10;
+		$search        = isset($_POST['search']['value']) ? trim($_POST['search']['value']) : '';
+
+		$orderColIndex = isset($_POST['order'][0]['column']) ? (int)$_POST['order'][0]['column'] : 13;
+		$orderDir      = (isset($_POST['order'][0]['dir']) && strtolower($_POST['order'][0]['dir']) === 'asc') ? 'ASC' : 'DESC';
+		$orderColumn   = isset($allowedColumns[$orderColIndex]) ? $allowedColumns[$orderColIndex] : 'created_at';
+
+		$statusFilter  = isset($_POST['status_filter'])  ? trim($_POST['status_filter'])  : '';
+		$benefitFilter = isset($_POST['benefit_filter']) ? trim($_POST['benefit_filter']) : '';
+		$startDate     = isset($_POST['start_date'])     ? trim($_POST['start_date'])     : '';
+		$endDate       = isset($_POST['end_date'])       ? trim($_POST['end_date'])       : '';
+
+		$totalRecords   = $this->recordsModel->countAllRecords();
+		$filteredCount  = $this->recordsModel->countFilteredRecords($search, $statusFilter, $benefitFilter, $startDate, $endDate);
+		$data           = $this->recordsModel->getRecordsPaged($start, $length, $search, $orderColumn, $orderDir, $statusFilter, $benefitFilter, $startDate, $endDate);
+
+		echo json_encode([
+			'draw'            => $draw,
+			'recordsTotal'    => $totalRecords,
+			'recordsFiltered' => $filteredCount,
+			'data'            => $data ?: [],
+		], JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
+	}
+
+	public function getFilterOptions() {
+		header('Content-Type: application/json; charset=utf-8');
+		echo json_encode($this->recordsModel->getDistinctFilterOptions());
+	}
+
 	public function updateRecordInput(){
 		if($_SERVER['REQUEST_METHOD']=='POST'){
 			$field = isset($_POST['field']) ? trim($_POST['field']) : '';

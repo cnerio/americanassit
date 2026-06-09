@@ -233,6 +233,49 @@ class Users extends Controller{
         echo json_encode($result);
     }
 
+    public function reactivateUser(){
+        if(!$this->ensureAdminJson()){
+            return;
+        }
+
+        if($_SERVER['REQUEST_METHOD']!=="POST"){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Invalid request method"
+            ]);
+            return;
+        }
+
+        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        if($id <= 0){
+            echo json_encode([
+                "status"=>"error",
+                "msg"=>"Invalid user id"
+            ]);
+            return;
+        }
+
+        $data=[
+            "id"=>$id,
+            "active"=>1
+        ];
+
+        $userId = $this->userModel->updateuser($data);
+        if($userId){
+            $result = [
+                "status"=>"success",
+                "msg"=>"User reactivated successfully"
+            ];
+        }else{
+            $result = [
+                "status"=>"error",
+                "msg"=>"Something wrong reactivating user"
+            ];
+        }
+
+        echo json_encode($result);
+    }
+
     public function register(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){
            // process form

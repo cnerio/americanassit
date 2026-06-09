@@ -173,13 +173,9 @@
         'created_at'
     ];
     let recordsTable = null;
-    let statusColumnIndex = -1;
-    let benefitColumnIndex = -1;
-    let createdAtColumnIndex = -1;
-    let externalFilterFn = null;
 
     function escapeHtml(value) {
-        return String(value)
+        return String(value == null ? '' : value)
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
@@ -187,228 +183,98 @@
             .replace(/'/g, '&#039;');
     }
 
-    function buildActionButton(record) {
-        const customerId = record.customer_id ? String(record.customer_id) : '';
-        if (!customerId) {
-            return '<span class="text-muted">N/A</span>';
-        }
-
-        return '<a href="' + urlroot + '/edit/' + encodeURIComponent(customerId) + '" class="btn btn-outline-dark btn-sm"><i class="fa fa-pencil"></i> Edit</a>';
-    }
-
-    function toDateOnlyValue(value) {
-        if (!value) {
-            return '';
-        }
-
-        const datePart = String(value).trim().split(' ')[0];
-        return /^\d{4}-\d{2}-\d{2}$/.test(datePart) ? datePart : '';
-    }
-
-    function registerExternalFilters() {
-        if (externalFilterFn) {
-            const index = $.fn.dataTable.ext.search.indexOf(externalFilterFn);
-            if (index > -1) {
-                $.fn.dataTable.ext.search.splice(index, 1);
-            }
-        }
-
-        externalFilterFn = function(settings, data) {
-            if (!recordsTable || settings.nTable !== recordsTable.table().node()) {
-                return true;
-            }
-
-            const selectedStatus = $('#statusFilter').val().trim().toLowerCase();
-            const selectedBenefit = $('#programBenefitFilter').val().trim().toLowerCase();
-            const startDate = $('#startDateFilter').val();
-            const endDate = $('#endDateFilter').val();
-
-            if (statusColumnIndex > -1 && selectedStatus !== '') {
-                const rowStatus = String(data[statusColumnIndex] || '').trim().toLowerCase();
-                if (rowStatus !== selectedStatus) {
-                    return false;
-                }
-            }
-
-            if (benefitColumnIndex > -1 && selectedBenefit !== '') {
-                const rowBenefit = String(data[benefitColumnIndex] || '').trim().toLowerCase();
-                if (rowBenefit !== selectedBenefit) {
-                    return false;
-                }
-            }
-
-            if (createdAtColumnIndex > -1 && (startDate || endDate)) {
-                const rowDate = toDateOnlyValue(data[createdAtColumnIndex]);
-                if (!rowDate) {
-                    return false;
-                }
-
-                if (startDate && rowDate < startDate) {
-                    return false;
-                }
-
-                if (endDate && rowDate > endDate) {
-                    return false;
-                }
-            }
-
-            return true;
-        };
-
-        $.fn.dataTable.ext.search.push(externalFilterFn);
-    }
-
-    function fillStatusFilter(records) {
-        const statusSet = new Set();
-
-        records.forEach((record) => {
-            const status = (record.order_status == null ? '' : String(record.order_status)).trim();
-            if (status !== '') {
-                statusSet.add(status);
-            }
-        });
-
-        const statusFilter = $('#statusFilter');
-        statusFilter.find('option:not(:first)').remove();
-
-        Array.from(statusSet).sort((a, b) => a.localeCompare(b)).forEach((status) => {
-            statusFilter.append('<option value="' + escapeHtml(status) + '">' + escapeHtml(status) + '</option>');
-        });
-    }
-
-    function fillProgramBenefitFilter(records) {
-        const benefitSet = new Set();
-
-        records.forEach((record) => {
-            const benefit = (record.program_benefit == null ? '' : String(record.program_benefit)).trim();
-            if (benefit !== '') {
-                benefitSet.add(benefit);
-            }
-        });
-
-        const benefitFilter = $('#programBenefitFilter');
-        benefitFilter.find('option:not(:first)').remove();
-
-        Array.from(benefitSet).sort((a, b) => a.localeCompare(b)).forEach((benefit) => {
-            benefitFilter.append('<option value="' + escapeHtml(benefit) + '">' + escapeHtml(benefit) + '</option>');
-        });
-    }
-
-    function buildTable(records) {
+    function initTable() {
         const tableEl = $('#recordsTable');
         const thead = tableEl.find('thead');
-        const tbody = tableEl.find('tbody');
-        const columns = recordsFields;
-
         thead.empty();
-        tbody.empty();
 
         const headerRow = $('<tr></tr>');
-        const filterRow = $('<tr></tr>');
-
-        columns.forEach((colName) => {
+        recordsFields.forEach(function(colName) {
             headerRow.append('<th>' + escapeHtml(colName.replace(/_/g, ' ').toUpperCase()) + '</th>');
-            filterRow.append('<th><input type="text" class="form-control form-control-sm column-filter" data-column="' + escapeHtml(colName) + '" placeholder="Filter"></th>');
         });
-
         headerRow.append('<th>ACTIONS</th>');
-        filterRow.append('<th></th>');
-
         thead.append(headerRow);
-        thead.append(filterRow);
 
-        if (!records || !records.length) {
-            tbody.html('<tr><td class="text-center" colspan="' + (columns.length + 1) + '">No records found</td></tr>');
-            fillStatusFilter([]);
-            fillProgramBenefitFilter([]);
-            return;
-        }
-
-        const dataSet = records.map((record) => {
-            const row = columns.map((colName) => escapeHtml(record[colName] == null ? '' : record[colName]));
-            row.push(buildActionButton(record));
-            return row;
+        const columns = recordsFields.map(function(field) {
+            return {
+                data: field,
+                render: function(data) {
+                    return escapeHtml(data);
+                }
+            };
         });
 
-        statusColumnIndex = columns.indexOf('order_status');
-        benefitColumnIndex = columns.indexOf('program_benefit');
-        createdAtColumnIndex = columns.indexOf('created_at');
-        const createdAtIndex = createdAtColumnIndex;
-
-        fillStatusFilter(records);
-        fillProgramBenefitFilter(records);
+        columns.push({
+            data: 'customer_id',
+            orderable: false,
+            render: function(data) {
+                if (!data) return '<span class="text-muted">N/A</span>';
+                return '<a href="' + urlroot + '/edit/' + encodeURIComponent(String(data)) + '" class="btn btn-outline-dark btn-sm"><i class="fa fa-pencil"></i> Edit</a>';
+            }
+        });
 
         recordsTable = tableEl.DataTable({
-            destroy: true,
-            data: dataSet,
-            orderCellsTop: true,
-            pageLength: 25,
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: urlroot + '/getRecordsServerSide',
+                type: 'POST',
+                data: function(d) {
+                    d.status_filter  = $('#statusFilter').val();
+                    d.benefit_filter = $('#programBenefitFilter').val();
+                    d.start_date     = $('#startDateFilter').val();
+                    d.end_date       = $('#endDateFilter').val();
+                    return d;
+                }
+            },
+            columns: columns,
+            pageLength: 10,
             lengthMenu: [10, 25, 50, 100],
             scrollX: true,
-            order: [[createdAtIndex >= 0 ? createdAtIndex : 0, 'desc']],
+            order: [[recordsFields.indexOf('created_at'), 'desc']],
             dom: 'Bfrtip',
             buttons: [
                 {
                     extend: 'excelHtml5',
                     text: 'Export Excel',
                     title: 'lifeline_records',
-                    exportOptions: {
-                        columns: ':not(:last-child)'
-                    }
+                    exportOptions: { columns: ':not(:last-child)' }
                 }
             ],
             language: {
-                search: 'Quick Filter:'
+                search: 'Quick Filter:',
+                processing: 'Loading records...'
             }
         });
 
-        const tableContainer = $(recordsTable.table().container());
-
-        tableContainer.off('keyup change', '.column-filter').on('keyup change', '.column-filter', function() {
-            const columnIndex = $(this).closest('th').index();
-            if (columnIndex < 0 || !recordsTable.column(columnIndex).length) {
-                return;
-            }
-
-            if (recordsTable.column(columnIndex).search() !== this.value) {
-                recordsTable.column(columnIndex).search(this.value).draw();
-            }
+        $('#statusFilter, #programBenefitFilter, #startDateFilter, #endDateFilter').on('change', function() {
+            recordsTable.ajax.reload();
         });
 
-        registerExternalFilters();
-
-        $('#statusFilter, #programBenefitFilter, #startDateFilter, #endDateFilter').off('change').on('change', function() {
-            recordsTable.draw();
-        });
-
-        $('#clearFilters').off('click').on('click', function() {
-            if (recordsTable) {
-                $(recordsTable.table().container()).find('.column-filter').val('');
-            }
+        $('#clearFilters').on('click', function() {
             $('#statusFilter').val('');
             $('#programBenefitFilter').val('');
             $('#startDateFilter').val('');
             $('#endDateFilter').val('');
-            recordsTable.search('').columns().search('').draw();
+            recordsTable.ajax.reload();
         });
     }
 
-    function loadRecords() {
-        $.ajax({
-            url: urlroot + '/getAllRecordsData',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-                buildTable((response && response.data) ? response.data : []);
-            },
-            error: function() {
-                buildTable([]);
-            }
+    function loadFilterOptions() {
+        $.getJSON(urlroot + '/getFilterOptions', function(data) {
+            const statusFilter = $('#statusFilter');
+            (data.statuses || []).forEach(function(status) {
+                statusFilter.append('<option value="' + escapeHtml(status) + '">' + escapeHtml(status) + '</option>');
+            });
+            const benefitFilter = $('#programBenefitFilter');
+            (data.benefits || []).forEach(function(benefit) {
+                benefitFilter.append('<option value="' + escapeHtml(benefit) + '">' + escapeHtml(benefit) + '</option>');
+            });
         });
     }
 
     $(document).ready(function() {
-        loadRecords();
+        initTable();
+        loadFilterOptions();
     });
 </script>

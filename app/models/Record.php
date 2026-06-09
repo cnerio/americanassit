@@ -216,5 +216,104 @@ class Record {
 	// 	$this->db->updateOrder("lifeline_records",$data);
 	// }
 
+	public function countAllRecords() {
+		$this->db->query("SELECT COUNT(*) as total FROM lifeline_records");
+		$row = $this->db->single();
+		return (int)$row['total'];
+	}
+
+	public function countFilteredRecords($search, $statusFilter, $benefitFilter, $startDate, $endDate) {
+		$sql = "SELECT COUNT(*) as total FROM lifeline_records lr LEFT JOIN lifeline_programs lp ON lp.id_program = lr.program_benefit WHERE 1=1";
+		$params = [];
+
+		if ($search !== '') {
+			$sql .= " AND (lr.customer_id LIKE :s1 OR lr.first_name LIKE :s2 OR lr.second_name LIKE :s3 OR lr.phone_number LIKE :s4 OR lr.email LIKE :s5 OR lr.order_id LIKE :s6 OR lr.order_status LIKE :s7)";
+			$sv = '%' . $search . '%';
+			$params[':s1'] = $sv; $params[':s2'] = $sv; $params[':s3'] = $sv;
+			$params[':s4'] = $sv; $params[':s5'] = $sv; $params[':s6'] = $sv; $params[':s7'] = $sv;
+		}
+		if ($statusFilter !== '') {
+			$sql .= " AND lr.order_status = :status_filter";
+			$params[':status_filter'] = $statusFilter;
+		}
+		if ($benefitFilter !== '') {
+			$sql .= " AND lp.name = :benefit_filter";
+			$params[':benefit_filter'] = $benefitFilter;
+		}
+		if ($startDate !== '') {
+			$sql .= " AND DATE(lr.created_at_ny) >= :start_date";
+			$params[':start_date'] = $startDate;
+		}
+		if ($endDate !== '') {
+			$sql .= " AND DATE(lr.created_at_ny) <= :end_date";
+			$params[':end_date'] = $endDate;
+		}
+
+		$this->db->query($sql);
+		foreach ($params as $key => $value) {
+			$this->db->bind($key, $value);
+		}
+		$row = $this->db->single();
+		return (int)$row['total'];
+	}
+
+	public function getRecordsPaged($start, $length, $search, $orderColumn, $orderDir, $statusFilter, $benefitFilter, $startDate, $endDate) {
+		$allowedColumns = ['id', 'customer_id', 'first_name', 'second_name', 'phone_number', 'email', 'dob', 'city', 'state', 'zipcode', 'order_id', 'order_status', 'program_benefit', 'created_at'];
+		if (!in_array($orderColumn, $allowedColumns, true)) {
+			$orderColumn = 'created_at';
+		}
+		$orderDir = ($orderDir === 'ASC') ? 'ASC' : 'DESC';
+		$columnMap = ['program_benefit' => 'lp.name', 'created_at' => 'lr.created_at_ny'];
+		$orderSql = isset($columnMap[$orderColumn]) ? $columnMap[$orderColumn] : 'lr.' . $orderColumn;
+
+		$sql = "SELECT lr.id, lr.customer_id, lr.first_name, lr.second_name, lr.phone_number, lr.email, lr.dob, lr.city, lr.state, lr.zipcode, lr.order_id, lr.order_status, lp.name as program_benefit, lr.created_at_ny AS created_at FROM lifeline_records lr LEFT JOIN lifeline_programs lp ON lp.id_program = lr.program_benefit WHERE 1=1";
+		$params = [];
+
+		if ($search !== '') {
+			$sql .= " AND (lr.customer_id LIKE :s1 OR lr.first_name LIKE :s2 OR lr.second_name LIKE :s3 OR lr.phone_number LIKE :s4 OR lr.email LIKE :s5 OR lr.order_id LIKE :s6 OR lr.order_status LIKE :s7)";
+			$sv = '%' . $search . '%';
+			$params[':s1'] = $sv; $params[':s2'] = $sv; $params[':s3'] = $sv;
+			$params[':s4'] = $sv; $params[':s5'] = $sv; $params[':s6'] = $sv; $params[':s7'] = $sv;
+		}
+		if ($statusFilter !== '') {
+			$sql .= " AND lr.order_status = :status_filter";
+			$params[':status_filter'] = $statusFilter;
+		}
+		if ($benefitFilter !== '') {
+			$sql .= " AND lp.name = :benefit_filter";
+			$params[':benefit_filter'] = $benefitFilter;
+		}
+		if ($startDate !== '') {
+			$sql .= " AND DATE(lr.created_at_ny) >= :start_date";
+			$params[':start_date'] = $startDate;
+		}
+		if ($endDate !== '') {
+			$sql .= " AND DATE(lr.created_at_ny) <= :end_date";
+			$params[':end_date'] = $endDate;
+		}
+
+		$sql .= " ORDER BY {$orderSql} {$orderDir} LIMIT :offset, :per_page";
+		$this->db->query($sql);
+		foreach ($params as $key => $value) {
+			$this->db->bind($key, $value);
+		}
+		$this->db->bind(':offset', (int)$start, PDO::PARAM_INT);
+		$this->db->bind(':per_page', (int)$length, PDO::PARAM_INT);
+		return $this->db->resultSet();
+	}
+
+	public function getDistinctFilterOptions() {
+		$this->db->query("SELECT DISTINCT order_status FROM lifeline_records WHERE order_status IS NOT NULL AND order_status != '' ORDER BY order_status");
+		$statuses = $this->db->resultSet();
+
+		$this->db->query("SELECT DISTINCT lp.name as program_benefit FROM lifeline_records lr LEFT JOIN lifeline_programs lp ON lp.id_program = lr.program_benefit WHERE lp.name IS NOT NULL AND lp.name != '' ORDER BY lp.name");
+		$benefits = $this->db->resultSet();
+
+		return [
+			'statuses' => array_column($statuses, 'order_status'),
+			'benefits' => array_column($benefits, 'program_benefit'),
+		];
+	}
+
 
 }

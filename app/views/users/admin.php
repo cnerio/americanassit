@@ -155,7 +155,11 @@ $initialUsers = isset($data['users']) && is_array($data['users']) ? $data['users
                                         <td class="px-3 py-2 text-right">
                                             <div class="inline-flex items-center gap-2">
                                                 <button class="inline-flex items-center rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 editUser" data-user="<?php echo (int)($u['id'] ?? 0); ?>"><i class="fa fa-pencil mr-1"></i>Edit</button>
-                                                <button data-user="<?php echo (int)($u['id'] ?? 0); ?>" class="inline-flex items-center rounded-lg border border-rose-300 px-2.5 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-50 deleteUser" type="button"><i class="fa fa-close mr-1"></i>Delete</button>
+                                                <?php if((int)($u['active'] ?? 0) === 1): ?>
+                                                    <button data-user="<?php echo (int)($u['id'] ?? 0); ?>" class="inline-flex items-center rounded-lg border border-rose-300 px-2.5 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-50 deleteUser" type="button"><i class="fa fa-close mr-1"></i>Delete</button>
+                                                <?php else: ?>
+                                                    <button data-user="<?php echo (int)($u['id'] ?? 0); ?>" class="inline-flex items-center rounded-lg border border-green-300 px-2.5 py-1.5 text-xs font-semibold text-green-700 transition hover:bg-green-50 reactivateUser" type="button"><i class="fa fa-check mr-1"></i>Reactivate</button>
+                                                <?php endif; ?>
                                             </div>
                                         </td>
                                     </tr>
@@ -280,6 +284,28 @@ $initialUsers = isset($data['users']) && is_array($data['users']) ? $data['users
                         <button type="button" id="savenew" class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700">Save</button>
                     </div>
                     <div style="padding: 13px;" id="msjresusersAdd"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade admin-modal" id="ReactivateUsersModal" tabindex="-1" role="dialog" aria-labelledby="ReactivateUsersModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-b border-slate-200">
+                    <h5 class="modal-title text-lg font-semibold text-slate-900" id="ReactivateUsersModalLabel">Reactivate User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="reactivateUsersForm">
+                    <div class="modal-body text-sm text-slate-700">
+                        Do you want to reactivate the user <b id="nameReactivateUser"></b>?
+                        <input type="hidden" name="idusersReactivate" id="idusersReactivate">
+                    </div>
+                    <div class="modal-footer border-t border-slate-200">
+                        <button type="button" class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100" data-bs-dismiss="modal" data-dismiss="modal">Close</button>
+                        <button type="button" id="reactivateok" class="inline-flex items-center rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-500"><i class="fa fa-check mr-1"></i>Reactivate</button>
+                    </div>
+                    <div style="padding: 13px;" id="msjresusersReactivate"></div>
                 </form>
             </div>
         </div>
@@ -446,7 +472,10 @@ $initialUsers = isset($data['users']) && is_array($data['users']) ? $data['users
                     cell4.innerHTML = (v.active == 1)
                         ? '<span class="status-badge status-active">Active</span>'
                         : '<span class="status-badge status-inactive">Inactive</span>';
-                    cell5.innerHTML = '<div class="inline-flex items-center gap-2"><button class="inline-flex items-center rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 editUser" data-user="' + v.id + '"><i class="fa fa-pencil mr-1"></i>Edit</button><button data-user="' + v.id + '" class="inline-flex items-center rounded-lg border border-rose-300 px-2.5 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-50 deleteUser" type="button"><i class="fa fa-close mr-1"></i>Delete</button></div>';
+                    var actionBtn = (v.active == 1)
+                        ? '<button data-user="' + v.id + '" class="inline-flex items-center rounded-lg border border-rose-300 px-2.5 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-50 deleteUser" type="button"><i class="fa fa-close mr-1"></i>Delete</button>'
+                        : '<button data-user="' + v.id + '" class="inline-flex items-center rounded-lg border border-green-300 px-2.5 py-1.5 text-xs font-semibold text-green-700 transition hover:bg-green-50 reactivateUser" type="button"><i class="fa fa-check mr-1"></i>Reactivate</button>';
+                    cell5.innerHTML = '<div class="inline-flex items-center gap-2"><button class="inline-flex items-center rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 editUser" data-user="' + v.id + '"><i class="fa fa-pencil mr-1"></i>Edit</button>' + actionBtn + '</div>';
 
                     i++;
                     c++;
@@ -594,8 +623,35 @@ $initialUsers = isset($data['users']) && is_array($data['users']) ? $data['users
             if (myObj.status == "success") {
                 $("#msjresusersDelete").html('<div class="alert alert-success" role="alert">' + myObj.msg + '</div>');
                 load(1, "", 10, "", "YES");
+                setTimeout(function() { hideModalById('DeleteUsersModal'); $("#msjresusersDelete").html(''); }, 800);
             } else {
                 $("#msjresusersDelete").html('<div class="alert alert-danger" role="alert">' + myObj.msg + '</div>');
+            }
+        });
+    });
+
+    $("#gridBody").on('click', '.reactivateUser', function() {
+        var userId = $(this).attr('data-user');
+        showModalById('ReactivateUsersModal');
+        $("#msjresusersReactivate").html('');
+        $.post(urlroot + '/getUser', { id: userId }, function(response) {
+            var resObj = JSON.parse(response);
+            $("#idusersReactivate").val(resObj.id);
+            $("#nameReactivateUser").html(resObj.name);
+        });
+    });
+
+    $("#reactivateok").on('click', function() {
+        $("#msjresusersReactivate").html('');
+        var userId = $("#idusersReactivate").val();
+        $.post(urlroot + '/reactivateUser', { id: userId }, function(response) {
+            var myObj = JSON.parse(response);
+            if (myObj.status == "success") {
+                $("#msjresusersReactivate").html('<div class="alert alert-success" role="alert">' + myObj.msg + '</div>');
+                load(1, "", 10, "", "YES");
+                setTimeout(function() { hideModalById('ReactivateUsersModal'); $("#msjresusersReactivate").html(''); }, 800);
+            } else {
+                $("#msjresusersReactivate").html('<div class="alert alert-danger" role="alert">' + myObj.msg + '</div>');
             }
         });
     });
