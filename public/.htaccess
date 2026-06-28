@@ -1,3 +1,5 @@
+Options -Indexes
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   DirectoryIndex index.php
@@ -11,4 +13,5 @@
   RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
   RewriteRule ^$ index.php [L]
 </IfModule>
+
 

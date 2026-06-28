@@ -41,7 +41,7 @@
 		];
 		$json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
 		if ($json === false) {
-			file_put_contents(dirname(APPROOT) . '/public/querylog.txt', sprintf("[%s] getAllRecordsData JSON ERROR: %s\n", date('Y-m-d H:i:s'), json_last_error_msg()), FILE_APPEND);
+			write_app_log("querylog.txt", sprintf("[%s] getAllRecordsData JSON ERROR: %s\n", date('Y-m-d H:i:s'), json_last_error_msg()), FILE_APPEND);
 			echo '{"data":[]}';
 			return;
 		}

@@ -173,14 +173,13 @@ class Record {
 
 	public function getAllRecords(){
 		$sql = 'SELECT lr.id, lr.customer_id, lr.first_name, lr.second_name, lr.phone_number, lr.email, lr.dob, lr.city, lr.state, lr.zipcode, lr.order_id, lr.order_status, lp.name as program_benefit, lr.created_at_ny AS created_at FROM lifeline_records lr LEFT JOIN lifeline_programs lp ON lp.id_program = lr.program_benefit ORDER BY lr.created_at_ny DESC';
-		//$logFile = dirname(APPROOT) . '/public/querylog.txt';
 		try {
 			$this->db->query($sql);
 			$rows = $this->db->resultSet();
-			//file_put_contents($logFile, sprintf("[%s] getAllRecords rows=%d\nSQL: %s\n", date('Y-m-d H:i:s'), count($rows), $sql), FILE_APPEND);
+			//write_app_log("querylog.txt", sprintf("[%s] getAllRecords rows=%d\nSQL: %s\n", date('Y-m-d H:i:s'), count($rows), $sql), FILE_APPEND);
 			return $rows;
 		} catch (Throwable $e) {
-			//file_put_contents($logFile, sprintf("[%s] getAllRecords ERROR: %s\nSQL: %s\n", date('Y-m-d H:i:s'), $e->getMessage(), $sql), FILE_APPEND);
+			//write_app_log("querylog.txt", sprintf("[%s] getAllRecords ERROR: %s\nSQL: %s\n", date('Y-m-d H:i:s'), $e->getMessage(), $sql), FILE_APPEND);
 			return [];
 		}
 	}
